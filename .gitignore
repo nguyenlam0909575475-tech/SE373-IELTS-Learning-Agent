@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+data/chroma_db/
+# Source and extracted copyrighted text remain local until redistribution is verified.
+ielts-writing-band-descriptors.pdf
+data/processed/writing_descriptors.json
+data/processed/descriptor_provenance.json
+data/raw/descriptors/*.png
+~$*
+
+!data/chroma_db/
+data/chroma_db/*
+!data/chroma_db/README.md

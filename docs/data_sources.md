@@ -12,7 +12,7 @@
 
 ## Cấu trúc và tái tạo
 
-Xem docs/member1_descriptor_contract.md để biết schema, lệnh chạy và cách Người 2 mở collection.
+Xem docs/member1_to_member2_handoff.md để biết schema, lệnh chạy và cách Người 2 mở collection.
 72 chunks riêng Task 1/Task 2, mỗi chunk là một ô criterion × band 1–9.
 Band 0 được giữ riêng trong descriptor_provenance.json, không gán enum all_criteria hoặc task1_task2.
 Provenance lưu SHA256 PDF và trang/bounding box từng ô. Chưa có người thứ hai kiểm tra chéo.

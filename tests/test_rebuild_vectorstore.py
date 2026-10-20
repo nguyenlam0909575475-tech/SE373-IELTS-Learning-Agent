@@ -1,4 +1,5 @@
 import json
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,7 +18,14 @@ class RebuildTests(unittest.TestCase):
             other = client.create_collection('unrelated', embedding_function=None)
             other.add(ids=['keep'], embeddings=[[1., 0., 0.]])
             # Only embedding inference is replaced; persistence/query/filtering use real Chroma.
-            with patch.object(DefaultEmbeddingFunction, '__call__', lambda self, input: [[1., 0., 0.] for _ in input]):
+            # Distinct stable vectors avoid ANN tie/deleted-node behaviour when
+            # every source cell and the stale record have the exact same vector.
+            # This remains a persistence/filter test, not a semantic quality test.
+            def synthetic_embeddings(self, input):
+                return [[(byte + 1) / 256 for byte in hashlib.sha256(text.encode()).digest()[:3]]
+                        for text in input]
+
+            with patch.object(DefaultEmbeddingFunction, '__call__', synthetic_embeddings):
                 rebuild(ROOT / 'data/processed/writing_descriptors.json', tmp)
                 col = client.get_collection(COLLECTION)
                 col.add(ids=['stale'], documents=['old'], embeddings=[[1., 0., 0.]], metadatas=[{'test_part': 'task1'}])

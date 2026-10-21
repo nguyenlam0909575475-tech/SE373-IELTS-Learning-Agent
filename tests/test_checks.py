@@ -223,4 +223,3 @@ if __name__ == "__main__":
     test_rejects_missing_under_length_and_off_topic_high_band()
     test_committee_consensus_vs_moderator_trigger()
     print("All Member 3 unit tests passed successfully!")
-

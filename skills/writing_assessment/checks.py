@@ -13,7 +13,8 @@ This module belongs to the Harness verification layer. It validates:
 from __future__ import annotations
 
 import math
-from typing import Any, Literal, Sequence
+from collections.abc import Sequence
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -42,8 +43,12 @@ CorrectionCategory = Literal["grammar", "lexis", "cohesion", "task"]
 
 
 class EvidenceSpan(BaseModel):
-    quote: str = Field(..., min_length=1, description="Verbatim substring from the student's essay.")
-    start_char: int = Field(..., ge=0, description="0-indexed start character offset in essay_text.")
+    quote: str = Field(
+        ..., min_length=1, description="Verbatim substring from the student's essay."
+    )
+    start_char: int = Field(
+        ..., ge=0, description="0-indexed start character offset in essay_text."
+    )
     end_char: int = Field(..., gt=0, description="0-indexed end character offset in essay_text.")
 
 
@@ -228,7 +233,11 @@ def validate_writing_assessment(
         )
 
     # 7. Off-topic penalty check (UC-02 Acceptance Criterion #4: off_topic must have TR/TA <= 5.0)
-    if "off_topic" in assessment.flags and task_criterion_band is not None and task_criterion_band > 5.0:
+    if (
+        "off_topic" in assessment.flags
+        and task_criterion_band is not None
+        and task_criterion_band > 5.0
+    ):
         errors.append(
             f"Essay is flagged 'off_topic', so {first_criterion} band must be <= 5.0 "
             f"(got {task_criterion_band})."

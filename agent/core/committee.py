@@ -13,7 +13,7 @@ Owned by Member 3. Implements:
 
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 from pydantic import BaseModel, Field
 
@@ -110,7 +110,7 @@ def merge_consensus_assessments(
                 criterion=crit_a.criterion,
                 band=avg_crit,
                 evidence=crit_a.evidence,
-                descriptor_refs= sorted(set(crit_a.descriptor_refs + crit_b.descriptor_refs)),
+                descriptor_refs = sorted(set(crit_a.descriptor_refs + crit_b.descriptor_refs)),
                 comment=f"[Consensus A & B] {crit_a.comment}",
             )
         )
@@ -150,7 +150,9 @@ def default_moderator_reconcile(
         reconciled_band = compute_ielts_overall_band(
             [crit_a.band, crit_a.band, crit_b.band, crit_b.band]
         )
-        chosen_evidence = crit_a.evidence if len(crit_a.evidence) >= len(crit_b.evidence) else crit_b.evidence
+        chosen_evidence = (
+            crit_a.evidence if len(crit_a.evidence) >= len(crit_b.evidence) else crit_b.evidence
+        )
         if chosen_evidence:
             cited_quotes.append(chosen_evidence[0].quote)
 

@@ -81,7 +81,9 @@ def compute_divergence(
     off_topic_b = "off_topic" in examiner_b.flags
     off_topic_conflict = off_topic_a != off_topic_b
 
-    trigger_moderator = overall_diff > 0.5 or max_crit_diff >= 1.0 or off_topic_conflict
+    trigger_moderator = (
+        overall_diff > 0.5 or max_crit_diff >= 1.0 or off_topic_conflict
+    )
 
     return DivergenceMetrics(
         overall_diff=overall_diff,
@@ -108,7 +110,7 @@ def merge_consensus_assessments(
                 criterion=crit_a.criterion,
                 band=avg_crit,
                 evidence=crit_a.evidence,
-                descriptor_refs=sorted(set(crit_a.descriptor_refs + crit_b.descriptor_refs)),
+                descriptor_refs = sorted(set(crit_a.descriptor_refs + crit_b.descriptor_refs)),
                 comment=f"[Consensus A & B] {crit_a.comment}",
             )
         )
@@ -215,7 +217,9 @@ def validate_moderator_decision(
             f"[{low_bound}, {high_bound}] without out_of_bounds_justification."
         )
 
-    all_examiner_quotes = {ev.quote for c in examiner_a.criteria for ev in c.evidence} | {
+    all_examiner_quotes = {
+        ev.quote for c in examiner_a.criteria for ev in c.evidence
+    } | {
         ev.quote for c in examiner_b.criteria for ev in c.evidence
     }
 

@@ -2,7 +2,7 @@
 
 This module belongs to the Harness verification layer. It validates:
 1. Schema compliance of `WritingAssessment` (Pydantic v2).
-2. Valid IELTS band increments [1.0, 1.5, ..., 9.0] and official IELTS overall band rounding.
+2. Valid IELTS band increments [1.0, 1.5, ..., 9.0] and the repository Task-band rounding policy.
 3. Exact 4 IELTS criteria matching `task1` (`task_achievement`) or `task2` (`task_response`).
 4. 100% verbatim existence of `evidence.quote` in `essay_text` and exact `[start_char:end_char]` slice matching.
 5. 100% validity of `descriptor_refs` against retrieved RAG chunk IDs and `task_type` (`task1` vs `task2`).
@@ -12,11 +12,14 @@ This module belongs to the Harness verification layer. It validates:
 
 from __future__ import annotations
 
-import math
 from collections.abc import Sequence
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
+
+from agent.tools.compute_tool import compute_band
+
+from .validators import consistency_validator, format_issue, quote_validator, refs_validator
 
 VALID_BANDS: set[float] = {i / 2.0 for i in range(2, 19)}  # {1.0, 1.5, ..., 9.0}
 
@@ -84,11 +87,8 @@ class ValidationResult(BaseModel):
 
 
 def compute_ielts_overall_band(bands: Sequence[float]) -> float:
-    """Compute official IELTS overall band from 4 criteria bands (nearest 0.5, .25/.75 round up)."""
-    if len(bands) != 4:
-        raise ValueError(f"Expected exactly 4 criterion bands, got {len(bands)}.")
-    mean_score = sum(bands) / 4.0
-    return math.floor(mean_score * 2.0 + 0.5) / 2.0
+    """Compatibility name retained for N3; N4 owns the shared calculation."""
+    return compute_band(bands)
 
 
 def repair_evidence_offsets(raw_data: dict[str, Any], essay_text: str) -> dict[str, Any]:
@@ -128,8 +128,19 @@ def validate_writing_assessment(
     expected_task_type: Literal["task1", "task2"] | None = None,
     expected_word_count: int | None = None,
     retrieved_descriptor_ids: set[str] | list[str] | None = None,
+    *,
+    retrieved_descriptors: list | None = None,
+    plagiarism_result: object | None = None,
+    security_result: object | None = None,
+    off_topic: bool | None = None,
 ) -> ValidationResult:
-    """Validate a candidate WritingAssessment against all UC-02 Definition-of-Done rules."""
+    """Validate N3 output using shared N4 tools.
+
+    Supply count_words(essay_text) as expected_word_count. Full descriptor
+    chunks enable metadata checks; the legacy IDs-only argument still works.
+    Trusted plagiarism/security/off-topic signals are checked only if supplied.
+    The caller must handle missing tools and retry or stop before displaying.
+    """
     errors: list[str] = []
 
     if isinstance(raw_output, WritingAssessment):
@@ -187,7 +198,7 @@ def validate_writing_assessment(
         errors.append(
             f"Invalid overall_band {assessment.overall_band}. Must be in [1.0, 1.5, ..., 9.0]."
         )
-    elif len(criterion_bands) == 4:
+    elif len(criterion_bands) == 4 and all(band in VALID_BANDS for band in criterion_bands):
         expected_overall = compute_ielts_overall_band(criterion_bands)
         if abs(assessment.overall_band - expected_overall) > 1e-6:
             errors.append(
@@ -199,30 +210,16 @@ def validate_writing_assessment(
     allowed_refs = set(retrieved_descriptor_ids) if retrieved_descriptor_ids is not None else None
     forbidden_prefix = "task1" if assessment.task_type == "task2" else "task2"
 
-    for crit in assessment.criteria:
-        for idx, ev in enumerate(crit.evidence):
-            if ev.quote not in essay_text:
-                errors.append(
-                    f"Criterion '{crit.criterion}' evidence[{idx}] quote not found verbatim in essay: "
-                    f"'{ev.quote}'"
-                )
-            elif essay_text[ev.start_char : ev.end_char] != ev.quote:
-                errors.append(
-                    f"Criterion '{crit.criterion}' evidence[{idx}] char offset [{ev.start_char}:{ev.end_char}] "
-                    f"slices '{essay_text[ev.start_char : ev.end_char]}', which does not match quote '{ev.quote}'."
-                )
+    errors.extend(format_issue(issue) for issue in quote_validator(assessment, essay_text))
+    if retrieved_descriptors is not None:
+        errors.extend(format_issue(issue) for issue in refs_validator(assessment, retrieved_descriptors))
 
+    for crit in assessment.criteria:
         for ref in crit.descriptor_refs:
             if forbidden_prefix in ref.lower():
-                errors.append(
-                    f"Criterion '{crit.criterion}' cites descriptor_ref '{ref}' belonging to "
-                    f"'{forbidden_prefix}' while grading '{assessment.task_type}'."
-                )
+                errors.append(f"Criterion '{crit.criterion}' cites a descriptor for {forbidden_prefix}.")
             if allowed_refs is not None and ref not in allowed_refs:
-                errors.append(
-                    f"Criterion '{crit.criterion}' cites unretrieved descriptor_ref '{ref}'. "
-                    f"Allowed refs: {sorted(allowed_refs)}."
-                )
+                errors.append(f"Criterion '{crit.criterion}' cites an unretrieved descriptor_ref.")
 
     # 6. Under-length flag check (<150 words for Task 1, <250 words for Task 2)
     min_words = 150 if assessment.task_type == "task1" else 250
@@ -242,6 +239,15 @@ def validate_writing_assessment(
             f"Essay is flagged 'off_topic', so {first_criterion} band must be <= 5.0 "
             f"(got {task_criterion_band})."
         )
+
+    # N4 consistency includes supplied trusted sensor signals; None is unknown.
+    errors.extend(format_issue(issue) for issue in consistency_validator(
+        assessment,
+        word_count=expected_word_count if expected_word_count is not None else assessment.word_count,
+        plagiarism=plagiarism_result,
+        security=security_result,
+        off_topic=off_topic,
+    ))
 
     # 8. Mandatory AI estimation disclaimer check (Rule 1.5.2)
     disclaimer_lower = assessment.disclaimer.lower()

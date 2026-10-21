@@ -81,6 +81,13 @@ SE373-IELTS-Learning-Agent/
 
 ---
 
+### Phần tools được chuyển sang repo thử nghiệm
+
+N4 tiếp tục phụ trách tools theo phân công đã thống nhất. Code nằm trong `agent/tools/`,
+bộ kiểm tra được nối vào `skills/writing_assessment/checks.py` của N3.
+Xem [bàn giao N4](docs/member4_handoff.md) để biết tên hàm, định dạng dữ liệu, phần đã kiểm thử
+và những dữ liệu còn cần nhận. Bảng phân công ban đầu phía trên chưa phản ánh thay đổi này.
+
 ## 4. Hướng dẫn cài đặt & Kiểm thử
 
 ### Yêu cầu tiên quyết
@@ -123,3 +130,20 @@ Mọi đóng góp vào repository phải tuân thủ nghiêm ngặt 4 quy tắc 
    > *"Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức."*
 3. **Bảo vệ dữ liệu người học:** Chỉ sử dụng hồ sơ người học giả lập (`data/learners/simulated_learners.json`). Tuyệt đối không commit dữ liệu cá nhân, bài làm thật của người dùng vào repo.
 4. **Tự xây dựng Agent:** Sử dụng mô hình qua API kết hợp LangGraph/LangChain; cấm sử dụng các API chấm bài IELTS đóng gói sẵn của bên thứ ba.
+
+
+### Kiểm tra trước khi đưa code lên GitHub
+
+```bash
+# Thực hiện một lần trên mỗi máy sau khi đã tạo .venv và cài requirements.txt
+git config core.hooksPath .githooks
+
+python -B scripts/check_repository.py
+python -B scripts/check_repository.py --staged
+python -B scripts/check_repository.py --history
+```
+
+Hook kiểm tra nội dung chuẩn bị commit và lịch sử trước khi push. CI chạy thêm các kiểm tra này,
+Ruff và Pytest. `.env` và môi trường `.venv` nằm ngoài phần cần commit; `.env.example` chỉ chứa mẫu.
+Bộ quét phát hiện các mẫu khóa phổ biến và đường dẫn bị cấm; người commit vẫn phải xem lại danh sách file.
+Không dùng `git add -f` để thêm `.env`, cache hoặc dữ liệu người học thật.

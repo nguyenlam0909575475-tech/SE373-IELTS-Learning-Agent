@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-# SE373-IELTS-Learning-Agent
-Kho lưu trữ để build website Agentic AI hoàn chỉnh
-
-## Member 1 handoff
-
-See [Member 1 to Member 2 handoff](docs/member1_to_member2_handoff.md) for installation, data generation and retrieval integration.
-=======
 # SE373: IELTS Learning Agent (Đề tài 06)
 
 > **Môn học:** Kỹ nghệ Hệ thống AI Tác tử (Agentic AI Systems Engineering - SE373)  
@@ -131,4 +123,3 @@ Mọi đóng góp vào repository phải tuân thủ nghiêm ngặt 4 quy tắc 
    > *"Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức."*
 3. **Bảo vệ dữ liệu người học:** Chỉ sử dụng hồ sơ người học giả lập (`data/learners/simulated_learners.json`). Tuyệt đối không commit dữ liệu cá nhân, bài làm thật của người dùng vào repo.
 4. **Tự xây dựng Agent:** Sử dụng mô hình qua API kết hợp LangGraph/LangChain; cấm sử dụng các API chấm bài IELTS đóng gói sẵn của bên thứ ba.
->>>>>>> origin/main

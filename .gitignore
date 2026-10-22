@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .venv/
 __pycache__/
 .pytest_cache/
@@ -13,3 +14,15 @@ data/raw/descriptors/*.png
 !data/chroma_db/
 data/chroma_db/*
 !data/chroma_db/README.md
+=======
+.env
+.env.local
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+dist/
+build/
+>>>>>>> origin/main

@@ -8,13 +8,19 @@ import pymupdf
 
 try:
     from .descriptor_data import ROOT, SOURCE_URL, VERSION, CRITERIA, validate_dataset
+    from .download_descriptors import EXPECTED_SHA256
 except ImportError:
     from descriptor_data import ROOT, SOURCE_URL, VERSION, CRITERIA, validate_dataset
+    from download_descriptors import EXPECTED_SHA256
 
 
 def extract(pdf):
+    content = Path(pdf).read_bytes()
+    digest = hashlib.sha256(content).hexdigest()
+    if digest != EXPECTED_SHA256:
+        raise ValueError('Source PDF SHA256 differs from the verified May 2023 source')
     chunks, provenance, policies = [], {}, []
-    with pymupdf.open(pdf) as doc:
+    with pymupdf.open(stream=content, filetype='pdf') as doc:
         if len(doc) != 9 or 'Updated May 2023' not in doc[0].get_text():
             raise ValueError('Expected the nine-page May 2023 source PDF')
         for task, pages in [('task1', (2, 3, 4)), ('task2', (6, 7, 8))]:
@@ -47,7 +53,7 @@ def extract(pdf):
                     band -= 1
             if band != -1:
                 raise ValueError('Missing bands')
-    data = {'meta': {'source_url': SOURCE_URL, 'version': VERSION, 'total_chunks': len(chunks), 'scope': 'Academic; source cells retain labelled General Training clauses', 'normalization': 'PDF line wraps collapsed to spaces; two unmapped punctuation glyphs restored', 'source_sha256': hashlib.sha256(Path(pdf).read_bytes()).hexdigest()}, 'chunks': chunks}
+    data = {'meta': {'source_url': SOURCE_URL, 'version': VERSION, 'total_chunks': len(chunks), 'scope': 'Academic; source cells retain labelled General Training clauses', 'normalization': 'PDF line wraps collapsed to spaces; two unmapped punctuation glyphs restored', 'source_sha256': digest}, 'chunks': chunks}
     validate_dataset(data)
     audit = {'source_url': SOURCE_URL, 'source_sha256': data['meta']['source_sha256'], 'cells': provenance, 'band_zero_policies': policies, 'rating_instruction': 'A script must fully fit the positive features of the descriptor at a particular level. Bolded text indicates negative features that will limit a rating.', 'review_status': 'Machine extraction with layout checks; independent human review still required. Bold formatting is not represented in plain text.'}
     return data, audit

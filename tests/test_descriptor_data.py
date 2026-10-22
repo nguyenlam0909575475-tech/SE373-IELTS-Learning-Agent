@@ -1,6 +1,8 @@
 import json
 import copy
 import unittest
+import tempfile
+import pymupdf
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -8,6 +10,18 @@ from scripts.descriptor_data import load_dataset, validate_dataset
 
 
 class DescriptorTests(unittest.TestCase):
+    def test_extraction_rejects_modified_pdf_with_same_layout(self):
+        from scripts.extract_descriptors import extract
+        with tempfile.TemporaryDirectory() as tmp:
+            altered = Path(tmp) / 'altered.pdf'
+            with pymupdf.open(ROOT / 'ielts-writing-band-descriptors.pdf') as doc:
+                metadata = dict(doc.metadata)
+                metadata['subject'] = 'Modified source for regression testing'
+                doc.set_metadata(metadata)
+                doc.save(altered)
+            with self.assertRaisesRegex(ValueError, 'SHA256'):
+                extract(altered)
+
     def test_validation_rejects_corruption(self):
         original = json.loads((ROOT / 'data/processed/writing_descriptors.json').read_text(encoding='utf-8'))
         for field, value in [('test_part', 'task1_task2'), ('criterion', 'task_response'), ('text', ''), ('band', True), ('band', 6.5), ('version', 'invented'), ('source_url', 'https://example.com')]:

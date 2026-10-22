@@ -1,23 +1,16 @@
-import json
 import copy
-import unittest
-import tempfile
-import pymupdf
+import json
 from pathlib import Path
+import tempfile
+import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
-from scripts.descriptor_data import load_dataset, validate_dataset
+import pymupdf
+
+from scripts.descriptor_data import ROOT, load_dataset, validate_dataset
 
 
 class DescriptorTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / 'ielts-writing-band-descriptors.pdf').is_file(), "Requires local source PDF")
-    def test_extraction_rejects_modified_pdf_with_same_layout(self):
-        ...
-
-    @unittest.skipUnless((ROOT / 'ielts-writing-band-descriptors.pdf').is_file(), "Requires local source PDF")
-    def test_source_geometry_reproduces_every_cell(self):
-        ...
-
     def test_extraction_rejects_modified_pdf_with_same_layout(self):
         from scripts.extract_descriptors import extract
         with tempfile.TemporaryDirectory() as tmp:
@@ -45,6 +38,7 @@ class DescriptorTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 validate_dataset({'meta': original['meta'], 'chunks': chunks})
 
+    @unittest.skipUnless((ROOT / 'ielts-writing-band-descriptors.pdf').is_file(), "Requires local source PDF")
     def test_source_geometry_reproduces_every_cell(self):
         from scripts.extract_descriptors import extract
         data, audit = extract(ROOT / 'ielts-writing-band-descriptors.pdf')

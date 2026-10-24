@@ -1,0 +1,392 @@
+[
+  {
+    "id": "bench_01",
+    "task_type": "task1",
+    "topic": "Electricity generation from renewable sources in four countries 2010-2020.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The bar chart illustrates the proportion of electricity produced from renewable energy sources in four different countries from 2010 to 2020. Overall, it is evident that all four nations experienced an upward trend in renewable power generation over the ten-year period. In 2010, Country A was the leader, accounting for approximately 30% of total electricity production. By 2020, this figure surged dramatically to reach nearly 55%. Country B followed a similar trajectory, rising steadily from 20% to 38%. In contrast, Country C and Country D registered comparatively modest growth throughout the observed timeframe. Country C started at 10% in 2010 and climbed incrementally to finish at 22% in 2020. Finally, Country D remained the lowest throughout, increasing from a mere 5% to 15%. In summary, while renewable electricity output expanded significantly across all four examined countries, Country A maintained the most commanding share throughout the entire decade, demonstrating the most substantial commitment to green energy transition. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_02",
+    "task_type": "task2",
+    "topic": "Remote working merits for employees and employers.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "In recent years, remote working has emerged as a prominent arrangement across numerous modern industries. I firmly agree that telecommuting provides far greater advantages to both workers and organizations compared to traditional office-based routines.\n\nFirst and foremost, employees experience profound improvements in productivity and work-life balance when working from home. By eliminating exhausting daily commutes, individuals conserve valuable hours each day, which can subsequently be channeled into focused intellectual tasks or healthy personal activities. Moreover, workers operate within a personalized and comfortable domestic environment, significantly minimizing ambient office distractions and stress levels.\n\nFrom the corporate standpoint, businesses can substantially reduce operating expenses through remote work models. Employers are no longer burdened by exorbitant rental costs for commercial office premises, utility bills, and workplace maintenance. Furthermore, companies can recruit exceptional talent globally regardless of geographical constraints, thereby fostering innovation and maintaining a highly competitive advantage in global markets.\n\nIn conclusion, telecommuting delivers indispensable benefits for work flexibility and fiscal efficiency. Both employees and corporate entities should actively embrace flexible remote working policies in the digital age.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike."
+  },
+  {
+    "id": "bench_03",
+    "task_type": "task1",
+    "topic": "Water consumption in three sectors in 2015.",
+    "ground_truth_band": 5.0,
+    "ground_truth_criteria": {
+      "task": 5.0,
+      "coherence": 5.0,
+      "lexical": 5.0,
+      "grammar": 5.0
+    },
+    "essay": "The table compares water use in three different sectors in 2015. Overall, agriculture used the most water, followed by domestic use and industrial use. Agriculture consumed 65% of the total water supply. Industry consumed about 20%, whereas domestic households consumed the remaining 15%. In conclusion, agricultural activities dominated global water consumption throughout the entire recorded period."
+  },
+  {
+    "id": "bench_04",
+    "task_type": "task2",
+    "topic": "University education practical skills vs theoretical knowledge.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "Many people debate whether higher education institutions should concentrate exclusively on pragmatic job skills or fundamental theoretical disciplines. In my perspective, while practical competencies facilitate prompt professional integration, rigorous theoretical foundations remain indispensable for enduring intellectual progress.\n\nAdvocates of practical education argue that modern employment markets demand tangible operational skills. Graduates who possess practical training in software development, clinical healthcare, or financial analysis can adapt rapidly to corporate expectations without extensive onboarding periods. Consequently, vocational integration enhances regional economic vitality and reduces youth unemployment rates.\n\nNevertheless, comprehensive theoretical comprehension empowers scholars to innovate and adapt when industries evolve. Without mastering fundamental physical or economic laws, professionals cannot formulate novel paradigms or solve unprecedented societal problems. Theoretical insights cultivate critical reflection and cognitive versatility, which are vital qualities for visionary leadership in an unpredictable global landscape.\n\nTo conclude, academic programs should maintain a symbiotic equilibrium between practical instruction and abstract theory. Equipping undergraduates with both empirical skillsets and conceptual breadth ensures optimal career longevity.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_05",
+    "task_type": "task2",
+    "topic": "Environmental protection individual vs government responsibility.",
+    "ground_truth_band": 6.0,
+    "ground_truth_criteria": {
+      "task": 6.0,
+      "coherence": 6.0,
+      "lexical": 6.0,
+      "grammar": 6.0
+    },
+    "essay": "Environmental preservation is one of the most pressing challenges facing the contemporary world. Some argue that state authorities must bear primary responsibility, while others contend that individual lifestyle choices play an equally pivotal role. I believe that while state legislation sets overarching frameworks, proactive civic participation is essential for sustainable ecological recovery.\n\nOn the one hand, centralized governments hold unmatched regulatory authority to enforce environmental compliance. National administrations can enact stringent carbon taxation, impose bans on single-use plastics, and subsidize large-scale renewable infrastructure projects such as offshore wind farms. Without strict legal enforcement and financial incentives, major industrial polluters would rarely curb carbon emissions voluntarily.\n\nOn the other hand, widespread ecological preservation cannot succeed without collective changes in personal consumer habits. Citizens determine market demand through their daily procurement choices. Opting for public transit, reducing meat consumption, and conscientiously sorting household waste collectively mitigate immense volumes of municipal pollution and resource depletion.\n\nIn conclusion, effective ecological stewardship requires seamless coordination between regulatory state mandates and conscientious grassroots habits. Neither governments nor individuals can resolve environmental degradation in isolation.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike."
+  },
+  {
+    "id": "bench_06",
+    "task_type": "task1",
+    "topic": "Car production in three countries over a 10-year span.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The line graph provides a comparative overview of automobile manufacturing figures across three distinct countries between 2005 and 2015. Overall, Country X maintained a substantial lead in automotive manufacturing throughout the entire span, despite experiencing a temporary plateau mid-period. In 2005, Country X produced roughly 5 million vehicles, which grew steadily to approximately 7.5 million by 2015. Conversely, Country Y initiated the period at 3 million units and witnessed moderate fluctuations before settling at 4 million units at the end of the survey. Country Z consistently recorded the lowest production levels, starting at 1 million vehicles in 2005 and concluding at 2 million vehicles by 2015. In summary, automotive manufacturing expanded across all three nations, with Country X reinforcing its undisputed manufacturing supremacy. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset."
+  },
+  {
+    "id": "bench_07",
+    "task_type": "task2",
+    "topic": "Social media impact on interpersonal communication.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "The proliferation of digital social media platforms has radically transformed how human beings interact and maintain interpersonal bonds. While some argue that online connectivity erodes authentic social intimacy, I am convinced that digital communication overwhelmingly enriches interpersonal connectivity when utilized responsibly.\n\nCritics frequently highlight that digital interactions often supplant meaningful face-to-face dialogues, leading to superficial connections and social alienation. People frequently prioritize curating idyllic virtual personas over cultivating vulnerable, authentic relationships, which can precipitate psychological distress and feelings of loneliness. Furthermore, pervasive screen dependency can impair non-verbal communicative competencies, especially among younger cohorts.\n\nConversely, social networking networks transcend geographical barriers and dismantle physical isolation. Individuals can maintain close contact with family members and peers across international borders without incurring prohibitive financial costs. Moreover, digital affinity communities enable marginalized populations and niche hobbyists to discover empathetic companionship and mutual support that might be absent in their immediate geographic surroundings.\n\nIn conclusion, although excessive reliance on social platforms poses psychological drawbacks, its communicative versatility and global bonding potential represent monumental social advancements.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_08",
+    "task_type": "task1",
+    "topic": "Coffee consumption per capita in four European nations.",
+    "ground_truth_band": 6.0,
+    "ground_truth_criteria": {
+      "task": 6.0,
+      "coherence": 6.0,
+      "lexical": 6.0,
+      "grammar": 6.0
+    },
+    "essay": "The bar chart illustrates the average annual per capita coffee consumption in four European countries during 2018. Overall, Nation M recorded the highest volume of coffee consumed per person, while Nation P registered the lowest intake. Specifically, citizens in Nation M drank approximately 12 kilograms of coffee annually. Nation N followed in second position with an average of 9 kilograms per resident. In comparison, Nation O recorded a moderate intake of 6 kilograms per individual. Finally, Nation P had the lowest consumption rate among all surveyed countries, standing at only 3.5 kilograms per person. To summarize, significant disparities existed in coffee drinking habits across European countries in 2018. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_09",
+    "task_type": "task2",
+    "topic": "Public transport funding vs road construction.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "Urban transport infrastructure represents a foundational determinant of municipal efficiency and civic wellbeing. Some argue that municipal authorities should direct resources primarily into expanding highway networks, whereas I advocate that prioritizing public transit systems yields far greater socioeconomic and ecological returns.\n\nProponents of highway expansion assert that constructing wider roads alleviates chronic vehicular congestion and facilitates commercial freight transportation. As metropolitan populations expand, automotive density intensifies; thus, augmenting road capacity appears to be an immediate remedy for vehicular bottlenecks. However, empirical transportation research reveals that expanding road capacity induces additional automobile traffic, ultimately recreating traffic paralysis.\n\nIn stark contrast, investing heavily in high-speed rail, subterranean metro networks, and electrified bus corridors addresses congestion fundamentally. Efficient public transit transports enormous volumes of commuters swiftly with minimal spatial occupation. Crucially, electrified mass transit diminishes municipal greenhouse gas emissions, curtails reliance on imported fossil fuels, and democratizes urban mobility for lower-income households who cannot afford private automobiles.\n\nIn conclusion, public funding should prioritize sustainable mass transit rather than perpetual highway expansion. A comprehensive public transportation network fosters greener, more equitable urban communities.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike."
+  },
+  {
+    "id": "bench_10",
+    "task_type": "task2",
+    "topic": "Artificial intelligence automation and future employment.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "The rapid advancement of artificial intelligence and robotic automation has ignited profound apprehension concerning the future viability of human employment. While mechanical displacement of repetitive labor is inevitable, I believe that technological evolution will catalyze unprecedented employment categories and augment human cognitive potential rather than cause permanent mass unemployment.\n\nHistorically, each industrial revolution generated transient labor market disruptions while fostering broader economic prosperity. Mechanical steam engines displaced manual weavers in textile mills, yet simultaneously stimulated burgeoning manufacturing and engineering industries. Similarly, while modern AI systems automate standardized computational and administrative duties, they create demand for machine learning researchers, data governance specialists, and robotic maintenance engineers.\n\nFurthermore, automated productivity frees human labor to focus on uniquely human aptitudes that algorithms cannot replicate. Professions requiring complex empathy, creative intuition, and philosophical nuance—such as palliative healthcare, early childhood education, and strategic dispute resolution—will inevitably expand in importance. By unburdening workers from monotonous tasks, AI allows humans to elevate their vocational endeavors into more fulfilling intellectual realms.\n\nIn conclusion, rather than fearing technological obsolescence, societies should reform educational paradigms to nurture human creativity and emotional intelligence. Coexisting synergistically with automated intelligence will unlock unprecedented prosperity.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike."
+  },
+  {
+    "id": "bench_11",
+    "task_type": "task1",
+    "topic": "Internet usage demographics across age groups in 2021.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The pie charts illustrate the distribution of internet users across five age brackets in a developed nation in 2021. Overall, young adults aged 18 to 29 constituted the largest proportion of daily internet consumers, whereas senior citizens aged 65 and above accounted for the smallest share. Young adults made up 35% of total internet users. The 30 to 49 age cohort closely followed, representing 30% of the overall demographic. The 50 to 64 category comprised 20% of users, demonstrating significant digital literacy among mature adults. In contrast, minors under 18 represented 10%, and senior individuals accounted for only 5% of the total digital user base. In summary, digital adoption was concentrated heavily among younger cohorts, while older citizens exhibited relatively limited participation. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset."
+  },
+  {
+    "id": "bench_12",
+    "task_type": "task2",
+    "topic": "Tourism impact on local culture and ecology.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "International tourism has expanded exponentially over recent decades, becoming an economic pillar for numerous developing destinations. However, unconstrained tourism frequently exacts severe cultural and ecological tolls. I believe that while tourism brings undeniable financial benefits, its adverse repercussions require rigorous regulatory containment.\n\nEconomically, tourism injects foreign capital directly into local communities, providing vital revenue for hospitality staff, artisanal craft producers, and transportation operators. Furthermore, revenue generated from tourist activities can be reinvested into restoring architectural heritage and preserving endangered natural reserves.\n\nConversely, unchecked mass tourism often commodifies delicate indigenous traditions, reducing sacred spiritual rituals into vulgar commercial spectacles. Ecologically, excessive tourist influxes cause severe coastal degradation, plastic pollution, and freshwater depletion in fragile island ecosystems.\n\nIn conclusion, sustainable tourism management must balance economic imperatives with cultural and ecological conservation through visitor quotas and environmental levies.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_13",
+    "task_type": "task1",
+    "topic": "University graduate employment rates by academic faculty.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The bar chart compares graduate employment rates within six months of graduation across four academic faculties at a state university in 2019. Overall, engineering graduates secured the highest full-time employment rate, while humanities graduates recorded the lowest proportion. Engineering led with 88% of alumni finding relevant work quickly. Business administration followed closely at 82%. Sciences recorded a respectable 74% employment rate. Conversely, humanities graduates lagged behind at 56%, with a significant portion pursuing postgraduate study or part-time work. In summary, vocational and technical faculties demonstrated markedly superior employment outcomes compared to liberal arts. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_14",
+    "task_type": "task2",
+    "topic": "Financial literacy education in secondary schools.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "Financial management is a fundamental life competency that profoundly influences an individual's lifelong wellbeing and economic stability. Many argue that secondary school curriculums should mandate comprehensive personal finance education. I wholeheartedly endorse this proposal, as mastering fiscal principles equips adolescents to navigate increasingly complex modern economies.\n\nWithout structured financial education, young adults frequently succumb to predatory credit schemes, predatory consumer loans, and reckless digital consumption. Introducing practical concepts such as compound interest, credit ratings, taxation, and disciplined budgeting empowers students to make prudent economic choices as they enter adulthood.\n\nMoreover, widespread financial literacy diminishes wealth inequality by democratizing sound investment practices. When students from varied socioeconomic backgrounds comprehend index funds and retirement savings, they gain the tools to achieve long-term financial security.\n\nIn conclusion, integrating personal financial literacy into compulsory secondary education is an urgent societal necessity that shields young people from fiscal destitution.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_15",
+    "task_type": "task2",
+    "topic": "Fast food advertising regulation to combat childhood obesity.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "Escalating rates of childhood obesity have sparked heated discussions concerning whether state authorities should restrict commercial advertising of fast food and sugary beverages targeted at children. I strongly advocate for stringent regulatory bans on unhealthy food advertisements during youth programming.\n\nChildren lack the cognitive maturity and critical discernment needed to evaluate manipulative marketing techniques. High-calorie junk food commercials deploy vibrant cartoon mascots and alluring jingles that trigger addictive cravings. Consequently, uncontrolled advertising directly fosters poor nutritional habits that lead to chronic health issues like juvenile diabetes and cardiovascular disorders.\n\nWhile parental guidance remains crucial, regulatory oversight creates a healthier media environment that supports parental efforts. Restricting fast food advertisements encourages food manufacturers to reformulate products and market healthier alternatives.\n\nIn conclusion, state regulation of junk food advertising is an ethical obligation that safeguards public pediatric health.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_16",
+    "task_type": "task1",
+    "topic": "Production of solar vs wind energy in Europe.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The line graph compares the total electricity output generated from solar panels and wind turbines in European nations from 2012 to 2022. Overall, both renewable technologies exhibited remarkable upward trends, with wind energy maintaining a steady lead throughout the observed decade. In 2012, wind generation stood at 200 terawatt-hours, rising substantially to reach 450 terawatt-hours by 2022. Meanwhile, solar energy started at a modest 70 terawatt-hours in 2012 before experiencing rapid expansion to surpass 220 terawatt-hours in 2022. In summary, renewable electricity production accelerated dramatically, driven by both massive offshore wind developments and residential solar adoption. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_17",
+    "task_type": "task2",
+    "topic": "Zoos ethics: conservation vs animal confinement.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The ethical validity of maintaining zoological parks has been widely debated among environmentalists and animal welfare advocates. While traditional zoos frequently confined wild animals in cramped enclosures for public entertainment, I believe modern conservation-oriented zoological facilities play a vital role in species preservation and public ecological education.\n\nOn the one hand, confining sentient wildlife in artificial habitats inevitably induces behavioral distress and limits natural foraging instincts. Commercial zoological parks often prioritize tourist footfall over animal welfare, resulting in psychological suffering. For this reason, exploitative animal exhibitions should be outlawed.\n\nOn the other hand, accredited modern conservation facilities conduct crucial captive breeding programs for critically endangered species facing extinction due to habitat destruction. Furthermore, interacting with wildlife fosters empathy and environmental stewardship among young visitors far more effectively than digital media.\n\nIn conclusion, zoological institutions must transition away from commercial entertainment toward dedicated wildlife rehabilitation and scientific conservation.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_18",
+    "task_type": "task1",
+    "topic": "Household expenditure patterns in Japan 2010 vs 2020.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The two pie charts illustrate the percentage breakdown of average household spending in Japan in 2010 and 2020. Overall, housing and food constituted the vast majority of family expenses in both years, while spending on recreation and clothing experienced noticeable declines. In 2010, housing accounted for 28% of the family budget, rising to 32% in 2020. Food expenditure remained relatively stable at 25% across both years. In contrast, expenditure on clothing dropped from 12% to 7%, and leisure spending fell from 15% to 11%. Transport stayed steady at approximately 15%. In summary, Japanese households redirected larger portions of their financial resources toward essential living costs such as shelter over the decade. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_19",
+    "task_type": "task2",
+    "topic": "Space exploration expenditure vs terrestrial poverty alleviation.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "Trillions of dollars are invested annually in space exploration programs, leading critics to argue that such colossal funds should instead be channeled directly into resolving terrestrial crises like poverty, hunger, and preventable diseases. Although alleviating global suffering is a paramount priority, I maintain that space research yields indispensable scientific spin-offs that directly improve terrestrial human life.\n\nOpponents of aerospace funding argue that allocating billions to lunar or Mars missions while millions lack clean water and primary healthcare is morally unconscionable. Immediate humanitarian relief appears to demand the total redirection of public budgets to domestic welfare.\n\nHowever, space exploration has generated transformative technological breakthroughs that benefit humanity daily. Satellite telecommunications, global weather forecasting, advanced agricultural soil monitoring, and medical imaging technologies all originated from space research programs. Furthermore, monitoring Earth's atmosphere from orbit is essential for tracking climate change and coordinating disaster responses.\n\nIn conclusion, space exploration and poverty alleviation are not mutually exclusive. Technological dividends from astrophysics actively assist in solving pressing global problems on Earth.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_20",
+    "task_type": "task1",
+    "topic": "Public library usage statistics in a metropolitan city.",
+    "ground_truth_band": 6.0,
+    "ground_truth_criteria": {
+      "task": 6.0,
+      "coherence": 6.0,
+      "lexical": 6.0,
+      "grammar": 6.0
+    },
+    "essay": "The bar chart outlines the number of visitors using various services at a city central library between 2014 and 2020. Overall, borrowing digital e-books and utilizing computer workstations surged dramatically, whereas physical book lending experienced a noticeable downward trajectory. In 2014, physical book borrowing was the most popular activity with 50,000 users, but this figure dropped to 25,000 by 2020. In contrast, digital book loans rose sharply from 10,000 to 45,000. Computer workstation access also climbed from 15,000 to 35,000 users. In conclusion, the city library evolved into a modern digital community hub rather than a traditional printed book repository. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_21",
+    "task_type": "task2",
+    "topic": "Compulsory community service for young adults.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "Some educators propose that high school graduates should undertake mandatory unpaid community service before entering university or the workforce. While forced labor can cause resentment, I believe that well-structured community programs instill civic responsibility and cultivate vital interpersonal skills.\n\nParticipating in local volunteer work—such as assisting at elderly nursing homes, mentoring underprivileged youth, or conducting neighborhood environmental cleanups—exposes adolescents to socioeconomic realities outside their personal bubbles. This cultivates empathy, social cohesion, and active citizenship.\n\nAdditionally, practical service offers youth tangible team-building and leadership competencies that academic curriculums often neglect. Experiencing practical problem-solving enhances maturity and self-confidence before entering competitive tertiary education.\n\nIn conclusion, instituting community service as a graduation requirement provides substantial societal and personal enrichment for emerging generations.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_22",
+    "task_type": "task1",
+    "topic": "Recycling rates of different materials in 2018.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The bar chart compares the recycling rates of five common materials in a European municipality in 2018. Overall, paper and glass achieved the highest recycling efficiency, while plastic and electronic waste recorded the lowest recovery rates. Paper recycling led the statistics at an impressive 82%, with glass bottles closely following at 75%. Metal cans reached a solid 60% recovery rate. Conversely, only 28% of plastic waste was recycled, and electronic waste recorded a dismal 18%. In summary, while traditional materials like paper and glass enjoyed mature recycling systems, synthetic polymers and complex electronics faced severe recovery deficits. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_23",
+    "task_type": "task2",
+    "topic": "Universal basic income: economic security vs work disincentive.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "The concept of Universal Basic Income (UBI)—guaranteeing every citizen an unconditional periodic cash stipend—has gained traction as technological automation threatens traditional job security. While opponents contend that unconditional stipends discourage labor productivity, I believe UBI provides an essential safety net that empowers citizens and stimulates economic dynamism.\n\nCritics argue that receiving guaranteed state money diminishes motivation to pursue demanding or low-wage employment, potentially precipitating economic stagnation and fiscal strain on state treasuries. However, pilot experiments globally demonstrate that beneficiaries primarily use stipends to afford nutrition, pursue vocational re-skilling, or care for sick relatives, rather than abandoning work entirely.\n\nFurthermore, UBI eliminates bureaucratic overhead associated with convoluted means-tested welfare programs. It equips vulnerable citizens with financial resilience to negotiate fairer labor conditions or pursue entrepreneurial ventures without fear of destitution.\n\nIn conclusion, UBI offers a visionary social contract that mitigates inequality and technological disruption in modern economies.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_24",
+    "task_type": "task1",
+    "topic": "Life expectancy trends in four continents 1960-2020.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The line graph illustrates the trajectory of average life expectancy across four continents between 1960 and 2020. Overall, life expectancy increased substantially across all four regions, with Europe maintaining the highest figures and Africa recording the most rapid gains despite starting from a low base. In 1960, European life expectancy stood at 69 years, climbing steadily to 81 years by 2020. The Americas rose from 65 to 77 years over the same span. Asia witnessed dramatic health improvements, rising from 48 years in 1960 to 74 years in 2020. Africa increased from 42 to 64 years. In summary, global public health interventions and sanitation advancements significantly lengthened human lifespans over the sixty-year period. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset."
+  },
+  {
+    "id": "bench_25",
+    "task_type": "task2",
+    "topic": "Preserving endangered minority languages in the globalized era.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "As English and other dominant languages become global mediums of commerce and technology, hundreds of indigenous and minority languages face imminent extinction. Some view this linguistic homogenization as an inevitable and convenient development for global communication, but I firmly argue that governments must actively protect and preserve endangered tongues.\n\nA language is not merely a communicative tool; it is the unique vessel of a culture's intangible heritage, oral histories, philosophical concepts, and ecological wisdom. When a language perishes, irreplaceable knowledge of indigenous flora, fauna, and traditional medicine vanishes forever, impoverishing the collective intellectual heritage of humanity.\n\nMoreover, linguistic diversity reinforces cultural identity and emotional dignity among minority communities. Policies supporting bilingual education and archiving oral traditions allow minority populations to engage with modern economies without discarding their ancestral roots.\n\nIn conclusion, state-funded language preservation is a moral and cultural imperative that safeguards global human diversity.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_26",
+    "task_type": "task1",
+    "topic": "Urban vs rural population proportions in five countries in 2020.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The stacked bar chart compares the proportions of urban and rural residents in five countries in 2020. Overall, Country Alpha had the most urbanized population, whereas Country Epsilon had the largest rural demographic. Country Alpha recorded 85% of its citizens residing in metropolitan centers and only 15% in rural areas. Country Beta and Country Gamma also exhibited high urbanization rates at 75% and 68% respectively. In contrast, Country Delta had an even 50-50 split between urban and rural dwellers. Finally, Country Epsilon was predominantly agrarian, with 70% of inhabitants living in rural communities. In summary, urbanization correlated strongly with national economic development across the surveyed nations. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_27",
+    "task_type": "task2",
+    "topic": "Cashless society: convenience vs privacy and financial exclusion.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "The transition toward a cashless economy through digital mobile wallets and contactless cards has accelerated worldwide. While digital transactions provide unprecedented convenience, I believe a completely cashless society poses grave threats to personal privacy and risks disenfranchising vulnerable populations.\n\nOn the one hand, electronic payments streamline financial transactions, curb currency counterfeiting, and reduce cash-handling expenses for retailers. Furthermore, digital trails hinder tax evasion and money laundering, boosting fiscal transparency.\n\nOn the other hand, cashless systems generate granular surveillance data on individuals' movements and consumer choices, creating vulnerabilities to corporate exploitation and cyber theft. Crucially, elderly citizens, unbanked low-income individuals, and rural residents often lack digital literacy or smartphone access, leaving them effectively excluded from commerce.\n\nIn conclusion, while embracing digital payments, societies must retain physical cash as a resilient, privacy-preserving legal tender.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_28",
+    "task_type": "task1",
+    "topic": "Air passenger numbers across four international airports 2015-2020.",
+    "ground_truth_band": 6.0,
+    "ground_truth_criteria": {
+      "task": 6.0,
+      "coherence": 6.0,
+      "lexical": 6.0,
+      "grammar": 6.0
+    },
+    "essay": "The line graph traces annual air passenger numbers at four major international airports from 2015 to 2020. Overall, passenger traffic expanded steadily until 2019, followed by an unprecedented collapse in 2020 due to international travel restrictions. Airport A handled the highest volume throughout, climbing from 70 million passengers in 2015 to 88 million in 2019, before plunging to 25 million in 2020. Airports B, C, and D displayed identical trajectories, peaking in 2019 before experiencing steep declines exceeding 65% in 2020. In summary, the aviation industry experienced robust multi-year growth that was abruptly halted by global health crises. Additionally, closer examination reveals that the overall differences remained pronounced throughout the recorded timeline, highlighting the consistent divergence between the highest and lowest performing categories. Furthermore, analyzing the specific distribution reveals subtle variations among intermediate periods, which collectively reinforce the overall comparative trend observed across the entire dataset. Overall, these comparative measurements illustrate a consistent pattern of structural development across the examined parameters throughout the whole surveyed timeframe."
+  },
+  {
+    "id": "bench_29",
+    "task_type": "task2",
+    "topic": "Mandatory physical education in universities to combat sedentary lifestyles.",
+    "ground_truth_band": 6.5,
+    "ground_truth_criteria": {
+      "task": 6.5,
+      "coherence": 6.5,
+      "lexical": 6.5,
+      "grammar": 6.5
+    },
+    "essay": "With increasing digitization and academic pressure, university students lead increasingly sedentary lifestyles that jeopardize their long-term health. Some advocate making physical education compulsory for all tertiary students. I support this policy because regular physical exercise enhances both cognitive performance and psychological stamina.\n\nPhysical fitness directly influences neurocognitive vitality. Aerobic exercise stimulates cerebral blood circulation and releases endorphins that alleviate depression, anxiety, and exam stress. Introducing mandatory sports modules ensures that students maintain healthy physical routines alongside demanding intellectual study.\n\nFurthermore, university sports programs encourage teamwork and interpersonal connections, mitigating campus loneliness. Establishing lifelong athletic habits during early adulthood shields individuals from chronic cardiovascular conditions later in life.\n\nIn conclusion, mandating sports credits in universities represents a holistic investment in graduates' physical and academic wellbeing.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  },
+  {
+    "id": "bench_30",
+    "task_type": "task2",
+    "topic": "Renewable energy transition speed: gradual vs immediate fossil fuel cessation.",
+    "ground_truth_band": 7.0,
+    "ground_truth_criteria": {
+      "task": 7.0,
+      "coherence": 7.0,
+      "lexical": 7.0,
+      "grammar": 7.0
+    },
+    "essay": "Confronting the accelerating threat of anthropogenic climate change necessitates an urgent overhaul of global energy systems. While environmental activists demand an immediate halt to all fossil fuel extraction, I argue that a rapid yet pragmatically phased transition is essential to safeguard global economic stability and prevent humanitarian crises.\n\nAn abrupt cessation of petroleum and natural gas would trigger catastrophic energy shortages, collapsing agricultural supply chains, public healthcare operations, and industrial manufacturing overnight. Vulnerable developing nations would suffer severe economic disruption and poverty if access to energy were suddenly curtailed.\n\nHowever, a phased transition must not become an excuse for political complacency. Governments must aggressively redirect fossil fuel subsidies into scaling offshore wind, utility-scale solar arrays, and high-capacity battery grid storage. Imposing escalating carbon tariffs compels industries to decarbonize while maintaining grid reliability.\n\nIn conclusion, achieving climate targets requires determined, accelerated decarbonization coupled with pragmatic energy security management.\n\nFurthermore, empirical evidence demonstrates that sustained engagement in structured planning yields significant positive outcomes. In addition, scholars consistently emphasize that adopting a balanced approach fosters resilience and long-term effectiveness in addressing these multifaceted modern challenges.\n\nIn addition to these considerations, modern sociological research highlights that systemic interventions produce far-reaching positive impacts across varied sectors. When institutions and individuals actively collaborate toward strategic improvements, sustainable societal advancement becomes significantly more achievable. Consequently, allocating adequate resources and attention toward holistic development remains a paramount objective for contemporary policymakers and citizens alike.\n\nIn addition, modern educational and social paradigms underscore that continuous reflection and targeted support mechanisms play an indispensable role in securing sustained advancement across diverse operational contexts."
+  }
+]

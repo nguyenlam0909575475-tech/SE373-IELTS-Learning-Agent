@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Learning Agent — Hệ Thống Đánh Giá &amp; Luyện Thi Thông Minh (UC-02)</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area" tabindex="0">
+        <div class="logo-badge">IELTS Learning Agent</div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <nav class="app-nav">
+        <button type="button" class="nav-btn active" id="navHomeBtn">
+          <span class="nav-icon">🏠</span>
+          <span>Trang chủ</span>
+        </button>
+        <button type="button" class="nav-btn" id="navWritingBtn">
+          <span class="nav-icon">✍️</span>
+          <span>Writing Test</span>
+        </button>
+      </nav>
+
+      <!-- Agent Mode Switch Control -->
+      <div class="mode-switch-card">
+        <div class="mode-label-group">
+          <span id="modeStatusBadge" class="badge badge-mock">⚡ Mock Agent</span>
+        </div>
+        <label class="switch" title="Chuyển đổi giữa Mock Agent (offline) và Live Agent (hệ thống thực)">
+          <input type="checkbox" id="mockModeToggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================================== -->
+  <!-- 1. HOME VIEW (Giao diện Trang chủ) -->
+  <!-- ============================================================================== -->
+  <div id="homeView" class="home-layout">
+    <!-- Test Modules Section -->
+    <section class="home-modules-section">
+      <div class="section-title-bar">
+        <h3 class="section-title">Chọn Kỹ Năng Luyện Thi</h3>
+        <p class="section-subtitle">Lựa chọn bài thi bạn muốn thực hành để bắt đầu đánh giá năng lực</p>
+      </div>
+
+      <div class="modules-grid">
+        <!-- Writing Test Box / Card (User requested focus) -->
+        <div class="module-card module-card-writing" id="homeWritingTestCard" role="button" tabindex="0" title="Nhấn để bắt đầu bài thi Writing">
+          <div class="module-card-header">
+            <div class="module-icon-wrapper writing-icon">
+              ✍️
+            </div>
+            <div class="module-status-badge badge-active">🟢 Đã sẵn sàng</div>
+          </div>
+          <div class="module-card-body">
+            <h4 class="module-title">Writing Test</h4>
+            <div class="module-tags">
+              <span class="m-tag">Academic</span>
+              <span class="m-tag">General Training</span>
+              <span class="m-tag">Task 1 &amp; Task 2</span>
+            </div>
+            <p class="module-desc">
+              Luyện viết Task 1 (biểu đồ, bản đồ, quy trình) và Task 2 (tiểu luận nghị luận xã hội).
+              Hệ thống AI tự động chấm 4 tiêu chí TR/TA, CC, LR, GRA với trích dẫn câu văn minh chứng phát sáng trên bài làm.
+            </p>
+            <div class="module-features">
+              <span class="feat-tag">⏱ Đồng hồ bấm giờ 40'</span>
+              <span class="feat-tag">📊 Đếm từ tự động chuẩn IELTS</span>
+              <span class="feat-tag">🔍 Dẫn chứng 100% nguyên văn</span>
+            </div>
+          </div>
+          <div class="module-card-footer">
+            <button type="button" class="btn btn-primary btn-block" id="btnStartWriting">
+              Bắt đầu bài thi Writing ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- Companion Modules: Showcase Future Phases (UC-04, UC-05, UC-10) -->
+        <div class="module-card module-card-secondary" title="Tính năng thuộc Phase 2 (UC-04)">
+          <div class="module-card-header">
+            <div class="module-icon-wrapper reading-icon">
+              📖
+            </div>
+            <div class="module-status-badge badge-upcoming">Phase 2 • UC-04</div>
+          </div>
+          <div class="module-card-body">
+            <h4 class="module-title">Reading Practice</h4>
+            <div class="module-tags">
+              <span class="m-tag">Academic Passages</span>
+              <span class="m-tag">Practice Generator</span>
+            </div>
+            <p class="module-desc">
+              Sinh bài đọc và câu hỏi Reading tự động dựa trên ngân hàng đề thi chuẩn CEFR kèm bộ kiểm chứng đáp án 2 lớp.
+            </p>
+          </div>
+          <div class="module-card-footer">
+            <button type="button" class="btn btn-outline btn-block disabled-btn" disabled>
+              Sắp ra mắt
+            </button>
+          </div>
+        </div>
+
+        <div class="module-card module-card-secondary" title="Tính năng thuộc Phase 2 (UC-04)">
+          <div class="module-card-header">
+            <div class="module-icon-wrapper listening-icon">
+              🎧
+            </div>
+            <div class="module-status-badge badge-upcoming">Phase 2 • UC-04</div>
+          </div>
+          <div class="module-card-body">
+            <h4 class="module-title">Listening Practice</h4>
+            <div class="module-tags">
+              <span class="m-tag">Audio Script</span>
+              <span class="m-tag">Multi-Accents</span>
+            </div>
+            <p class="module-desc">
+              Luyện nghe các Sections 1-4 với đa dạng chất giọng bản xứ và phản hồi chi tiết vị trí thông tin cần điền.
+            </p>
+          </div>
+          <div class="module-card-footer">
+            <button type="button" class="btn btn-outline btn-block disabled-btn" disabled>
+              Sắp ra mắt
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ============================================================================== -->
+  <!-- 2. WRITING TEST VIEW (Giao diện Luyện thi Writing) -->
+  <!-- ============================================================================== -->
+  <main class="main-layout hidden" id="writingTestView">
+    
+    <!-- Top Action Sub-bar in Writing Workspace -->
+    <div class="workspace-top-bar">
+      <button type="button" class="btn-sub-nav" id="btnBackToHome">
+        <span>← Về Trang chủ</span>
+      </button>
+      <div class="workspace-actions">
+        <button type="button" class="btn-sub-nav btn-sample-trigger" id="btnOpenSampleTestsFromEditor">
+          <span>📚 Chọn bài thi mẫu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Left Column: Input and Editor -->
+    <section class="panel editor-panel">
+      
+      <!-- Task Selection & Presets -->
+      <div class="panel-header">
+        <div class="task-tabs">
+          <button type="button" class="tab-btn active" id="tabTask1" data-task="task1">Writing Task 1 (Min 150 từ)</button>
+          <button type="button" class="tab-btn" id="tabTask2" data-task="task2">Writing Task 2 (Min 250 từ)</button>
+        </div>
+
+        <div class="preset-dropdown-container">
+          <select id="presetSelector" class="form-select">
+            <option value="">⚡ Chọn bài mẫu thử nghiệm...</option>
+            <option value="task1_standard">Task 1: Chuẩn Band 6.5 (Năng lượng tái tạo)</option>
+            <option value="task2_standard">Task 2: Chuẩn Band 7.0 (Làm việc từ xa)</option>
+            <option value="task1_under_length">Task 1: Bài ngắn &lt; 150 từ (Bật cờ under_length)</option>
+            <option value="task2_off_topic">Task 2: Lạc đề hoàn toàn (Nuclear vs Bánh ngọt)</option>
+            <option value="task2_prompt_injection">Task 2: Tấn công Prompt Injection</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Prompt Input -->
+      <div class="form-group">
+        <label for="promptInput" class="form-label">
+          <span>Đề bài</span>
+        </label>
+        <textarea id="promptInput" class="form-textarea prompt-box" rows="3" placeholder="Nhập đề bài IELTS Writing hoặc chọn từ danh sách mẫu phía trên..."></textarea>
+      </div>
+
+      <!-- Writing Editor Tools Header -->
+      <div class="editor-toolbar">
+        <div class="timer-widget">
+          <span class="timer-icon">⏱</span>
+          <span id="timerDisplay" class="timer-text">40:00</span>
+          <button id="timerToggleBtn" class="btn-sm btn-outline">Bắt đầu</button>
+          <button id="timerResetBtn" class="btn-sm btn-ghost">Đặt lại</button>
+        </div>
+
+        <div class="word-counter-widget">
+          <span class="wc-label">Số từ:</span>
+          <span id="wordCountBadge" class="wc-number">0</span>
+          <span id="wordTargetBadge" class="wc-target">/ 150 từ</span>
+          <span id="lengthStatusBadge" class="badge badge-warning hidden">Chưa đủ từ</span>
+        </div>
+      </div>
+
+      <!-- Essay Editor Textarea -->
+      <div class="form-group">
+        <textarea id="essayInput" class="form-textarea essay-box" rows="16" placeholder="Gõ hoặc dán bài viết học viên vào đây..."></textarea>
+      </div>
+
+      <!-- Submit Actions -->
+      <div class="editor-footer">
+        <button id="clearBtn" class="btn btn-secondary">Xóa bài</button>
+        <button id="submitBtn" class="btn btn-primary">
+          <span id="submitSpinner" class="spinner hidden"></span>
+          <span id="submitText">🚀 Nộp bài &amp; Chấm điểm ngay</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Right Column: Assessment Results -->
+    <section class="panel results-panel" id="resultsSection">
+      
+      <!-- Empty state before grading -->
+      <div id="emptyResultState" class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h3>Chưa có kết quả chấm</h3>
+        <p class="empty-desc">Nhập đề bài và bài làm của bạn rồi ấn nút "Nộp bài &amp; Chấm điểm ngay" để nhận kết quả phân tích chi tiết.</p>
+      </div>
+
+      <!-- Results Content Container -->
+      <div id="assessmentResults" class="results-content hidden">
+        
+        <!-- Score Header & Disclaimer -->
+        <div class="score-summary-card">
+          <div class="score-overall-badge">
+            <span class="score-caption">Điểm bài Task ước lượng</span>
+            <span class="score-num" id="overallBandValue">6.5</span>
+            <span class="score-scale">/ 9.0</span>
+          </div>
+
+          <div class="score-meta">
+            <div class="meta-row">
+              <span class="meta-item">⏱ Thời gian xử lý: <strong id="durationValue">-- ms</strong></span>
+              <span class="meta-item">📊 Tổng số từ: <strong id="resWordCount">--</strong></span>
+              <span class="meta-item">🤖 Cơ chế: <strong id="resExecMode">MOCK</strong></span>
+            </div>
+            
+            <!-- Mandatory AI Estimation Disclaimer -->
+            <div class="disclaimer-banner">
+              <span class="disclaimer-icon">⚠️</span>
+              <span id="disclaimerText">Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Warning Flags Alert (if any triggered) -->
+        <div id="flagsContainer" class="flags-container hidden">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Interactive Highlighting Essay View -->
+        <div class="interactive-essay-container">
+          <div class="interactive-header">
+            <h4>📖 Bài viết &amp; Dẫn chứng thực tế (Interactive Quote Highlighting)</h4>
+            <span class="hint-pill">💡 Bấm vào tiêu chí hoặc câu dẫn chứng bên dưới để tô màu phát sáng</span>
+          </div>
+          <div id="highlightedEssayContent" class="highlighted-essay-box">
+            <!-- Rendered with spans for interactive highlighting -->
+          </div>
+        </div>
+
+        <!-- 4 IELTS Criteria Breakdown -->
+        <div class="criteria-section">
+          <h4>📊 Đánh giá chi tiết 4 tiêu chí IELTS</h4>
+          <div class="criteria-grid" id="criteriaGrid">
+            <!-- Criterion cards rendered here -->
+          </div>
+        </div>
+
+        <!-- Actionable Corrections -->
+        <div class="corrections-section">
+          <h4>🛠 Gợi ý sửa lỗi &amp; Nâng cấp diễn đạt (Actionable Corrections)</h4>
+          <div class="corrections-list" id="correctionsList">
+            <!-- Corrections items rendered here -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+
+  <!-- ============================================================================== -->
+  <!-- 3. MODAL: WRITING TEST OPTIONS (Chọn bài mẫu vs Tự thiết kế) -->
+  <!-- ============================================================================== -->
+  <div id="writingOptionsModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="writingOptionsTitle">
+    <div class="modal-card options-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-title-icon">✍️</span>
+          <div>
+            <h3 id="writingOptionsTitle" class="modal-title">Hình Thức Luyện Thi Writing</h3>
+            <p class="modal-subtitle">Lựa chọn cách bạn muốn bắt đầu làm bài</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeWritingOptionsBtn" aria-label="Đóng cửa sổ" title="Đóng">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="options-choice-grid">
+          <!-- Option 1: Chọn bài mẫu -->
+          <div class="option-card" id="optSelectSampleBtn" role="button" tabindex="0">
+            <div class="option-icon-box sample-icon">📚</div>
+            <div class="option-content">
+              <h4 class="option-title">Chọn bài mẫu</h4>
+              <p class="option-description">
+                Lựa chọn từ danh sách các bộ đề thi mẫu chuẩn IELTS (Cambridge, British Council, IDP) kèm đầy đủ câu hỏi Task 1 và Task 2.
+              </p>
+              <div class="option-badge">Có danh sách câu hỏi &amp; nguồn bài thi</div>
+            </div>
+            <div class="option-arrow-box">➔</div>
+          </div>
+
+          <!-- Option 2: Tự thiết kế -->
+          <div class="option-card" id="optCustomTestBtn" role="button" tabindex="0">
+            <div class="option-icon-box custom-icon">✏️</div>
+            <div class="option-content">
+              <h4 class="option-title">Tự thiết kế</h4>
+              <p class="option-description">
+                Tự nhập đề bài hoặc dán bài viết tự do của bạn. Tùy ý chọn Task 1 (min 150 từ) hoặc Task 2 (min 250 từ) để AI chấm điểm.
+              </p>
+              <div class="option-badge">Tự do nhập đề bài &amp; bài viết</div>
+            </div>
+            <div class="option-arrow-box">➔</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================================== -->
+  <!-- 4. MODAL: SAMPLE TESTS WINDOW (Cửa sổ danh sách bài thi mẫu) -->
+  <!-- ============================================================================== -->
+  <div id="sampleTestsModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="sampleTestsTitle">
+    <div class="modal-card sample-tests-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-title-icon">📚</span>
+          <div>
+            <h3 id="sampleTestsTitle" class="modal-title">Danh Sách Các Bài Thi Mẫu (IELTS Sample Tests)</h3>
+            <p class="modal-subtitle">Nhấn vào dấu 3 chấm (⋮) ở mỗi bài thi để hiển thị danh sách câu hỏi</p>
+          </div>
+        </div>
+        <!-- Close Button (dấu x ở góc trên bên phải để đóng) -->
+        <button type="button" class="modal-close-btn" id="closeSampleTestsBtn" aria-label="Đóng cửa sổ" title="Đóng">&times;</button>
+      </div>
+
+      <div class="modal-body sample-tests-body">
+        <div id="sampleTestsList" class="sample-tests-container">
+          <!-- Dynamically populated sample tests with name, source, and 3-dots questions menu -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================================== -->
+  <!-- 5. APP FOOTER (Hiển thị Nhóm 13) -->
+  <!-- ============================================================================== -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <span class="footer-team">Nhóm 13</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

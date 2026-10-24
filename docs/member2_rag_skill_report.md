@@ -43,8 +43,11 @@ Pydantic của TV3 là schema chuẩn; script sync sẽ xuất schema thật và
 JSON sau khi model có mặt. Hiện YAML ghi rõ chỉ là contract snapshot theo handoff.
 
 Essay/task material/chunks được xử lý như dữ liệu, không phải lệnh hệ thống.
-Tool đếm từ trước chấm, tool tính trung bình sau khi có bốn điểm. Theo handoff
-TV3/TV4 mới nhất, không làm tròn điểm ở cấp Task. Quote dùng offset Python
+Tool đếm từ trước chấm; sau khi có bốn điểm, `compute_band` tính trung bình
+và làm tròn đến nấc 0.5 gần nhất, đúng giữa hai mức thì lên (.25 lên .5,
+.75 lên 1.0), theo file phân công Phase 1. Ví dụ `[6,6,6,7] -> 6.5`.
+Đây là policy của nhóm cho một Task, không khẳng định là quy tắc IELTS chính
+thức ở cấp Task. Quote dùng offset Python
 Unicode, `end_char` loại trừ. Graph quản lý tối đa hai lượt sửa, không trả bản
 chấm còn lỗi. Có nhãn AI ước lượng trên kết quả.
 
@@ -141,6 +144,7 @@ regression của hệ thống chấm theo Mục 6.3 đề tài. Chưa đo MAE, Q
 - [Chroma Python reference](https://docs.trychroma.com/reference/python) và
   [mã Collection của Chroma](https://github.com/chroma-core/chroma/blob/main/chromadb/api/models/Collection.py): API query/get collection và metadata filtering.
 - [Band Descriptors chính thức](https://ielts.org/cdn/ielts-guides/ielts-writing-band-descriptors.pdf): nguồn TV1 đã ghim; toàn văn chỉ để local khi chưa xác minh quyền phân phối.
-- Phân công Phase 1 và hai bản handoff TV3/TV4 do người dùng cung cấp:
-  contract tích hợp và quy ước không làm tròn ở cấp Task; không tự xem như code đã merge.
+- File phân công Phase 1 do nhóm cung cấp là căn cứ hợp đồng cho gói TV2.
+  Hai handoff TV3/TV4 dùng tham khảo tích hợp; chỗ ghi không làm tròn cấp Task
+  khác phân công và cần đồng bộ. Không tự xem handoff như code đã merge.
 - [Minh bạch sử dụng AI](ai_usage.md).

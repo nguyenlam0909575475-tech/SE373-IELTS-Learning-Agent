@@ -13,9 +13,10 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+from agent.tools.compute_tool import count_words
 from backend.config import get_mock_mode, set_mock_mode
 from backend.main import app
-from backend.mock_service import count_words, mock_assess_writing
+from backend.mock_service import mock_assess_writing
 from skills.writing_assessment.checks import validate_writing_assessment
 
 client = TestClient(app)

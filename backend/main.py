@@ -21,9 +21,10 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from agent.tools.compute_tool import count_words
 from backend.config import FRONTEND_DIR, WORD_COUNT_REGEX, get_mock_mode, set_mock_mode
 from backend.live_service import run_live_assessment
-from backend.mock_service import count_words, mock_assess_writing
+from backend.mock_service import mock_assess_writing
 from skills.writing_assessment.checks import WritingAssessment
 
 logging.basicConfig(level=logging.INFO)

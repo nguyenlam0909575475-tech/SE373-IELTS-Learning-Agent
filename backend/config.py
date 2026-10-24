@@ -11,6 +11,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from agent.tools.compute_tool import WORD_PATTERN
+
 # Load .env if present
 load_dotenv()
 
@@ -26,8 +28,8 @@ EVALS_DIR = ROOT_DIR / "evals"
 # Set USE_MOCK_AGENT=false to run in live agent mode (calls real LLM / LangGraph pipeline).
 USE_MOCK_AGENT: bool = os.getenv("USE_MOCK_AGENT", "true").lower() in ("true", "1", "yes")
 
-# Standard regex for word count (harmonized across frontend, backend, and harness)
-WORD_COUNT_REGEX: str = r"\b[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*\b"
+# Standard regex for word count (harmonized from Member 4 deterministic tool)
+WORD_COUNT_REGEX: str = WORD_PATTERN
 
 # API Server settings
 HOST: str = os.getenv("HOST", "0.0.0.0")

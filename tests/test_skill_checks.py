@@ -1,9 +1,9 @@
 import importlib.util
 import json
-from pathlib import Path
 import tempfile
 import types
 import unittest
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from scripts.sync_writing_schema import export_schema

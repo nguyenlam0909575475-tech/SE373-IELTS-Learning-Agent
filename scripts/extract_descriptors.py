@@ -7,9 +7,9 @@ from pathlib import Path
 import pymupdf
 
 try:
-    from .descriptor_data import ROOT, SOURCE_URL, VERSION, CRITERIA, validate_dataset
+    from .descriptor_data import CRITERIA, ROOT, SOURCE_URL, VERSION, validate_dataset
 except ImportError:
-    from descriptor_data import ROOT, SOURCE_URL, VERSION, CRITERIA, validate_dataset
+    from descriptor_data import CRITERIA, ROOT, SOURCE_URL, VERSION, validate_dataset
 
 
 def extract(pdf):

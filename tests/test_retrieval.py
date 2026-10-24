@@ -1,18 +1,20 @@
 """Scope/failure tests; fixtures are synthetic, not grading benchmarks."""
 import copy
-from dataclasses import asdict
-from enum import Enum
 import importlib.util
 import json
-from pathlib import Path
 import tempfile
 import unittest
+from dataclasses import asdict
+from enum import Enum
+from pathlib import Path
 from unittest.mock import Mock, patch
 
-from scripts.descriptor_data import CRITERIA, VERSION, SOURCE_URL
+from scripts.descriptor_data import CRITERIA, SOURCE_URL, VERSION
 from scripts.download_descriptors import EXPECTED_SHA256
 from src.tools.rag_descriptors import (
-    DescriptorRetriever, DescriptorChunk, RetrievalError, Member3RetrieverAdapter,
+    DescriptorRetriever,
+    Member3RetrieverAdapter,
+    RetrievalError,
     retrieve_descriptors,
 )
 

@@ -7,7 +7,7 @@ from time import perf_counter
 from uuid import uuid4
 
 from scripts.descriptor_data import CRITERIA, ROOT
-from src.tools.rag_descriptors import DescriptorRetriever, RetrievalError, QUERY_VERSION
+from src.tools.rag_descriptors import QUERY_VERSION, DescriptorRetriever, RetrievalError
 
 
 def main():

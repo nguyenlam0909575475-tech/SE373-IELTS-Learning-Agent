@@ -5,8 +5,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.descriptor_data import ROOT, CRITERIA
-from src.tools.rag_descriptors import DescriptorRetriever, RetrievalError, QUERY_VERSION, _arguments
+from scripts.descriptor_data import ROOT
+from src.tools.rag_descriptors import QUERY_VERSION, DescriptorRetriever, RetrievalError, _arguments
 
 
 def ranking_metrics(retrieved_ids, relevant_ids, k):

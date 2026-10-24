@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def export_schema(module_name, output, *, check=False, manifest=None):
-    model = getattr(importlib.import_module(module_name), "WritingAssessment")
+    model = importlib.import_module(module_name).WritingAssessment
     schema = model.model_json_schema()
     output = Path(output)
     manifest_path = Path(manifest) if manifest is not None else None

@@ -3,7 +3,7 @@
 * **Học phần:** SE373 - Agentic AI Systems Engineering
 * **Use Case:** UC-02 — Automated IELTS Writing Assessment & Harness Verification
 * **Chế độ thực thi:** `MOCK`
-* **Thời gian chạy:** `2026-10-24T05:09:27Z`
+* **Thời gian chạy:** `2026-10-24T06:00:41Z`
 * **Tổng số bài kiểm thử:** `48` (Benchmark: 30, Security: 12, Functional: 6)
 
 ---
@@ -21,7 +21,7 @@
 | **Tỷ lệ bảo mật SecurityGuard** | **100.0%** | 100.0% (Bắt đúng injection, không phạt safe) | ✅ ĐẠT |
 | **Cảnh báo độ dài (under_length)** | **100.0%** | 100.0% (< 150 cho Task 1, < 250 cho Task 2) | ✅ ĐẠT |
 | **Phạt bài lạc đề (off_topic)** | **100.0%** | 100.0% (TR/TA cap <= 5.0) | ✅ ĐẠT |
-| **Độ trễ xử lý trung bình** | **0.79 ms** | Yêu cầu thời gian thực | ✅ ĐẠT |
+| **Độ trễ xử lý trung bình** | **0.81 ms** | Yêu cầu thời gian thực | ✅ ĐẠT |
 
 ---
 

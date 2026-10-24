@@ -3,11 +3,11 @@
 The local records are transport objects, not replacements for Member 3's schemas.
 Pass chunk_factory=DescriptorChunk from Member 3 when wiring Dependencies.
 """
-from dataclasses import dataclass
-from pathlib import Path
 import json
 import re
-from typing import Callable
+from collections.abc import Callable
+from dataclasses import dataclass
+from pathlib import Path
 
 from scripts.descriptor_data import CRITERIA, ROOT, SOURCE_URL, VERSION
 from scripts.download_descriptors import EXPECTED_SHA256
@@ -136,7 +136,7 @@ class DescriptorRetriever:
                 raise ValueError("Invalid result length")
             chunks, seen = [], set()
             expected = {"chunk_id", "test_part", "criterion", "band", "version", "source_url"}
-            for cid, document, metadata in zip(ids, documents, metadatas):
+            for cid, document, metadata in zip(ids, documents, metadatas, strict=True):
                 if not isinstance(metadata, dict) or set(metadata) != expected:
                     raise ValueError("Invalid metadata")
                 if not isinstance(cid, str) or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,100}", cid):

@@ -1,5 +1,5 @@
-import json
 import hashlib
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import chromadb
 from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
+
 from scripts.descriptor_data import ROOT, load_dataset
 from scripts.rebuild_vectorstore import COLLECTION, rebuild
 
@@ -39,7 +40,12 @@ class RebuildTests(unittest.TestCase):
             self.assertEqual(len(result['ids'][0]), 3)
             self.assertTrue(all(m['test_part'] == 'task1' and m['criterion'] == 'lexical_resource' for m in result['metadatas'][0]))
             stored = reopened.get(include=['documents', 'metadatas'])
-            actual = {cid: dict(meta, text=text) for cid, meta, text in zip(stored['ids'], stored['metadatas'], stored['documents'])}
+            actual = {
+                cid: dict(meta, text=text)
+                for cid, meta, text in zip(
+                    stored['ids'], stored['metadatas'], stored['documents'], strict=True
+                )
+            }
             self.assertEqual(actual, {c['chunk_id']: c for c in load_dataset()})
 
     def test_invalid_source_does_not_create_database(self):

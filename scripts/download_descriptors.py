@@ -2,8 +2,8 @@
 import argparse
 import hashlib
 import json
-import urllib.request
 import urllib.error
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -20,7 +20,8 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT / 'ielts-writing-band-descriptors.pdf')
     args = parser.parse_args()
     try:
-        with urllib.request.urlopen(SOURCE_URL, timeout=60) as response:
+        req = urllib.request.Request(SOURCE_URL, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        with urllib.request.urlopen(req, timeout=60) as response:
             content = response.read()
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         parser.exit(1, f'Cannot download source: {exc}. Open {SOURCE_URL} in a browser and save the PDF as {args.output}; then run extract_descriptors.py.\n')

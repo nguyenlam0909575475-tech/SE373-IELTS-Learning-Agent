@@ -1,5 +1,5 @@
 """Delegate skill checks to the supplied Member 4 validators; no scoring logic."""
-from typing import Protocol, Any
+from typing import Any, Protocol
 
 
 class Validators(Protocol):

@@ -1,11 +1,11 @@
-import json
 import copy
+import json
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
 from scripts.descriptor_data import load_dataset, validate_dataset
 
+ROOT = Path(__file__).resolve().parents[1]
 
 class DescriptorTests(unittest.TestCase):
     def test_validation_rejects_corruption(self):

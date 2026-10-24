@@ -8,3 +8,59 @@ venv/
 node_modules/
 dist/
 build/
+
+# N4: local secrets, generated files and private learner data
+.env.*
+!.env.example
+.uv-cache/
+*.py[cod]
+.ruff_cache/
+.mypy_cache/
+.tox/
+.nox/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.egg-info/
+.next/
+data/chroma_db/
+# Local credentials and private key files
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+client_secret*.json
+service-account*.json
+# Local state, raw traces and private learner data
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.log
+logs/
+data/private/
+traces/raw/
+# Temporary Office files
+~$*
+# Editor, OS and temporary files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*.bak
+*.tmp
+*~

@@ -2,6 +2,7 @@
 __pycache__/
 .pytest_cache/
 .env
+artifacts/
 data/chroma_db/
 # Source and extracted copyrighted text remain local until redistribution is verified.
 ielts-writing-band-descriptors.pdf

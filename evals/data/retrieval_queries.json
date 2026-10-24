@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "version": "member2_relevance_v1",
+    "source": "Team-authored paraphrase queries; no learner submissions or copied source cells.",
+    "label_status": "Provisional relevance judgments authored with AI assistance; independent human review pending.",
+    "scope": "16 sample queries, two per Task/criterion, target bands 5 and 7. Not a complete band-range benchmark.",
+    "usage": "Keep fixed when comparing retrieval changes; do not treat as a hold-out set after tuning."
+  },
+  "cases": [
+    {
+      "case_id": "task1_task_achievement_b5",
+      "task_type": "task1",
+      "criterion": "task_achievement",
+      "query": "The report lists a few values but misses the main trend and offers too little comparison.",
+      "relevant_ids": [
+        "writing_task1_task_achievement_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_task_achievement_b7",
+      "task_type": "task1",
+      "criterion": "task_achievement",
+      "query": "The report identifies major trends and compares the most important figures with enough supporting data.",
+      "relevant_ids": [
+        "writing_task1_task_achievement_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_coherence_cohesion_b5",
+      "task_type": "task1",
+      "criterion": "coherence_cohesion",
+      "query": "The sequence of ideas is uneven and links between sentences are often mechanical.",
+      "relevant_ids": [
+        "writing_task1_coherence_cohesion_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_coherence_cohesion_b7",
+      "task_type": "task1",
+      "criterion": "coherence_cohesion",
+      "query": "Information moves logically between clear sections, although a few linking expressions are awkward.",
+      "relevant_ids": [
+        "writing_task1_coherence_cohesion_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_lexical_resource_b5",
+      "task_type": "task1",
+      "criterion": "lexical_resource",
+      "query": "Repeated everyday terms and unsuitable word choices restrict the precision of the report.",
+      "relevant_ids": [
+        "writing_task1_lexical_resource_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_lexical_resource_b7",
+      "task_type": "task1",
+      "criterion": "lexical_resource",
+      "query": "The report uses a varied, mostly precise vocabulary, with occasional errors in less familiar expressions.",
+      "relevant_ids": [
+        "writing_task1_lexical_resource_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_grammatical_range_accuracy_b5",
+      "task_type": "task1",
+      "criterion": "grammatical_range_accuracy",
+      "query": "Simple clauses dominate the report and frequent grammar mistakes make parts difficult to follow.",
+      "relevant_ids": [
+        "writing_task1_grammatical_range_accuracy_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task1_grammatical_range_accuracy_b7",
+      "task_type": "task1",
+      "criterion": "grammatical_range_accuracy",
+      "query": "The report uses different sentence patterns, including complex clauses, and many sentences are accurate.",
+      "relevant_ids": [
+        "writing_task1_grammatical_range_accuracy_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_task_response_b5",
+      "task_type": "task2",
+      "criterion": "task_response",
+      "query": "The essay takes a position but leaves one part of the question unanswered and explanations are too thin.",
+      "relevant_ids": [
+        "writing_task2_task_response_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_task_response_b7",
+      "task_type": "task2",
+      "criterion": "task_response",
+      "query": "The essay answers the whole question, sustains an opinion and develops supporting arguments with examples.",
+      "relevant_ids": [
+        "writing_task2_task_response_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_coherence_cohesion_b5",
+      "task_type": "task2",
+      "criterion": "coherence_cohesion",
+      "query": "The argument jumps between points and paragraph boundaries do not consistently separate ideas.",
+      "relevant_ids": [
+        "writing_task2_coherence_cohesion_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_coherence_cohesion_b7",
+      "task_type": "task2",
+      "criterion": "coherence_cohesion",
+      "query": "The argument follows a clear sequence with focused paragraphs and mostly effective connections.",
+      "relevant_ids": [
+        "writing_task2_coherence_cohesion_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_lexical_resource_b5",
+      "task_type": "task2",
+      "criterion": "lexical_resource",
+      "query": "The writer repeats common vocabulary, with frequent word-choice and spelling problems.",
+      "relevant_ids": [
+        "writing_task2_lexical_resource_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_lexical_resource_b7",
+      "task_type": "task2",
+      "criterion": "lexical_resource",
+      "query": "The writer uses a broad vocabulary to express distinctions, with occasional awkward collocations.",
+      "relevant_ids": [
+        "writing_task2_lexical_resource_b7_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_grammatical_range_accuracy_b5",
+      "task_type": "task2",
+      "criterion": "grammatical_range_accuracy",
+      "query": "The essay relies heavily on short sentences, while errors in longer sentences sometimes obscure the point.",
+      "relevant_ids": [
+        "writing_task2_grammatical_range_accuracy_b5_2023_05"
+      ]
+    },
+    {
+      "case_id": "task2_grammatical_range_accuracy_b7",
+      "task_type": "task2",
+      "criterion": "grammatical_range_accuracy",
+      "query": "The writer combines sentence structures flexibly and produces many correct sentences, with a few grammar errors.",
+      "relevant_ids": [
+        "writing_task2_grammatical_range_accuracy_b7_2023_05"
+      ]
+    }
+  ]
+}

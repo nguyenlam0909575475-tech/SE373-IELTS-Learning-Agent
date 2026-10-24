@@ -1,0 +1,272 @@
+{
+  "run_id": "516377b7-ce9a-422e-ab97-75e53af32114",
+  "created_at": "2026-10-20T06:55:57.706950+00:00",
+  "scope": "Member 2 retrieval demo only; no examiner or learner data.",
+  "query_version": "member2_criterion_v1",
+  "calls": [
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task1",
+        "criterion": "task_achievement",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task1_task_achievement_b7_2023_05",
+          "test_part": "task1",
+          "criterion": "task_achievement",
+          "band": 7,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_task_achievement_b5_2023_05",
+          "test_part": "task1",
+          "criterion": "task_achievement",
+          "band": 5,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_task_achievement_b6_2023_05",
+          "test_part": "task1",
+          "criterion": "task_achievement",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 2403.294
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task1",
+        "criterion": "coherence_cohesion",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task1_coherence_cohesion_b6_2023_05",
+          "test_part": "task1",
+          "criterion": "coherence_cohesion",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_coherence_cohesion_b8_2023_05",
+          "test_part": "task1",
+          "criterion": "coherence_cohesion",
+          "band": 8,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_coherence_cohesion_b9_2023_05",
+          "test_part": "task1",
+          "criterion": "coherence_cohesion",
+          "band": 9,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 309.087
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task1",
+        "criterion": "lexical_resource",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task1_lexical_resource_b9_2023_05",
+          "test_part": "task1",
+          "criterion": "lexical_resource",
+          "band": 9,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_lexical_resource_b5_2023_05",
+          "test_part": "task1",
+          "criterion": "lexical_resource",
+          "band": 5,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_lexical_resource_b4_2023_05",
+          "test_part": "task1",
+          "criterion": "lexical_resource",
+          "band": 4,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 254.914
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task1",
+        "criterion": "grammatical_range_accuracy",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task1_grammatical_range_accuracy_b9_2023_05",
+          "test_part": "task1",
+          "criterion": "grammatical_range_accuracy",
+          "band": 9,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_grammatical_range_accuracy_b6_2023_05",
+          "test_part": "task1",
+          "criterion": "grammatical_range_accuracy",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task1_grammatical_range_accuracy_b8_2023_05",
+          "test_part": "task1",
+          "criterion": "grammatical_range_accuracy",
+          "band": 8,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 245.1
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task2",
+        "criterion": "task_response",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task2_task_response_b7_2023_05",
+          "test_part": "task2",
+          "criterion": "task_response",
+          "band": 7,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_task_response_b6_2023_05",
+          "test_part": "task2",
+          "criterion": "task_response",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_task_response_b5_2023_05",
+          "test_part": "task2",
+          "criterion": "task_response",
+          "band": 5,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 267.634
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task2",
+        "criterion": "coherence_cohesion",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task2_coherence_cohesion_b7_2023_05",
+          "test_part": "task2",
+          "criterion": "coherence_cohesion",
+          "band": 7,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_coherence_cohesion_b6_2023_05",
+          "test_part": "task2",
+          "criterion": "coherence_cohesion",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_coherence_cohesion_b8_2023_05",
+          "test_part": "task2",
+          "criterion": "coherence_cohesion",
+          "band": 8,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 246.883
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task2",
+        "criterion": "lexical_resource",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task2_lexical_resource_b5_2023_05",
+          "test_part": "task2",
+          "criterion": "lexical_resource",
+          "band": 5,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_lexical_resource_b9_2023_05",
+          "test_part": "task2",
+          "criterion": "lexical_resource",
+          "band": 9,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_lexical_resource_b4_2023_05",
+          "test_part": "task2",
+          "criterion": "lexical_resource",
+          "band": 4,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 434.944
+    },
+    {
+      "tool": "retrieve_descriptors",
+      "parameters": {
+        "task_type": "task2",
+        "criterion": "grammatical_range_accuracy",
+        "top_k": 3
+      },
+      "status": "success",
+      "result": [
+        {
+          "chunk_id": "writing_task2_grammatical_range_accuracy_b6_2023_05",
+          "test_part": "task2",
+          "criterion": "grammatical_range_accuracy",
+          "band": 6,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_grammatical_range_accuracy_b8_2023_05",
+          "test_part": "task2",
+          "criterion": "grammatical_range_accuracy",
+          "band": 8,
+          "version": "ielts_writing_2023_05"
+        },
+        {
+          "chunk_id": "writing_task2_grammatical_range_accuracy_b9_2023_05",
+          "test_part": "task2",
+          "criterion": "grammatical_range_accuracy",
+          "band": 9,
+          "version": "ielts_writing_2023_05"
+        }
+      ],
+      "elapsed_ms": 311.483
+    }
+  ]
+}

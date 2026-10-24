@@ -1,0 +1,526 @@
+{
+  "created_at": "2026-10-24T06:01:15.243865+00:00",
+  "query_version": "member2_criterion_v1",
+  "dataset_sha256": "0088c623de3ffbb4852926f49adf71fe9fbf09f823bfe20013c8f215097e21d7",
+  "dataset_metadata": {
+    "version": "member2_relevance_v1",
+    "source": "Team-authored paraphrase queries; no learner submissions or copied source cells.",
+    "label_status": "Provisional relevance judgments authored with AI assistance; independent human review pending.",
+    "scope": "16 sample queries, two per Task/criterion, target bands 5 and 7. Not a complete band-range benchmark.",
+    "usage": "Keep fixed when comparing retrieval changes; do not treat as a hold-out set after tuning."
+  },
+  "index_metadata": {
+    "descriptor_version": "ielts_writing_2023_05",
+    "embedding_model": "all-MiniLM-L6-v2",
+    "source_sha256": "c8e575fea366234ab73677d7744f1ff3188e13fd960d4d0c99defba9b4a0caab"
+  },
+  "scope": "Retrieval ranking only; not benchmark grading accuracy or injection robustness.",
+  "runs": [
+    {
+      "mode": "query",
+      "top_k": 3,
+      "case_count": 16,
+      "error_count": 0,
+      "metrics": {
+        "precision_at_k": 0.1875,
+        "recall_at_k": 0.5625,
+        "mrr_at_k": 0.3854166666666667
+      },
+      "cases": [
+        {
+          "case_id": "task1_task_achievement_b5",
+          "retrieved_ids": [
+            "writing_task1_task_achievement_b2_2023_05",
+            "writing_task1_task_achievement_b7_2023_05",
+            "writing_task1_task_achievement_b6_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_task_achievement_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_task_achievement_b7",
+          "retrieved_ids": [
+            "writing_task1_task_achievement_b6_2023_05",
+            "writing_task1_task_achievement_b7_2023_05",
+            "writing_task1_task_achievement_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_task_achievement_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "case_id": "task1_coherence_cohesion_b5",
+          "retrieved_ids": [
+            "writing_task1_coherence_cohesion_b8_2023_05",
+            "writing_task1_coherence_cohesion_b4_2023_05",
+            "writing_task1_coherence_cohesion_b7_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_coherence_cohesion_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_coherence_cohesion_b7",
+          "retrieved_ids": [
+            "writing_task1_coherence_cohesion_b7_2023_05",
+            "writing_task1_coherence_cohesion_b6_2023_05",
+            "writing_task1_coherence_cohesion_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_coherence_cohesion_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task1_lexical_resource_b5",
+          "retrieved_ids": [
+            "writing_task1_lexical_resource_b9_2023_05",
+            "writing_task1_lexical_resource_b5_2023_05",
+            "writing_task1_lexical_resource_b3_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_lexical_resource_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "case_id": "task1_lexical_resource_b7",
+          "retrieved_ids": [
+            "writing_task1_lexical_resource_b5_2023_05",
+            "writing_task1_lexical_resource_b9_2023_05",
+            "writing_task1_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_lexical_resource_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_grammatical_range_accuracy_b5",
+          "retrieved_ids": [
+            "writing_task1_grammatical_range_accuracy_b5_2023_05",
+            "writing_task1_grammatical_range_accuracy_b4_2023_05",
+            "writing_task1_grammatical_range_accuracy_b3_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_grammatical_range_accuracy_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task1_grammatical_range_accuracy_b7",
+          "retrieved_ids": [
+            "writing_task1_grammatical_range_accuracy_b5_2023_05",
+            "writing_task1_grammatical_range_accuracy_b6_2023_05",
+            "writing_task1_grammatical_range_accuracy_b7_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_grammatical_range_accuracy_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "case_id": "task2_task_response_b5",
+          "retrieved_ids": [
+            "writing_task2_task_response_b4_2023_05",
+            "writing_task2_task_response_b8_2023_05",
+            "writing_task2_task_response_b6_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_task_response_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_task_response_b7",
+          "retrieved_ids": [
+            "writing_task2_task_response_b6_2023_05",
+            "writing_task2_task_response_b7_2023_05",
+            "writing_task2_task_response_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_task_response_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "case_id": "task2_coherence_cohesion_b5",
+          "retrieved_ids": [
+            "writing_task2_coherence_cohesion_b7_2023_05",
+            "writing_task2_coherence_cohesion_b4_2023_05",
+            "writing_task2_coherence_cohesion_b6_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_coherence_cohesion_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_coherence_cohesion_b7",
+          "retrieved_ids": [
+            "writing_task2_coherence_cohesion_b8_2023_05",
+            "writing_task2_coherence_cohesion_b9_2023_05",
+            "writing_task2_coherence_cohesion_b7_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_coherence_cohesion_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "case_id": "task2_lexical_resource_b5",
+          "retrieved_ids": [
+            "writing_task2_lexical_resource_b5_2023_05",
+            "writing_task2_lexical_resource_b9_2023_05",
+            "writing_task2_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_lexical_resource_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task2_lexical_resource_b7",
+          "retrieved_ids": [
+            "writing_task2_lexical_resource_b9_2023_05",
+            "writing_task2_lexical_resource_b5_2023_05",
+            "writing_task2_lexical_resource_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_lexical_resource_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_grammatical_range_accuracy_b5",
+          "retrieved_ids": [
+            "writing_task2_grammatical_range_accuracy_b5_2023_05",
+            "writing_task2_grammatical_range_accuracy_b8_2023_05",
+            "writing_task2_grammatical_range_accuracy_b3_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_grammatical_range_accuracy_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task2_grammatical_range_accuracy_b7",
+          "retrieved_ids": [
+            "writing_task2_grammatical_range_accuracy_b8_2023_05",
+            "writing_task2_grammatical_range_accuracy_b6_2023_05",
+            "writing_task2_grammatical_range_accuracy_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_grammatical_range_accuracy_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        }
+      ]
+    },
+    {
+      "mode": "criterion",
+      "top_k": 3,
+      "case_count": 16,
+      "error_count": 0,
+      "metrics": {
+        "precision_at_k": 0.14583333333333331,
+        "recall_at_k": 0.4375,
+        "mrr_at_k": 0.3333333333333333
+      },
+      "cases": [
+        {
+          "case_id": "task1_task_achievement_b5",
+          "retrieved_ids": [
+            "writing_task1_task_achievement_b7_2023_05",
+            "writing_task1_task_achievement_b5_2023_05",
+            "writing_task1_task_achievement_b6_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_task_achievement_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "case_id": "task1_task_achievement_b7",
+          "retrieved_ids": [
+            "writing_task1_task_achievement_b7_2023_05",
+            "writing_task1_task_achievement_b5_2023_05",
+            "writing_task1_task_achievement_b6_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_task_achievement_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task1_coherence_cohesion_b5",
+          "retrieved_ids": [
+            "writing_task1_coherence_cohesion_b6_2023_05",
+            "writing_task1_coherence_cohesion_b8_2023_05",
+            "writing_task1_coherence_cohesion_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_coherence_cohesion_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_coherence_cohesion_b7",
+          "retrieved_ids": [
+            "writing_task1_coherence_cohesion_b6_2023_05",
+            "writing_task1_coherence_cohesion_b8_2023_05",
+            "writing_task1_coherence_cohesion_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_coherence_cohesion_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_lexical_resource_b5",
+          "retrieved_ids": [
+            "writing_task1_lexical_resource_b9_2023_05",
+            "writing_task1_lexical_resource_b5_2023_05",
+            "writing_task1_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_lexical_resource_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        {
+          "case_id": "task1_lexical_resource_b7",
+          "retrieved_ids": [
+            "writing_task1_lexical_resource_b9_2023_05",
+            "writing_task1_lexical_resource_b5_2023_05",
+            "writing_task1_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_lexical_resource_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_grammatical_range_accuracy_b5",
+          "retrieved_ids": [
+            "writing_task1_grammatical_range_accuracy_b9_2023_05",
+            "writing_task1_grammatical_range_accuracy_b6_2023_05",
+            "writing_task1_grammatical_range_accuracy_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_grammatical_range_accuracy_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task1_grammatical_range_accuracy_b7",
+          "retrieved_ids": [
+            "writing_task1_grammatical_range_accuracy_b9_2023_05",
+            "writing_task1_grammatical_range_accuracy_b6_2023_05",
+            "writing_task1_grammatical_range_accuracy_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task1_grammatical_range_accuracy_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_task_response_b5",
+          "retrieved_ids": [
+            "writing_task2_task_response_b7_2023_05",
+            "writing_task2_task_response_b6_2023_05",
+            "writing_task2_task_response_b5_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_task_response_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        },
+        {
+          "case_id": "task2_task_response_b7",
+          "retrieved_ids": [
+            "writing_task2_task_response_b7_2023_05",
+            "writing_task2_task_response_b6_2023_05",
+            "writing_task2_task_response_b5_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_task_response_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task2_coherence_cohesion_b5",
+          "retrieved_ids": [
+            "writing_task2_coherence_cohesion_b7_2023_05",
+            "writing_task2_coherence_cohesion_b6_2023_05",
+            "writing_task2_coherence_cohesion_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_coherence_cohesion_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_coherence_cohesion_b7",
+          "retrieved_ids": [
+            "writing_task2_coherence_cohesion_b7_2023_05",
+            "writing_task2_coherence_cohesion_b6_2023_05",
+            "writing_task2_coherence_cohesion_b8_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_coherence_cohesion_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task2_lexical_resource_b5",
+          "retrieved_ids": [
+            "writing_task2_lexical_resource_b5_2023_05",
+            "writing_task2_lexical_resource_b9_2023_05",
+            "writing_task2_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_lexical_resource_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.3333333333333333,
+          "recall_at_k": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        {
+          "case_id": "task2_lexical_resource_b7",
+          "retrieved_ids": [
+            "writing_task2_lexical_resource_b5_2023_05",
+            "writing_task2_lexical_resource_b9_2023_05",
+            "writing_task2_lexical_resource_b4_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_lexical_resource_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_grammatical_range_accuracy_b5",
+          "retrieved_ids": [
+            "writing_task2_grammatical_range_accuracy_b6_2023_05",
+            "writing_task2_grammatical_range_accuracy_b8_2023_05",
+            "writing_task2_grammatical_range_accuracy_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_grammatical_range_accuracy_b5_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        {
+          "case_id": "task2_grammatical_range_accuracy_b7",
+          "retrieved_ids": [
+            "writing_task2_grammatical_range_accuracy_b6_2023_05",
+            "writing_task2_grammatical_range_accuracy_b8_2023_05",
+            "writing_task2_grammatical_range_accuracy_b9_2023_05"
+          ],
+          "relevant_ids": [
+            "writing_task2_grammatical_range_accuracy_b7_2023_05"
+          ],
+          "error": null,
+          "precision_at_k": 0.0,
+          "recall_at_k": 0.0,
+          "reciprocal_rank": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+if [ -x .venv/Scripts/python.exe ]; then
+    exec .venv/Scripts/python.exe -B scripts/check_repository.py --staged
+elif [ -x .venv/bin/python ]; then
+    exec .venv/bin/python -B scripts/check_repository.py --staged
+fi
+printf '%s\n' 'Repository check requires .venv. Run: python -m venv .venv, then install requirements.txt' >&2
+exit 1

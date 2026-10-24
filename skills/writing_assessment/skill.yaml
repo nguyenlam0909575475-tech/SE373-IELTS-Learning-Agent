@@ -29,13 +29,16 @@ steps:
   - step: 4
     name: compute_overall_band
     description: >
-      Call compute_band with the 4 criterion band scores to calculate the official IELTS rounded
-      overall band score in code.
+      Call compute_band with the 4 criterion band scores to calculate the Task overall band score in code using the current repository
+      policy (mean of 4 criteria, nearest 0.5, ties upward).
   - step: 5
     name: verify_output_contract
     description: >
       Run skills/writing_assessment/checks.py to verify schema compliance, valid band steps,
       exact character offsets for quotes, valid RAG descriptor_refs, penalty flags, and disclaimer.
+      Pass expected_word_count=count_words(essay_text), retrieved_descriptors (full chunks),
+      plagiarism_result, security_result and an independently assessed off_topic signal.
+      None for a sensor means unchecked; a missing corpus is a dependency error, not a clean result.
       Self-correct up to 2 times if any check fails.
 
 constraints:
@@ -73,7 +76,7 @@ input_contract:
       description: List of descriptor chunks returned by retrieve_descriptors RAG tool.
       items:
         type: object
-        required: ["chunk_id", "test_part", "criterion", "band", "text"]
+        required: ["chunk_id", "test_part", "criterion", "band", "text", "source_url", "version"]
     vocab_metrics:
       type: object
       description: Output from ielts_vocab_cefr_analyzer tool.

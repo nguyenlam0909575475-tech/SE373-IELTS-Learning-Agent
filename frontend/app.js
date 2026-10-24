@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const navHomeBtn = document.getElementById("navHomeBtn");
   const navWritingBtn = document.getElementById("navWritingBtn");
   const btnBackToHome = document.getElementById("btnBackToHome");
-  const homeWritingTestCard = document.getElementById("homeWritingTestCard");
   const btnStartWriting = document.getElementById("btnStartWriting");
   const btnOpenSampleTestsFromEditor = document.getElementById("btnOpenSampleTestsFromEditor");
 
@@ -286,9 +285,12 @@ document.addEventListener("DOMContentLoaded", () => {
       card.className = "sample-test-card";
       card.id = `testCard-${test.id || testIdx}`;
 
-      // Card Header: Tên bài mẫu, Nguồn bài thi, and Dấu 3 chấm
+      // Card Header: Tên bài mẫu, Nguồn bài thi, and Expand Indicator
       const header = document.createElement("div");
       header.className = "sample-test-header";
+      header.setAttribute("role", "button");
+      header.setAttribute("tabindex", "0");
+      header.setAttribute("title", "Nhấn vào đây để xem danh sách câu hỏi");
       header.innerHTML = `
         <div class="sample-test-info">
           <div class="sample-test-name-row">
@@ -301,13 +303,13 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
         <div class="sample-test-action-area">
-          <button type="button" class="btn-three-dots" id="dotsBtn-${testIdx}" title="Nhấn để xem danh sách câu hỏi" aria-label="Xem danh sách câu hỏi">
-            ⋮
-          </button>
+          <span class="expand-badge">
+            <span class="expand-chevron">▼</span>
+          </span>
         </div>
       `;
 
-      // Collapsible Questions Drawer (Hiển thị khi ấn vào dấu 3 chấm)
+      // Collapsible Questions Drawer (Hiển thị khi ấn vào đề đó)
       const drawer = document.createElement("div");
       drawer.className = "sample-questions-drawer hidden";
       drawer.id = `drawer-${testIdx}`;
@@ -352,27 +354,32 @@ document.addEventListener("DOMContentLoaded", () => {
       questionsHtml += `</div>`;
       drawer.innerHTML = questionsHtml;
 
-      // Event listener for 3 dots button
-      const dotsBtn = header.querySelector(".btn-three-dots");
-      dotsBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
+      // Event listener: Nhấn vào đề đó thì toggle hiển thị danh sách câu hỏi
+      function toggleDrawer() {
         const isHidden = drawer.classList.contains("hidden");
-        // Close other drawers for clean accordion UX
-        document.querySelectorAll(".sample-questions-drawer").forEach(d => d.classList.add("hidden"));
-        document.querySelectorAll(".btn-three-dots").forEach(b => b.classList.remove("active"));
+        // Close other open drawers for clean accordion UX
+        document.querySelectorAll(".sample-questions-drawer").forEach(d => {
+          if (d !== drawer) d.classList.add("hidden");
+        });
+        document.querySelectorAll(".sample-test-card").forEach(c => {
+          if (c !== card) c.classList.remove("expanded");
+        });
 
         if (isHidden) {
           drawer.classList.remove("hidden");
-          dotsBtn.classList.add("active");
+          card.classList.add("expanded");
         } else {
           drawer.classList.add("hidden");
-          dotsBtn.classList.remove("active");
+          card.classList.remove("expanded");
         }
-      });
+      }
 
-      // Also allow clicking header to toggle
-      header.addEventListener("click", () => {
-        dotsBtn.click();
+      header.addEventListener("click", toggleDrawer);
+      header.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleDrawer();
+        }
       });
 
       card.appendChild(header);
@@ -811,11 +818,6 @@ document.addEventListener("DOMContentLoaded", () => {
     navHomeBtn.addEventListener("click", () => switchView("home"));
     navWritingBtn.addEventListener("click", () => switchView("writing"));
     btnBackToHome.addEventListener("click", () => switchView("home"));
-
-    // Home: Clicking on Writing Test Card or its CTA Button opens options modal
-    homeWritingTestCard.addEventListener("click", (e) => {
-      openWritingOptionsModal();
-    });
 
     btnStartWriting.addEventListener("click", (e) => {
       e.stopPropagation();

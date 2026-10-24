@@ -1,5 +1,8 @@
 # Quy trình chấm một bài Academic Writing
 
+Căn cứ hợp đồng: file phân công Phase 1 do nhóm cung cấp. Khi handoff TV3/TV4
+khác file phân công, dùng file phân công và ghi nhận phần cần phối hợp sửa.
+
 Skill version: `1.0.0`. Đây là hướng dẫn cho giám khảo của UC-02 và từng giám khảo
 độc lập của UC-07. Chỉ chấm một Task; kết quả là điểm ước lượng dùng để luyện tập.
 
@@ -47,9 +50,12 @@ Không sửa essay trước khi đếm từ hoặc trích dẫn vì sẽ làm l�
    không quá 5 (Task 1 là policy mở rộng của nhóm); vẫn đánh giá ba tiêu chí còn
    lại độc lập. Độ dài và từ khó không bù cho lạc đề.
 7. Để code gọi `compute_band` sau khi có bốn điểm, rồi gán `overall_band`.
-   Theo TV3/TV4 mới nhất: trung bình cộng, không làm tròn cấp Task, ví dụ
-   `[6, 6, 6, 7] -> 6.25`. Đây chưa phải điểm Writing gộp hai Task hay overall
-   bốn kỹ năng. `word_count` cũng do code gán.
+   Theo file phân công Phase 1: lấy trung bình bốn tiêu chí và làm tròn đến
+   nấc 0.5 gần nhất, đúng giữa hai mức thì lên (.25 lên .5, .75 lên 1.0).
+   Ví dụ `[6, 6, 6, 7] -> 6.5`; `[6, 7, 7, 7] -> 7.0`. Đây là quy ước
+   tính điểm một Task của nhóm, chưa phải điểm Writing gộp hai Task hay overall
+   bốn kỹ năng; không khẳng định đây là quy tắc chính thức ở cấp Task.
+   `word_count` cũng do code gán.
 8. Người 3 validate Pydantic trước, sau đó gọi `checks.py:run_checks` với các
    kết quả tool độc lập. Hàm chỉ chuyển tiếp ba validators của Người 4.
    Lỗi validation nằm trong danh sách `ValidationIssue`, không thêm vào `flags`.

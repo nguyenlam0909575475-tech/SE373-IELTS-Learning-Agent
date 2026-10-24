@@ -151,7 +151,11 @@ Trả `[]` khi đạt; lỗi vận hành truyền lên caller, không giả thà
 Không import cứng module TV4, không viết lại validator. Các test dùng object giả
 để kiểm thứ tự/keyword/return shape, chưa phải kiểm tích hợp với code TV4 thật.
 
-Theo TV3 và TV4 mới: `compute_band([6,6,6,7]) = 6.25`, không làm tròn ở cấp Task.
+Theo file phân công Phase 1: `compute_band([6,6,6,7]) = 6.5`. Lấy trung bình
+bốn tiêu chí rồi làm tròn tới nấc 0.5 gần nhất, đúng giữa hai mức thì lên
+(.25 lên .5, .75 lên 1.0). Đây là policy tính điểm một Task của nhóm, không
+khẳng định là quy tắc chính thức của kỳ thi ở cấp Task. Bản handoff TV3/TV4
+ngày 18/10 ghi không làm tròn cần được nhóm cập nhật theo phân công.
 `overall_band` vẫn là tên trường đúng. TV3 quản lý tối đa hai lượt repair;
 checks không tự gọi LLM và không thêm validation errors vào `flags`.
 
@@ -177,3 +181,26 @@ Sau merge cần: DTO TV3 thật; adapter failure thật; validators TV4 thật; 
 skill và ghi trace; thử lỗi refs/quote rồi repair, hết hai lượt thì dừng. Người 5
 chạy eval chấm Writing trên benchmark hợp lệ. Không tính 16 truy vấn retrieval
 là 16 bài chấm chuẩn hoặc là nghiệm thu UC-02.
+
+
+## Đồng bộ theo file phân công Phase 1 (24/10/2026)
+
+File phân công do nhóm cung cấp là căn cứ khi khác handoff hoặc code trên main.
+
+| Thành phần | Hợp đồng TV2 theo phân công | Trạng thái phối hợp |
+|---|---|---|
+| Tên tiêu chí chung | `coherence_cohesion`, `lexical_resource`, `grammatical_range_accuracy` | Retriever/Skill TV2 giữ các tên này. Schema và validators trên main đang dùng hai tên có thêm `_and_`; TV3/TV4 cần đồng bộ hoặc cung cấp adapter được kiểm thử. |
+| Điểm Task | Trung bình bốn tiêu chí, làm tròn nấc 0.5; ties upward | Skill đã đồng bộ; cập nhật hai handoff đang ghi không làm tròn. |
+| Schema I/O | Xuất từ Pydantic `WritingAssessment` thật của TV3 | YAML vẫn là snapshot; chưa có model TV3 đúng hợp đồng để xuất schema thật. Không xuất từ model trên main đang dùng tên tiêu chí khác. |
+| Validator | Gọi lại ba hàm TV4, trả `list[ValidationIssue]` | Wrapper hiện có; chưa nghiệm thu cùng graph/DTO/validators thật. |
+| Không có chunk | Dừng an toàn với `RETRIEVAL_INVALID`; không bịa rubric | Đây là nhánh xử lý thất bại an toàn. Nếu nhóm yêu cầu nguồn dự phòng, phải thống nhất riêng và kiểm thử cùng bộ lọc. |
+
+Hai thư mục `skills/writing-assessment/` và `skills/writing_assessment/` hiện là
+hai implementation khác nhau, chưa phải alias. Gói TV2 theo phân công là thư mục
+dùng dấu gạch nối. Backend đang dùng bản gạch dưới; không coi đó là bằng chứng
+đã nạp Skill TV2. Chốt đường tích hợp cùng TV3/TV4/TV5 trước nghiệm thu.
+
+Sau khi TV3 thống nhất model theo hợp đồng trên, chạy script sync đã bàn giao,
+thêm kiểm tra drift vào CI và kiểm thử graph với retrieval/validators thật.
+Các kết quả ranking ngày 20/10 giữ nguyên vì lần sửa này không đổi thuật toán,
+index, truy vấn hoặc nhãn đánh giá; chưa chạy lại embedding và chưa cải thiện RAG.

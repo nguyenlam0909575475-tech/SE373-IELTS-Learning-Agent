@@ -2,6 +2,7 @@
   "name": "writing-assessment",
   "version": "1.0.0",
   "description": "Assess one Academic Writing Task with evidence and retrieved descriptors.",
+  "contract_basis": "Uploaded Phan_Cong_Nhiem_Vu_Phase_1 (2).md; Member 3/4 handoffs apply only where consistent with this assignment.",
   "when_to_use": "After task bank resolution for UC-02; reusable for each independent UC-07 examiner.",
   "entrypoint": "instructions.md",
   "schema_authority": {
@@ -38,7 +39,7 @@
       "task_type": "task1 | task2",
       "word_count": "int; supplied by code",
       "criteria": "Exactly four CriterionAssessment objects",
-      "overall_band": "finite float; supplied by compute_band, arithmetic mean without Task-level rounding",
+      "overall_band": "finite float in [0, 9]; supplied by compute_band, mean of four criteria rounded to nearest 0.5, ties upward (.25 -> .5, .75 -> 1.0); team policy for one Task",
       "corrections": "list[{original: str, suggestion: str, reason: str, category: grammar|lexis|cohesion|task}]",
       "flags": "list[under_length|off_topic|possible_plagiarism|injection_detected]",
       "disclaimer": "Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức"

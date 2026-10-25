@@ -1,6 +1,6 @@
 # Bàn giao N4 trong SE373-Agent
 
-Cập nhật: 21/10/2026. N4 tiếp tục phụ trách tools theo phân công đã xác nhận.
+Cập nhật: 25/10/2026. N4 tiếp tục phụ trách tools theo phân công đã xác nhận.
 Code được chuyển từ repo SE373 cũ sang nhánh `feature/m4-tools` của repo thử nghiệm.
 Repo cũ được giữ nguyên. Chưa commit hoặc push phần chuyển code này.
 

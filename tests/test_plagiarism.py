@@ -1,4 +1,4 @@
-"""Copy spans, thresholds and corpus failure handling without real essays."""
+"""Unit tests for plagiarism copy spans, thresholds and corpus handling."""
 
 import json
 from dataclasses import asdict

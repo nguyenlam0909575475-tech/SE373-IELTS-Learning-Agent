@@ -37,12 +37,13 @@ body {
 }
 
 /* ==============================================================================
-   App Header & Navigation
+   Top App Header (Chuẩn IELTS thi trên máy tính)
+   Ở cạnh bên IELTS Learning Agent hiển thị thời gian chạy, nút Nộp bài ở ngoài cùng bên phải
    ============================================================================== */
 .app-header {
   background: #1e293b;
   color: #ffffff;
-  padding: 14px 24px;
+  padding: 12px 24px;
   border-bottom: 1px solid #334155;
   position: sticky;
   top: 0;
@@ -50,7 +51,7 @@ body {
 }
 
 .header-container {
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -59,21 +60,53 @@ body {
   gap: 16px;
 }
 
+.header-left-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  transition: opacity 0.2s;
 }
 
 .logo-badge {
   background: linear-gradient(135deg, #3b82f6, #6366f1);
   color: #fff;
   font-weight: 800;
-  font-size: 1.1rem;
-  padding: 8px 12px;
+  font-size: 1.05rem;
+  padding: 7px 11px;
   border-radius: var(--radius-md);
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Exam Timer Badge cạnh bên IELTS Learning Agent */
+.exam-timer-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f172a;
+  border: 1.5px solid #38bdf8;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+  user-select: none;
+}
+
+.timer-icon {
+  font-size: 1.1rem;
+}
+
+.timer-text {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 1px;
 }
 
 /* Nav tabs in header */
@@ -87,10 +120,10 @@ body {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #cbd5e1;
-  padding: 8px 16px;
+  padding: 7px 15px;
   border-radius: 9999px;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -112,17 +145,19 @@ body {
   box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
 }
 
-.nav-icon {
-  font-size: 1rem;
+/* Header Right Group: Mode switch & Nút Nộp bài ở ngoài cùng bên phải */
+.header-right-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-/* Mode Switch Widget */
 .mode-switch-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   background: #0f172a;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 9999px;
   border: 1px solid #334155;
 }
@@ -136,8 +171,8 @@ body {
 .switch {
   position: relative;
   display: inline-block;
-  width: 46px;
-  height: 24px;
+  width: 44px;
+  height: 22px;
 }
 
 .switch input {
@@ -160,8 +195,8 @@ body {
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 16px;
+  width: 16px;
   left: 3px;
   bottom: 3px;
   background-color: white;
@@ -177,20 +212,44 @@ input:checked + .slider:before {
 }
 
 .slider.round {
-  border-radius: 24px;
+  border-radius: 22px;
 }
 
 .slider.round:before {
   border-radius: 50%;
 }
 
+/* Nút Nộp bài ở ngoài cùng bên phải */
+.btn-submit-exam {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 8px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-submit-exam:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.45);
+  transform: translateY(-1px);
+}
+
 /* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 9999px;
-  font-size: 0.8rem;
+  font-size: 0.775rem;
   font-weight: 600;
 }
 
@@ -206,12 +265,6 @@ input:checked + .slider:before {
   border: 1px solid #86efac;
 }
 
-.badge-warning {
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fca5a5;
-}
-
 .badge-flag {
   background: #fef2f2;
   color: #991b1b;
@@ -220,12 +273,12 @@ input:checked + .slider:before {
   padding: 6px 12px;
 }
 
-/* Buttons */
+/* Base Buttons */
 .btn {
   font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
-  padding: 10px 20px;
+  padding: 9px 18px;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
@@ -278,16 +331,17 @@ input:checked + .slider:before {
 }
 
 .btn-sm {
-  padding: 6px 12px;
+  padding: 5px 12px;
   font-size: 0.825rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
-.btn:disabled, .btn-sm:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 0.775rem;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* ==============================================================================
@@ -341,13 +395,18 @@ input:checked + .slider:before {
   justify-content: space-between;
   box-shadow: var(--shadow-md);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
 }
 
-/* Primary Writing Card Highlight */
 .module-card-writing {
   border-color: #93c5fd;
+  cursor: pointer;
   background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.module-card-writing:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 28px -6px rgba(37, 99, 235, 0.16);
+  border-color: var(--primary);
 }
 
 .module-card-secondary {
@@ -464,254 +523,590 @@ input:checked + .slider:before {
 }
 
 /* ==============================================================================
-   2. WRITING TEST WORKSPACE STYLES
+   2. COMPUTER-DELIVERED WRITING TEST WORKSPACE
    ============================================================================== */
-.workspace-top-bar {
-  max-width: 1600px;
-  margin: 0 auto 16px auto;
-  width: 100%;
+.cd-writing-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: calc(100vh - 66px);
+  min-height: 560px;
+  background: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Thanh thông tin trên cùng (Top Banner: Hộp màu xám nhạt với nội dung hướng dẫn) */
+.cd-top-banner {
+  background: #e2e8f0;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 10px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.btn-sub-nav {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  color: #334155;
-  font-weight: 600;
-  font-size: 0.875rem;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
+.cd-instruction-content {
+  display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.btn-sub-nav:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  color: #0f172a;
-}
-
-.btn-sample-trigger {
-  background: var(--primary-light);
-  border-color: #bfdbfe;
-  color: var(--primary);
-}
-
-.btn-sample-trigger:hover {
-  background: #dbeafe;
-  border-color: var(--primary);
-}
-
-.main-layout {
-  max-width: 1600px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px 36px 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 12px;
   flex: 1;
 }
 
-@media (max-width: 1024px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
+.cd-instruction-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.panel {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+/* Khu vực làm bài chính (Split-screen 2 cột) */
+.cd-split-container {
+  display: flex;
+  flex: 1;
+  margin: 12px 20px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+/* Cột trái: Hiển thị đề bài luận văn bản, phân cấp đoạn văn mạch lạc */
+.cd-left-pane {
+  width: 50%;
+  min-width: 280px;
+  max-width: calc(100% - 280px);
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.editor-panel {
-  padding: 24px;
+.cd-pane-header {
+  padding: 10px 18px;
+  background: #e2e8f0;
+  border-bottom: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.panel-header {
+.cd-part-title-badge {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cd-prompt-view {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.cd-prompt-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cd-prompt-formatted {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #1e293b;
+}
+
+.cd-prompt-formatted p {
+  margin-bottom: 14px;
+}
+
+.cd-prompt-formatted p:last-child {
+  margin-bottom: 0;
+}
+
+/* Thanh phân cách giữa: Đường kẻ dọc mảnh có biểu tượng <-> cho phép kéo thả */
+.cd-resizer {
+  width: 14px;
+  background: #e2e8f0;
+  cursor: col-resize;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 10;
+  transition: background 0.15s;
+}
+
+.cd-resizer:hover, .cd-resizer.active-drag {
+  background: #cbd5e1;
+}
+
+.cd-resizer-line {
+  flex: 1;
+  width: 1px;
+  background: #cbd5e1;
+}
+
+.cd-resizer-handle {
+  background: #ffffff;
+  border: 1.5px solid #94a3b8;
+  border-radius: 9999px;
+  padding: 0 4px;             /* Giảm padding ngang để dành chỗ cho text */
+  width: 32px;                /* Đặt width cố định thay vì min-width */
+  height: 24px;               /* Đổi từ 36px xuống 24px để tạo dáng oval ngang cân đối */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 20px;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  user-select: none;
+  overflow: visible;          /* Cho phép hiển thị tràn ra ngoài thanh 14px mà không bị cắt */
+  flex-shrink: 0;             /* Ngăn flexbox bóp méo handle */
 }
 
-.task-tabs {
+.resizer-arrows {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #334155;
+  letter-spacing: -1px;
+  white-space: nowrap;        /* Bắt buộc: Chống rớt dòng tuyệt đối */
+  line-height: 1;
+}
+
+/* Cột phải: Khung nhập liệu màu trắng có viền mỏng; góc trên bên phải có biểu tượng; bên dưới có bộ đếm từ */
+.cd-right-pane {
+  flex: 1;
+  min-width: 280px;
+  background: #ffffff;
   display: flex;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: var(--radius-md);
-  gap: 4px;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.tab-btn {
-  background: transparent;
+.cd-editor-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.cd-essay-textarea {
+  flex: 1;
+  width: 100%;
   border: none;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
+  padding: 20px 24px;
   font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: #0f172a;
+  resize: none;
+  outline: none;
+  background: #ffffff;
+}
+
+.cd-editor-bottom-bar {
+  padding: 10px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cd-word-counter {
+  font-size: 0.95rem;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wc-prefix {
+  font-weight: 700;
+}
+
+.wc-val {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* ==============================================================================
+   Thanh điều hướng & Footer (Navigation & Footer)
+   ============================================================================== */
+.cd-bottom-bar {
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  padding: 8px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 40;
+}
+
+/* Dưới đáy màn hình: Thanh tiến trình hiển thị hai phần thi gồm Part 1 và Part 2 */
+.cd-progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cd-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border-radius: 9999px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.cd-progress-step:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.cd-progress-step.active {
+  border-color: var(--primary);
+  background: #eff6ff;
+  color: var(--primary);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+/* Khi hoàn thành: Thêm tick và chuyển sang màu xanh lá */
+.cd-progress-step.completed {
+  border-color: #10b981;
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.cd-progress-step.completed .step-tick-icon:before {
+  content: "✓ ";
+  font-weight: 900;
+  margin-right: 2px;
+}
+
+.cd-progress-line {
+  width: 28px;
+  height: 2px;
+  background: #cbd5e1;
+}
+
+/* Góc dưới bên phải: Chứa 2 biểu tượng mũi tên */
+.cd-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cd-arrow-btn {
+  width: 44px;
+  height: 38px;
+  border-radius: 6px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 1.05rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+/* Mũi tên khi sáng cho phép di chuyển */
+.cd-arrow-btn.active {
+  background: #1e293b;
+  color: #ffffff;
+  border-color: #1e293b;
+  box-shadow: var(--shadow-sm);
+}
+
+.cd-arrow-btn.active:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* Mũi tên khi disabled / tối */
+.cd-arrow-btn.disabled, .cd-arrow-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+/* ==============================================================================
+   3. REVIEW SCREEN (Giao diện xem lại bài làm khi nhấn Nộp bài)
+   ============================================================================== */
+.cd-review-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.cd-review-modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 50px -12px rgba(15, 23, 42, 0.3);
+  border: 1px solid #cbd5e1;
+  width: 100%;
+  max-width: 980px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cd-review-content-scroll {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.cd-review-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  background: #fafafa;
+}
+
+.cd-review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.review-part-tag {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.review-part-wc {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--primary);
+}
+
+.review-prompt-section {
+  margin-bottom: 12px;
+}
+
+.review-label {
+  display: block;
   font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.review-text-prompt {
+  font-size: 0.925rem;
+  color: #334155;
+  line-height: 1.6;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.review-text-essay {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 14px;
+  white-space: pre-wrap;
+  line-height: 1.75;
+  font-size: 0.95rem;
+  color: #0f172a;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.cd-review-footer-bar {
+  padding: 18px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Thông báo Đã hết thời gian làm bài */
+.cd-time-expired-alert {
+  background: #fee2e2;
+  border: 1.5px solid #ef4444;
+  color: #991b1b;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.cd-confirm-prompt-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cd-confirm-question {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.cd-confirm-btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Nút trái: "Không" ô màu xám */
+.btn-cd-reject {
+  background: #64748b;
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.tab-btn.active {
-  background: #ffffff;
-  color: var(--primary);
-  box-shadow: var(--shadow-sm);
+.btn-cd-reject:hover {
+  background: #475569;
 }
 
-.preset-dropdown-container {
-  min-width: 240px;
-}
-
-.form-select {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  color: var(--text-main);
-  background-color: #fff;
+/* Nút phải: "Đồng ý" ô màu xanh lá */
+.btn-cd-confirm {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 10px 32px;
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-main);
-  margin-bottom: 6px;
-}
-
-.form-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text-main);
-  resize: vertical;
-  transition: border-color 0.2s;
-}
-
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.prompt-box {
-  background: #f8fafc;
-  min-height: 80px;
-}
-
-.essay-box {
-  min-height: 380px;
-  font-family: var(--font-sans);
-}
-
-.editor-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 10px 14px;
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  margin-bottom: 12px;
-}
-
-.timer-widget {
-  display: flex;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.timer-text {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.word-counter-widget {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.9rem;
-}
-
-.wc-label {
-  color: var(--text-muted);
-}
-
-.wc-number {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--primary);
-}
-
-.wc-target {
-  color: var(--text-muted);
-}
-
-.editor-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 12px;
+.btn-cd-confirm:hover {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
 }
 
 /* ==============================================================================
-   Results Panel
+   4. ASSESSMENT RESULTS VIEW (Phân tích của giao diện chấm bài cũ)
    ============================================================================== */
-.results-panel {
+.results-screen-layout {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
   padding: 24px;
-  max-height: 90vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-muted);
+.results-sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-.empty-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
+.results-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.empty-desc {
-  font-size: 0.9rem;
-  max-width: 380px;
-  margin: 8px auto 0 auto;
+.results-main-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.results-task-tabs {
+  display: flex;
+  gap: 6px;
+  background: #e2e8f0;
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.results-task-tabs .tab-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.results-task-tabs .tab-btn.active {
+  background: #ffffff;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .results-content {
@@ -739,7 +1134,7 @@ input:checked + .slider:before {
   padding: 16px 20px;
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  min-width: 130px;
+  min-width: 140px;
 }
 
 .score-caption {
@@ -796,10 +1191,11 @@ input:checked + .slider:before {
 }
 
 .interactive-essay-container {
-  background: #f8fafc;
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
 }
 
 .interactive-header {
@@ -825,14 +1221,14 @@ input:checked + .slider:before {
 }
 
 .highlighted-essay-box {
-  background: #fff;
+  background: #f8fafc;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 16px;
   font-size: 0.95rem;
   line-height: 1.8;
   white-space: pre-wrap;
-  max-height: 300px;
+  max-height: 320px;
   overflow-y: auto;
 }
 
@@ -1024,7 +1420,7 @@ input:checked + .slider:before {
 }
 
 /* ==============================================================================
-   3. MODAL OVERLAY & WINDOW DIALOG STYLES
+   5. MODAL OVERLAYS (Options & Sample Tests)
    ============================================================================== */
 .modal-overlay {
   position: fixed;
@@ -1200,16 +1596,6 @@ input:checked + .slider:before {
   margin-bottom: 8px;
 }
 
-.option-badge {
-  display: inline-block;
-  font-size: 0.725rem;
-  font-weight: 600;
-  background: #e2e8f0;
-  color: #334155;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
 .option-arrow-box {
   font-size: 1.25rem;
   color: #94a3b8;
@@ -1222,9 +1608,7 @@ input:checked + .slider:before {
   transform: translateX(4px);
 }
 
-/* ==============================================================================
-   4. SAMPLE TESTS LIST & 3-DOT QUESTIONS EXPANSION
-   ============================================================================== */
+/* Sample Tests List */
 .sample-tests-container {
   display: flex;
   flex-direction: column;
@@ -1298,18 +1682,25 @@ input:checked + .slider:before {
   margin-left: 14px;
 }
 
-/* Expand badge & chevron indicator */
 .expand-badge {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
   color: #475569;
   font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
 }
 
 .sample-test-header:hover .expand-badge {
+  background: var(--primary-light);
   color: var(--primary);
+  border-color: #bfdbfe;
 }
 
 .expand-chevron {
@@ -1328,14 +1719,17 @@ input:checked + .slider:before {
 }
 
 .sample-test-card.expanded .expand-badge {
-  color: var(--primary);
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 .sample-test-card.expanded .expand-chevron {
   transform: rotate(180deg);
 }
 
-/* Collapsible drawer with question list */
+/* Collapsible drawer with unified test bundle block */
 .sample-questions-drawer {
   background: #ffffff;
   border-top: 1px dashed var(--border);
@@ -1346,6 +1740,67 @@ input:checked + .slider:before {
 @keyframes drawerSlideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Single Unified Block for Writing Test (Task 1 & Task 2) */
+.sample-test-bundle-block {
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.bundle-task-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.bundle-task-section .question-prompt-text {
+  margin-bottom: 0;
+}
+
+.bundle-task-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 16px 0;
+}
+
+.bundle-footer-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 4px;
+}
+
+.btn-select-test-green {
+  background-color: #10b981;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.925rem;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-select-test-green:hover {
+  background-color: #059669;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-select-test-green:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25);
 }
 
 .drawer-header {
@@ -1446,12 +1901,12 @@ input:checked + .slider:before {
 }
 
 /* ==============================================================================
-   5. APP FOOTER (Nhóm 13)
+   6. APP FOOTER (Nhóm 13)
    ============================================================================== */
 .app-footer {
   background: #0f172a;
   border-top: 1px solid #1e293b;
-  padding: 18px 24px;
+  padding: 16px 24px;
   color: #94a3b8;
   font-size: 0.85rem;
   margin-top: auto;
@@ -1463,7 +1918,7 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 14px;
+  gap: 14px;  
   flex-wrap: wrap;
 }
 
@@ -1479,24 +1934,43 @@ input:checked + .slider:before {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
 }
 
+.footer-text {
+  color: #cbd5e1;
+}
 
+/* Hide outer page footer when CD test is active to avoid double scrollbars */
+body.cd-test-active .app-footer {
+  display: none;
+}
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .home-hero {
-    padding: 28px 20px;
-  }
-  .hero-title {
-    font-size: 1.6rem;
-  }
-  .modules-grid {
-    grid-template-columns: 1fr;
-  }
   .header-container {
     flex-direction: column;
     align-items: flex-start;
   }
-  .score-summary-card {
+  .header-left-group, .header-right-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .cd-split-container {
     flex-direction: column;
-    text-align: center;
+  }
+  .cd-left-pane, .cd-right-pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    height: 50%;
+  }
+  .cd-resizer {
+    display: none;
+  }
+  .cd-confirm-prompt-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cd-confirm-btn-group {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

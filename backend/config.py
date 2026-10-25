@@ -24,9 +24,8 @@ EVALS_DIR = ROOT_DIR / "evals"
 # ==============================================================================
 # SWITCH FLAG: Mock vs. Live Agent
 # ==============================================================================
-# Set USE_MOCK_AGENT=true to run in fast, offline, deterministic mock mode.
-# Set USE_MOCK_AGENT=false to run in live agent mode (calls real LLM / LangGraph pipeline).
-USE_MOCK_AGENT: bool = os.getenv("USE_MOCK_AGENT", "true").lower() in ("true", "1", "yes")
+# Set USE_MOCK_AGENT=false: Member 3 Agent Core is the default agent pipeline.
+USE_MOCK_AGENT: bool = os.getenv("USE_MOCK_AGENT", "false").lower() in ("true", "1", "yes")
 
 # Standard regex for word count (harmonized from Member 4 deterministic tool)
 WORD_COUNT_REGEX: str = WORD_PATTERN

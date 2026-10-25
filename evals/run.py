@@ -33,8 +33,7 @@ if str(ROOT_DIR) not in sys.path:
 from agent.tools.compute_tool import count_words  # noqa: E402
 from agent.tools.security_tool import SecurityGuard  # noqa: E402
 from backend.config import get_mock_mode  # noqa: E402
-from backend.live_service import run_live_assessment  # noqa: E402
-from backend.mock_service import mock_assess_writing  # noqa: E402
+from backend.live_service import run_agent_assessment  # noqa: E402
 from skills.writing_assessment.checks import validate_writing_assessment  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -66,10 +65,7 @@ def evaluate_single_case(
     start_t = time.perf_counter()
     w_count = count_words(essay)
 
-    if use_mock:
-        assessment = mock_assess_writing(task_type=task_type, prompt=topic, essay=essay)
-    else:
-        assessment = run_live_assessment(task_type=task_type, prompt=topic, essay=essay)
+    assessment = run_agent_assessment(task_type=task_type, prompt=topic, essay=essay)
 
     duration_ms = (time.perf_counter() - start_t) * 1000.0
 

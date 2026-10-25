@@ -4,6 +4,9 @@
     "task_type": "task1",
     "topic": "The chart below shows the percentage of electricity generated from renewable sources in four countries between 2010 and 2020.",
     "ground_truth_band": 6.5,
+    "source": "Self-authored functional benchmark (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "The bar chart illustrates the proportion of electricity produced from renewable energy sources in four different countries from 2010 to 2020. Overall, it is evident that all four nations experienced an upward trend in renewable power generation over the ten-year period. In 2010, Country A was the leader, accounting for approximately 30% of total electricity production. By 2020, this figure surged dramatically to reach nearly 55%. Country B followed a similar trajectory, rising steadily from 20% to 38%. In contrast, Country C and Country D registered comparatively modest growth throughout the observed timeframe. Country C started at 10% in 2010 and climbed incrementally to finish at 22% in 2020. Finally, Country D remained the lowest throughout, increasing from a mere 5% to 15%. In summary, while renewable electricity output expanded significantly across all four examined countries, Country A maintained the most commanding share throughout the entire decade, demonstrating the most substantial commitment to green energy transition."
   },
   {
@@ -11,6 +14,9 @@
     "task_type": "task2",
     "topic": "Some people believe that working from home brings more benefits to employees and employers than working in an office. To what extent do you agree or disagree?",
     "ground_truth_band": 7.0,
+    "source": "Self-authored functional benchmark (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "In recent years, remote working has emerged as a prominent arrangement across numerous modern industries. I firmly agree that telecommuting provides far greater advantages to both workers and organizations compared to traditional office-based routines.\n\nFirst and foremost, employees experience profound improvements in productivity and work-life balance when working from home. By eliminating exhausting daily commutes, individuals conserve valuable hours each day, which can subsequently be channeled into focused intellectual tasks or healthy personal activities. Moreover, workers operate within a personalized and comfortable domestic environment, significantly minimizing ambient office distractions and stress levels.\n\nFrom the corporate standpoint, businesses can substantially reduce operating expenses through remote work models. Employers are no longer burdened by exorbitant rental costs for commercial office premises, utility bills, and workplace maintenance. Furthermore, companies can recruit exceptional talent globally regardless of geographical constraints, thereby fostering innovation and maintaining a highly competitive advantage in global markets.\n\nIn conclusion, telecommuting delivers indispensable benefits for work flexibility and fiscal efficiency. Both employees and corporate entities should actively embrace flexible remote working policies in the digital age."
   },
   {
@@ -18,6 +24,9 @@
     "task_type": "task1",
     "topic": "The table compares water use in three different sectors in 2015.",
     "ground_truth_band": 5.0,
+    "source": "Under-length boundary test (<150 words) (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "The table compares water use in three sectors in 2015. Agriculture consumed 65%, industry consumed 20%, and domestic households consumed 15%. In summary, agricultural activities dominated global water consumption throughout the entire recorded period."
   },
   {
@@ -25,6 +34,9 @@
     "task_type": "task2",
     "topic": "Some people believe that university education should be free for all students. Discuss.",
     "ground_truth_band": 5.0,
+    "source": "Under-length boundary test (<250 words) (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "Free university education is very good for students. When university is free, poor people can study and get good jobs in the future. However, governments need a lot of money to pay for schools, teachers, and libraries. In conclusion, I think tertiary education should be supported by the state."
   },
   {
@@ -32,6 +44,9 @@
     "task_type": "task2",
     "topic": "Nuclear energy provides a clean source of electricity, but its safety risks are significant. Discuss both views and give your opinion.",
     "ground_truth_band": 4.5,
+    "source": "Off-topic semantic penalty boundary test (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "Baking a rich chocolate cake requires high-quality ingredients, particularly Dutch-processed cocoa powder and unsalted butter. First, preheat the oven to 175 degrees Celsius and grease two round cake pans thoroughly with flour. In a large bowl, whisk together the dry ingredients including granulated sugar, baking powder, and a pinch of fine salt. Next, gently incorporate fresh eggs, whole milk, and vanilla extract until the batter achieves a smooth, glossy consistency. Carefully pour the batter into the prepared pans and bake for approximately thirty minutes. After allowing the sponges to cool completely on a wire rack, apply decadent chocolate ganache between the layers. This dessert is universally cherished for celebratory gatherings and family celebrations."
   },
   {
@@ -39,6 +54,9 @@
     "task_type": "task2",
     "topic": "Do advantages of social media outweigh disadvantages?",
     "ground_truth_band": 5.5,
+    "source": "Grammatical error diagnosis test (SE373 Team 06)",
+    "label_status": "human_verified",
+    "reviewed_by": "SE373_Team_06",
     "essay": "Nowadays many people uses social network every day. It have many advantage because people can chat with friends easily. However, some people spends too much times on phone and forget to do homework. In addition, there is many fake news on internet which make people confuse. If government do not control this problem, it will become more worse in the future. In conclusion, social media is useful but we must use it carefully."
   }
 ]

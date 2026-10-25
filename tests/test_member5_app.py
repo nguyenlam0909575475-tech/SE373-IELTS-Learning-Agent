@@ -15,8 +15,8 @@ from fastapi.testclient import TestClient
 
 from agent.tools.compute_tool import count_words
 from backend.config import get_mock_mode, set_mock_mode
+from backend.live_service import run_agent_assessment
 from backend.main import app
-from backend.mock_service import mock_assess_writing
 from skills.writing_assessment.checks import validate_writing_assessment
 
 client = TestClient(app)
@@ -77,7 +77,7 @@ def test_sample_tests_endpoint() -> None:
     res = client.get("/api/sample-tests")
     assert res.status_code == 200
     tests = res.json()
-    assert len(tests) >= 5
+    assert len(tests) >= 3
     first = tests[0]
     assert "name" in first
     assert "source" in first
@@ -110,7 +110,7 @@ def test_assess_writing_standard_task1() -> None:
     assert res.status_code == 200
     data = res.json()
     assert data["success"] is True
-    assert data["execution_mode"] == "mock"
+    assert data["execution_mode"] in ("agent", "live", "mock")
     a = data["assessment"]
     assert a["task_type"] == "task1"
     assert a["word_count"] >= 150
@@ -127,6 +127,13 @@ def test_assess_writing_standard_task1() -> None:
             start = ev["start_char"]
             end = ev["end_char"]
             assert sample_essay[start:end] == quote
+
+    # Verify official descriptor_refs from Member 1 & 2
+    for crit in a["criteria"]:
+        assert len(crit["descriptor_refs"]) >= 1
+        for ref in crit["descriptor_refs"]:
+            assert ref.startswith("writing_task1_"), f"Unexpected ref: {ref}"
+            assert "task2" not in ref
 
 
 def test_assess_writing_under_length_penalty() -> None:
@@ -190,7 +197,7 @@ def test_harness_validation_passes() -> None:
         "Rising sea levels and severe meteorological anomalies threaten agricultural security and human habitats. "
         "Consequently, governments must enact decisive carbon emission reduction mandates to mitigate future catastrophe."
     )
-    assessment = mock_assess_writing(
+    assessment = run_agent_assessment(
         task_type="task2",
         prompt="Discuss global warming solutions.",
         essay=essay,

@@ -1,53 +1,72 @@
 /**
- * Frontend JavaScript for IELTS Learning Agent (UC-02).
- * Handles Home navigation, Writing Test options (Chọn bài mẫu & Tự thiết kế),
- * Sample Tests Window with 3-dot question expansion, real-time word counting,
- * interactive evidence highlighting, timer, and Mock vs Live agent switching.
+ * Computer-Delivered IELTS Writing Test Application (SE373 UC-02).
+ * Simulates the official computer-based IELTS testing experience with:
+ * - Real-time countdown timer in header next to IELTS Learning Agent
+ * - Split-screen resizable columns with draggable <-> divider
+ * - Dynamic instructions banner for Part 1 (20m, 150w) and Part 2 (40m, 250w)
+ * - Realtime word counter "Words: 0"
+ * - Bottom progress bar with checkmark ticks and green completion status
+ * - Bottom-right directional navigation arrows
+ * - Review screen showing both Part 1 and Part 2 questions and essays
+ * - Confirmation with "Không" (checking time expiration) and "Đồng ý" (Agent assessment)
+ * - Rich assessment results view with verbatim quote highlighting & 4 criteria breakdown
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Navigation & View Elements ---
+  // --- DOM Elements: Navigation & Layout Views ---
   const homeView = document.getElementById("homeView");
   const writingTestView = document.getElementById("writingTestView");
+  const reviewScreenView = document.getElementById("reviewScreenView");
+  const resultsView = document.getElementById("resultsView");
+
   const navHomeBtn = document.getElementById("navHomeBtn");
   const navWritingBtn = document.getElementById("navWritingBtn");
-  const btnBackToHome = document.getElementById("btnBackToHome");
   const btnStartWriting = document.getElementById("btnStartWriting");
-  const btnOpenSampleTestsFromEditor = document.getElementById("btnOpenSampleTestsFromEditor");
+  const btnHeaderSubmitExam = document.getElementById("btnHeaderSubmitExam");
+  const examTimerBox = document.getElementById("examTimerBox");
+  const examTimerDisplay = document.getElementById("examTimerDisplay");
 
-  // --- Modal Elements ---
-  const writingOptionsModal = document.getElementById("writingOptionsModal");
-  const closeWritingOptionsBtn = document.getElementById("closeWritingOptionsBtn");
-  const optSelectSampleBtn = document.getElementById("optSelectSampleBtn");
-  const optCustomTestBtn = document.getElementById("optCustomTestBtn");
 
-  const sampleTestsModal = document.getElementById("sampleTestsModal");
-  const closeSampleTestsBtn = document.getElementById("closeSampleTestsBtn");
-  const sampleTestsList = document.getElementById("sampleTestsList");
+  // Split-screen & Editor Elements
+  const cdSplitContainer = document.getElementById("cdSplitContainer");
+  const cdLeftPane = document.getElementById("cdLeftPane");
+  const cdResizer = document.getElementById("cdResizer");
 
-  // --- Writing Workspace Elements ---
-  const tabTask1 = document.getElementById("tabTask1");
-  const tabTask2 = document.getElementById("tabTask2");
-  const presetSelector = document.getElementById("presetSelector");
-  const promptInput = document.getElementById("promptInput");
+  const cdInstructionText = document.getElementById("cdInstructionText");
+
+  const cdCurrentPartTitle = document.getElementById("cdCurrentPartTitle");
+  const cdPromptTextFormatted = document.getElementById("cdPromptTextFormatted");
+
   const essayInput = document.getElementById("essayInput");
-  const wordCountBadge = document.getElementById("wordCountBadge");
-  const wordTargetBadge = document.getElementById("wordTargetBadge");
-  const lengthStatusBadge = document.getElementById("lengthStatusBadge");
-  const mockModeToggle = document.getElementById("mockModeToggle");
-  const modeStatusBadge = document.getElementById("modeStatusBadge");
+  const cdWordCountDisplay = document.getElementById("cdWordCountDisplay");
 
-  const timerDisplay = document.getElementById("timerDisplay");
-  const timerToggleBtn = document.getElementById("timerToggleBtn");
-  const timerResetBtn = document.getElementById("timerResetBtn");
+  // Progress Bar & Navigation Arrows
+  const progressStepPart1 = document.getElementById("progressStepPart1");
+  const progressStepPart2 = document.getElementById("progressStepPart2");
+  const btnArrowPrev = document.getElementById("btnArrowPrev");
+  const btnArrowNext = document.getElementById("btnArrowNext");
 
-  const clearBtn = document.getElementById("clearBtn");
-  const submitBtn = document.getElementById("submitBtn");
-  const submitSpinner = document.getElementById("submitSpinner");
-  const submitText = document.getElementById("submitText");
+  // Review Screen Elements
+  const reviewPart1WcBadge = document.getElementById("reviewPart1WcBadge");
+  const reviewPart1PromptText = document.getElementById("reviewPart1PromptText");
+  const reviewPart1EssayText = document.getElementById("reviewPart1EssayText");
 
-  const emptyResultState = document.getElementById("emptyResultState");
-  const assessmentResults = document.getElementById("assessmentResults");
+  const reviewPart2WcBadge = document.getElementById("reviewPart2WcBadge");
+  const reviewPart2PromptText = document.getElementById("reviewPart2PromptText");
+  const reviewPart2EssayText = document.getElementById("reviewPart2EssayText");
+
+  const timeExpiredNotice = document.getElementById("timeExpiredNotice");
+  const btnReviewReject = document.getElementById("btnReviewReject");
+  const btnReviewConfirm = document.getElementById("btnReviewConfirm");
+  const submitReviewSpinner = document.getElementById("submitReviewSpinner");
+  const submitReviewText = document.getElementById("submitReviewText");
+
+  // Results View Elements
+  const btnBackToExamFromResults = document.getElementById("btnBackToExamFromResults");
+  const btnHomeFromResults = document.getElementById("btnHomeFromResults");
+  const tabResultPart1 = document.getElementById("tabResultPart1");
+  const tabResultPart2 = document.getElementById("tabResultPart2");
+  const scorePartCaption = document.getElementById("scorePartCaption");
   const overallBandValue = document.getElementById("overallBandValue");
   const durationValue = document.getElementById("durationValue");
   const resWordCount = document.getElementById("resWordCount");
@@ -57,85 +76,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const highlightedEssayContent = document.getElementById("highlightedEssayContent");
   const criteriaGrid = document.getElementById("criteriaGrid");
   const correctionsList = document.getElementById("correctionsList");
+  const emptyResultState = document.getElementById("emptyResultState");
+  const assessmentResults = document.getElementById("assessmentResults");
 
-  // --- State Variables ---
-  let currentTask = "task1";
-  let targetWords = 150;
-  let presetsData = {};
-  let sampleTestsData = [];
-  let currentAssessment = null;
-  let timerInterval = null;
-  let timeLeftSeconds = 40 * 60; // 40 minutes default
-  let timerRunning = false;
-  let currentView = "home"; // "home" or "writing"
+  // Modals Elements
+  const writingOptionsModal = document.getElementById("writingOptionsModal");
+  const closeWritingOptionsBtn = document.getElementById("closeWritingOptionsBtn");
+  const optSelectSampleBtn = document.getElementById("optSelectSampleBtn");
+  const optCustomTestBtn = document.getElementById("optCustomTestBtn");
+
+  const sampleTestsModal = document.getElementById("sampleTestsModal");
+  const closeSampleTestsBtn = document.getElementById("closeSampleTestsBtn");
+  const sampleTestsList = document.getElementById("sampleTestsList");
 
   // Harmonized regex for word count (matches backend & harness)
   const WORD_REGEX = /\b[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*\b/g;
 
-  // Fallback Sample Tests Data
+  // --- Fallback Sample Tests Data (100% Người 1 từ evals/data/5_basic_cases.json) ---
   const DEFAULT_SAMPLE_TESTS = [
     {
-      id: "cambridge_19_test1",
-      name: "Cambridge IELTS 19 - Test 1 Academic",
-      source: "Cambridge University Press & Assessment (2024)",
-      description: "Đề thi thử chính thức mới nhất năm 2024 từ bộ sách Cambridge IELTS 19.",
+      id: "member1_standard_set",
+      name: "Bộ đề mẫu 01: Chuẩn Band 6.5 – 7.0 (Năng lượng tái tạo & Làm việc từ xa)",
+      source: "Bộ dữ liệu Người 1 (evals/data/5_basic_cases.json • Case 01 & Case 02)",
+      description: "Bộ đề kiểm thử tiêu chuẩn gồm bài làm mẫu Task 1 (Band 6.5) và Task 2 (Band 7.0).",
       questions: [
         {
-          id: "c19_t1_q1",
+          id: "case_01_task1_standard",
           task_type: "task1",
-          title: "Task 1: Rented Accommodation in Europe (2011–2021)",
-          prompt: "The chart below shows the percentage of households in four European countries living in rented accommodation between 2011 and 2021. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
-          min_words: 150,
-          suggested_time: "20 phút",
-          sample_essay: ""
-        },
-        {
-          id: "c19_t1_q2",
-          task_type: "task2",
-          title: "Task 2: Compulsory Community Service in High School",
-          prompt: "Some people believe that unpaid community service should be a compulsory part of high school programmes (for example working for a charity, improving the neighborhood or teaching sports to younger children). To what extent do you agree or disagree?",
-          min_words: 250,
-          suggested_time: "40 phút",
-          sample_essay: ""
-        }
-      ]
-    },
-    {
-      id: "cambridge_18_test2",
-      name: "Cambridge IELTS 18 - Test 2 Academic",
-      source: "Cambridge University Press & Assessment (2023)",
-      description: "Đề thi chuẩn hóa học thuật từ bộ đề Cambridge IELTS 18.",
-      questions: [
-        {
-          id: "c18_t2_q1",
-          task_type: "task1",
-          title: "Task 1: Monthly Temperature & Rainfall in 3 Major Cities",
-          prompt: "The graph below shows the average monthly temperature and total rainfall in three major cities throughout 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
-          min_words: 150,
-          suggested_time: "20 phút",
-          sample_essay: ""
-        },
-        {
-          id: "c18_t2_q2",
-          task_type: "task2",
-          title: "Task 2: Impact of Technology on Modern Life Complexity",
-          prompt: "Some people believe that technology has made modern life more complicated rather than simpler. To what extent do you agree or disagree with this statement?",
-          min_words: 250,
-          suggested_time: "40 phút",
-          sample_essay: ""
-        }
-      ]
-    },
-    {
-      id: "cambridge_17_test1",
-      name: "Cambridge IELTS 17 - Test 1 Academic (Kèm bài mẫu)",
-      source: "Cambridge University Press & Assessment (2022)",
-      description: "Đề thi kèm bài làm mẫu chuẩn Band 6.5 và Band 7.0 để thử nghiệm hệ thống chấm điểm.",
-      questions: [
-        {
-          id: "c17_t1_q1",
-          task_type: "task1",
-          title: "Task 1: Renewable Energy Production (Standard Band 6.5)",
+          title: "Task 1: Renewable Energy Production (2010–2020)",
           prompt: "The chart below shows the percentage of electricity generated from renewable sources in four countries between 2010 and 2020. Summarise the information by selecting and reporting the main features.",
           min_words: 150,
           suggested_time: "20 phút",
@@ -143,9 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
           sample_band: "6.5"
         },
         {
-          id: "c17_t1_q2",
+          id: "case_02_task2_standard",
           task_type: "task2",
-          title: "Task 2: Remote Working Merits (Standard Band 7.0)",
+          title: "Task 2: Remote Working Merits (Employees vs Employers)",
           prompt: "Some people believe that working from home brings more benefits to employees and employers than working in an office. To what extent do you agree or disagree?",
           min_words: 250,
           suggested_time: "40 phút",
@@ -155,298 +123,102 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     {
-      id: "british_council_2024",
-      name: "British Council Official Practice Test 2024",
-      source: "British Council IELTS Preparation Materials",
-      description: "Đề thi thử chính thức chuẩn quốc tế từ Hội đồng Anh (British Council).",
+      id: "member1_underlength_set",
+      name: "Bộ đề mẫu 02: Kiểm thử độ dài ngắn (<150 từ & <250 từ)",
+      source: "Bộ dữ liệu Người 1 (evals/data/5_basic_cases.json • Case 03a & Case 03b)",
+      description: "Bộ đề kiểm thử chế tài trừ điểm bài viết chưa đạt độ dài tối thiểu (Task 1 < 150 từ, Task 2 < 250 từ).",
       questions: [
         {
-          id: "bc_2024_q1",
+          id: "case_03a_task1_under_length",
           task_type: "task1",
-          title: "Task 1: Public Park Redevelopment Plan (1920 vs Today)",
-          prompt: "The plans below show a public park when it first opened in 1920 and the same park today. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+          title: "Task 1: Water Consumption in 3 Sectors in 2015 (<150 từ)",
+          prompt: "The table compares water use in three different sectors in 2015.",
           min_words: 150,
           suggested_time: "20 phút",
-          sample_essay: ""
+          sample_essay: "The table compares water use in three sectors in 2015. Agriculture consumed 65%, industry consumed 20%, and domestic households consumed 15%. In summary, agricultural activities dominated global water consumption throughout the entire recorded period.",
+          sample_band: "5.0"
         },
         {
-          id: "bc_2024_q2",
+          id: "case_03b_task2_under_length",
           task_type: "task2",
-          title: "Task 2: Causes & Effects of Fast Food Consumption",
-          prompt: "In many countries, an increasing number of people are buying and consuming fast food. What are the causes of this trend, and what effects does it have on society and individuals?",
+          title: "Task 2: Free University Education for All Students (<250 từ)",
+          prompt: "Some people believe that university education should be free for all students. Discuss.",
           min_words: 250,
           suggested_time: "40 phút",
-          sample_essay: ""
+          sample_essay: "Free university education is very good for students. When university is free, poor people can study and get good jobs in the future. However, governments need a lot of money to pay for schools, teachers, and libraries. In conclusion, I think tertiary education should be supported by the state.",
+          sample_band: "5.0"
         }
       ]
     },
     {
-      id: "idp_mock_2024",
-      name: "IDP IELTS Mock Examination 2024",
-      source: "IDP Education Official Assessment Practice",
-      description: "Đề thi thử định dạng khảo thí từ trung tâm khảo thí IDP Education.",
+      id: "member1_edge_cases_set",
+      name: "Bộ đề mẫu 03: Kiểm thử Lạc đề & Lỗi ngữ pháp cơ bản",
+      source: "Bộ dữ liệu Người 1 (evals/data/5_basic_cases.json • Case 04 & Case 05)",
+      description: "Bộ đề kiểm thử phát hiện lỗi lạc đề (Off-topic Cap <= 5.0) và phân tích lỗi ngữ pháp.",
       questions: [
         {
-          id: "idp_2024_q1",
-          task_type: "task1",
-          title: "Task 1: Water Consumption Across 3 Sectors in 2020",
-          prompt: "The table below gives information about water consumption in three sectors (agriculture, industry, domestic) in four countries in 2020. Summarise the information by selecting and reporting the main features.",
-          min_words: 150,
-          suggested_time: "20 phút",
-          sample_essay: ""
-        },
-        {
-          id: "idp_2024_q2",
+          id: "case_04_off_topic_advanced_vocab",
           task_type: "task2",
-          title: "Task 2: Practical Skills vs Theoretical Knowledge in Universities",
-          prompt: "Some people think that universities should prioritize practical skills over theoretical knowledge to increase graduates' employability. Discuss both views and give your opinion.",
+          title: "Task 2: Nuclear Energy Safety Risks (Kiểm thử Lạc đề)",
+          prompt: "Nuclear energy provides a clean source of electricity, but its safety risks are significant. Discuss both views and give your opinion.",
           min_words: 250,
           suggested_time: "40 phút",
-          sample_essay: ""
+          sample_essay: "Baking a rich chocolate cake requires high-quality ingredients, particularly Dutch-processed cocoa powder and unsalted butter. First, preheat the oven to 175 degrees Celsius and grease two round cake pans thoroughly with flour. In a large bowl, whisk together the dry ingredients including granulated sugar, baking powder, and a pinch of fine salt. Next, gently incorporate fresh eggs, whole milk, and vanilla extract until the batter achieves a smooth, glossy consistency. Carefully pour the batter into the prepared pans and bake for approximately thirty minutes. After allowing the sponges to cool completely on a wire rack, apply decadent chocolate ganache between the layers. This dessert is universally cherished for celebratory gatherings and family celebrations.",
+          sample_band: "4.5"
+        },
+        {
+          id: "case_05_basic_grammar_errors",
+          task_type: "task2",
+          title: "Task 2: Advantages & Disadvantages of Social Media (Lỗi ngữ pháp)",
+          prompt: "Do advantages of social media outweigh disadvantages?",
+          min_words: 250,
+          suggested_time: "40 phút",
+          sample_essay: "Nowadays many people uses social network every day. It have many advantage because people can chat with friends easily. However, some people spends too much times on phone and forget to do homework. In addition, there is many fake news on internet which make people confuse. If government do not control this problem, it will become more worse in the future. In conclusion, social media is useful but we must use it carefully.",
+          sample_band: "5.5"
         }
       ]
     }
   ];
 
+  // --- Central Exam Application State ---
+  const examState = {
+    activePart: "task1", // "task1" (Part 1) or "task2" (Part 2)
+    currentView: "home", // "home", "writing", "review", "results"
+    timeLeftSeconds: 60 * 60, // 60 minutes countdown default
+    timerRunning: false,
+    timerInterval: null,
+    sampleTestsData: [],
+    task1: {
+      title: "Writing Task 1",
+      prompt: DEFAULT_SAMPLE_TESTS[0].questions[0].prompt,
+      essay: "",
+      wordCount: 0,
+      targetWords: 150,
+      completed: false,
+    },
+    task2: {
+      title: "Writing Task 2",
+      prompt: DEFAULT_SAMPLE_TESTS[0].questions[1].prompt,
+      essay: "",
+      wordCount: 0,
+      targetWords: 250,
+      completed: false,
+    },
+    results: {
+      task1: null,
+      task2: null,
+    },
+    activeResultTab: "task1",
+  };
+
   // --- Initialization ---
   fetchServerConfig();
-  fetchSamplePresets();
   fetchSampleTests();
   setupEventListeners();
-
-  // Show Home view by default
+  setupResizer();
   switchView("home");
 
-  // --- View Switching Functions ---
-
-  function switchView(viewName) {
-    currentView = viewName;
-    if (viewName === "home") {
-      homeView.classList.remove("hidden");
-      writingTestView.classList.add("hidden");
-      navHomeBtn.classList.add("active");
-      navWritingBtn.classList.remove("active");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      homeView.classList.add("hidden");
-      writingTestView.classList.remove("hidden");
-      navHomeBtn.classList.remove("active");
-      navWritingBtn.classList.add("active");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }
-
-  // --- Modal Functions ---
-
-  function openWritingOptionsModal() {
-    writingOptionsModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeWritingOptionsModal() {
-    writingOptionsModal.classList.add("hidden");
-    document.body.style.overflow = "";
-  }
-
-  function openSampleTestsModal() {
-    closeWritingOptionsModal();
-    sampleTestsModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-    renderSampleTestsList();
-  }
-
-  function closeSampleTestsModal() {
-    sampleTestsModal.classList.add("hidden");
-    document.body.style.overflow = "";
-  }
-
-  // --- Sample Tests Rendering & 3-Dot Interaction ---
-
-  async function fetchSampleTests() {
-    try {
-      const res = await fetch("/api/sample-tests");
-      if (res.ok) {
-        sampleTestsData = await res.json();
-      } else {
-        sampleTestsData = DEFAULT_SAMPLE_TESTS;
-      }
-    } catch (e) {
-      console.warn("Could not fetch /api/sample-tests, using default mock tests.", e);
-      sampleTestsData = DEFAULT_SAMPLE_TESTS;
-    }
-  }
-
-  function renderSampleTestsList() {
-    sampleTestsList.innerHTML = "";
-    const list = (sampleTestsData && sampleTestsData.length > 0) ? sampleTestsData : DEFAULT_SAMPLE_TESTS;
-
-    list.forEach((test, testIdx) => {
-      const card = document.createElement("div");
-      card.className = "sample-test-card";
-      card.id = `testCard-${test.id || testIdx}`;
-
-      // Card Header: Tên bài mẫu, Nguồn bài thi, and Expand Indicator
-      const header = document.createElement("div");
-      header.className = "sample-test-header";
-      header.setAttribute("role", "button");
-      header.setAttribute("tabindex", "0");
-      header.setAttribute("title", "Nhấn vào đây để xem danh sách câu hỏi");
-      header.innerHTML = `
-        <div class="sample-test-info">
-          <div class="sample-test-name-row">
-            <span class="test-icon">📄</span>
-            <h4 class="sample-test-name">${escapeHtml(test.name)}</h4>
-          </div>
-          <div class="sample-test-source-row">
-            <span class="source-tag">🏛 Nguồn bài thi:</span>
-            <span class="sample-test-source">${escapeHtml(test.source)}</span>
-          </div>
-        </div>
-        <div class="sample-test-action-area">
-          <span class="expand-badge">
-            <span class="expand-chevron">▼</span>
-          </span>
-        </div>
-      `;
-
-      // Collapsible Questions Drawer (Hiển thị khi ấn vào đề đó)
-      const drawer = document.createElement("div");
-      drawer.className = "sample-questions-drawer hidden";
-      drawer.id = `drawer-${testIdx}`;
-
-      let questionsHtml = `
-        <div class="drawer-header">
-          <span class="drawer-title">📋 Danh Sách Câu Hỏi Của Bài Thi:</span>
-          <span class="drawer-sub">Chọn một câu hỏi để nạp vào bài thi Writing</span>
-        </div>
-        <div class="questions-list">
-      `;
-
-      (test.questions || []).forEach((q, qIdx) => {
-        const isTask1 = q.task_type === "task1";
-        const taskLabel = isTask1 ? "Writing Task 1" : "Writing Task 2";
-        const taskBadgeClass = isTask1 ? "badge-task1" : "badge-task2";
-        const wordReq = isTask1 ? "Min 150 từ" : "Min 250 từ";
-        const timeReq = q.suggested_time || (isTask1 ? "20 phút" : "40 phút");
-
-        questionsHtml += `
-          <div class="question-item-card">
-            <div class="question-item-header">
-              <span class="task-badge ${taskBadgeClass}">${taskLabel}</span>
-              <span class="question-meta-info">⏱ ${timeReq} • 📝 ${wordReq}</span>
-            </div>
-            <h5 class="question-item-title">${escapeHtml(q.title || `Câu hỏi ${qIdx + 1}`)}</h5>
-            <p class="question-prompt-text">${escapeHtml(q.prompt)}</p>
-            <div class="question-actions">
-              <button type="button" class="btn-sm btn-primary btn-select-question" data-test-idx="${testIdx}" data-q-idx="${qIdx}">
-                ✍️ Chọn câu này &amp; Bắt đầu làm bài
-              </button>
-              ${q.sample_essay ? `
-                <button type="button" class="btn-sm btn-outline btn-load-sample-essay" data-test-idx="${testIdx}" data-q-idx="${qIdx}">
-                  ⚡ Nạp bài mẫu chuẩn (Band ${escapeHtml(q.sample_band || "7.0")})
-                </button>
-              ` : ""}
-            </div>
-          </div>
-        `;
-      });
-
-      questionsHtml += `</div>`;
-      drawer.innerHTML = questionsHtml;
-
-      // Event listener: Nhấn vào đề đó thì toggle hiển thị danh sách câu hỏi
-      function toggleDrawer() {
-        const isHidden = drawer.classList.contains("hidden");
-        // Close other open drawers for clean accordion UX
-        document.querySelectorAll(".sample-questions-drawer").forEach(d => {
-          if (d !== drawer) d.classList.add("hidden");
-        });
-        document.querySelectorAll(".sample-test-card").forEach(c => {
-          if (c !== card) c.classList.remove("expanded");
-        });
-
-        if (isHidden) {
-          drawer.classList.remove("hidden");
-          card.classList.add("expanded");
-        } else {
-          drawer.classList.add("hidden");
-          card.classList.remove("expanded");
-        }
-      }
-
-      header.addEventListener("click", toggleDrawer);
-      header.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggleDrawer();
-        }
-      });
-
-      card.appendChild(header);
-      card.appendChild(drawer);
-      sampleTestsList.appendChild(card);
-    });
-
-    // Attach event listeners to question selection buttons
-    sampleTestsList.querySelectorAll(".btn-select-question").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const testIdx = parseInt(btn.dataset.testIdx, 10);
-        const qIdx = parseInt(btn.dataset.qIdx, 10);
-        loadSelectedQuestion(testIdx, qIdx, false);
-      });
-    });
-
-    sampleTestsList.querySelectorAll(".btn-load-sample-essay").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const testIdx = parseInt(btn.dataset.testIdx, 10);
-        const qIdx = parseInt(btn.dataset.qIdx, 10);
-        loadSelectedQuestion(testIdx, qIdx, true);
-      });
-    });
-  }
-
-  function loadSelectedQuestion(testIdx, qIdx, loadSampleEssay = false) {
-    const list = (sampleTestsData && sampleTestsData.length > 0) ? sampleTestsData : DEFAULT_SAMPLE_TESTS;
-    const test = list[testIdx];
-    if (!test || !test.questions || !test.questions[qIdx]) return;
-
-    const question = test.questions[qIdx];
-
-    // Set task type (Task 1 or Task 2)
-    setTask(question.task_type);
-
-    // Set prompt
-    promptInput.value = question.prompt;
-
-    // Set or clear essay
-    if (loadSampleEssay && question.sample_essay) {
-      essayInput.value = question.sample_essay;
-    } else {
-      essayInput.value = "";
-    }
-
-    // Reset preset selector
-    presetSelector.value = "";
-
-    // Update word count
-    updateWordCountDisplay();
-
-    // Reset results if any
-    resetAssessmentDisplay();
-
-    // Close modal
-    closeSampleTestsModal();
-
-    // Switch to Writing view
-    switchView("writing");
-
-    // Focus editor
-    essayInput.focus();
-  }
-
-  // --- Writing Workspace Functions ---
+  // --- Functions ---
 
   function countWords(text) {
     if (!text || !text.trim()) return 0;
@@ -454,181 +226,434 @@ document.addEventListener("DOMContentLoaded", () => {
     return matches ? matches.length : 0;
   }
 
-  function updateWordCountDisplay() {
+  function formatParagraphs(text) {
+    if (!text) return "";
+    const paras = text.split(/\n\s*\n|\n/);
+    return paras
+      .map(p => p.trim())
+      .filter(p => p.length > 0)
+      .map(p => `<p>${escapeHtml(p)}</p>`)
+      .join("");
+  }
+
+  function escapeHtml(text) {
+    if (!text) return "";
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // --- View Switching ---
+
+  function switchView(viewName) {
+    examState.currentView = viewName;
+
+    // Hide all main containers
+    homeView.classList.add("hidden");
+    writingTestView.classList.add("hidden");
+    reviewScreenView.classList.add("hidden");
+    resultsView.classList.add("hidden");
+
+    // Header buttons state
+    navHomeBtn.classList.remove("active");
+    navWritingBtn.classList.remove("active");
+
+    if (viewName === "writing") {
+      document.body.classList.add("cd-test-active");
+      writingTestView.classList.remove("hidden");
+      navWritingBtn.classList.add("active");
+      btnHeaderSubmitExam.classList.remove("hidden");
+      examTimerBox.classList.remove("hidden");
+      startExamTimer();
+      renderCurrentPart();
+    } else {
+      document.body.classList.remove("cd-test-active");
+      if (viewName === "home") {
+        homeView.classList.remove("hidden");
+        navHomeBtn.classList.add("active");
+        btnHeaderSubmitExam.classList.add("hidden");
+        examTimerBox.classList.add("hidden");
+        pauseExamTimer();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (viewName === "review") {
+        reviewScreenView.classList.remove("hidden");
+        navWritingBtn.classList.add("active");
+        btnHeaderSubmitExam.classList.remove("hidden");
+        examTimerBox.classList.remove("hidden");
+        renderReviewScreen();
+      } else if (viewName === "results") {
+        resultsView.classList.remove("hidden");
+        btnHeaderSubmitExam.classList.add("hidden");
+        examTimerBox.classList.add("hidden");
+        pauseExamTimer();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }
+
+  // --- Timer Controls ---
+
+  function updateTimerDisplay() {
+    const mins = Math.floor(examState.timeLeftSeconds / 60);
+    const secs = examState.timeLeftSeconds % 60;
+    examTimerDisplay.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+    if (examState.timeLeftSeconds <= 300) {
+      examTimerBox.style.borderColor = "#ef4444";
+      examTimerDisplay.style.color = "#ef4444";
+    } else {
+      examTimerBox.style.borderColor = "#38bdf8";
+      examTimerDisplay.style.color = "#38bdf8";
+    }
+  }
+
+  function startExamTimer() {
+    if (examState.timerRunning) return;
+    examState.timerRunning = true;
+    updateTimerDisplay();
+
+    examState.timerInterval = setInterval(() => {
+      if (examState.timeLeftSeconds > 0) {
+        examState.timeLeftSeconds--;
+        updateTimerDisplay();
+      } else {
+        clearInterval(examState.timerInterval);
+        examState.timerRunning = false;
+        examState.timeLeftSeconds = 0;
+        updateTimerDisplay();
+        alert("⚠️ Đã hết 60 phút làm bài thi IELTS Writing!");
+      }
+    }, 1000);
+  }
+
+  function pauseExamTimer() {
+    if (examState.timerInterval) {
+      clearInterval(examState.timerInterval);
+    }
+    examState.timerRunning = false;
+  }
+
+  // --- Computer-Delivered IELTS Workspace Logic ---
+
+  function renderCurrentPart() {
+    const isPart1 = examState.activePart === "task1";
+    const partData = isPart1 ? examState.task1 : examState.task2;
+
+    // 1. Top Banner: Hộp màu xám nhạt với nội dung hướng dẫn
+    if (isPart1) {
+      cdInstructionText.textContent = "Part 1 - You should spend about 20 minutes on this task. Write at least 150 words.";
+      cdCurrentPartTitle.textContent = "Writing Task 1";
+    } else {
+      cdInstructionText.textContent = "Part 2 - You should spend about 40 minutes on this task. Write at least 250 words.";
+      cdCurrentPartTitle.textContent = "Writing Task 2";
+    }
+
+    // 2. Cột trái: Hiển thị đề bài luận văn bản, phân cấp đoạn văn mạch lạc
+    cdPromptTextFormatted.innerHTML = formatParagraphs(partData.prompt);
+    cdPromptView.classList.remove("hidden");
+
+    // 3. Cột phải: Khung nhập liệu và bộ đếm từ
+    essayInput.value = partData.essay;
+    const currentWc = countWords(partData.essay);
+    partData.wordCount = currentWc;
+    cdWordCountDisplay.textContent = currentWc;
+
+    // 4. Thanh tiến trình dưới đáy
+    updateProgressBottomBar();
+
+    // 5. Hai biểu tượng mũi tên góc dưới bên phải
+    if (isPart1) {
+      btnArrowPrev.disabled = true;
+      btnArrowPrev.classList.remove("active");
+      btnArrowPrev.classList.add("disabled");
+
+      btnArrowNext.disabled = false;
+      btnArrowNext.classList.add("active");
+      btnArrowNext.classList.remove("disabled");
+    } else {
+      btnArrowPrev.disabled = false;
+      btnArrowPrev.classList.add("active");
+      btnArrowPrev.classList.remove("disabled");
+
+      btnArrowNext.disabled = true;
+      btnArrowNext.classList.remove("active");
+      btnArrowNext.classList.add("disabled");
+    }
+  }
+
+  function saveCurrentPartText() {
+    const currentText = essayInput.value;
+    const currentWc = countWords(currentText);
+
+    if (examState.activePart === "task1") {
+      examState.task1.essay = currentText;
+      examState.task1.wordCount = currentWc;
+      if (currentWc > 0) {
+        examState.task1.completed = true;
+      }
+    } else {
+      examState.task2.essay = currentText;
+      examState.task2.wordCount = currentWc;
+      if (currentWc > 0) {
+        examState.task2.completed = true;
+      }
+    }
+  }
+
+  function switchPart(targetPart) {
+    if (examState.activePart === targetPart) return;
+
+    // Save current active part first
+    saveCurrentPartText();
+
+    // Mark previous part completed if user is moving from Part 1 to Part 2
+    if (examState.activePart === "task1" && targetPart === "task2") {
+      examState.task1.completed = true;
+    }
+
+    examState.activePart = targetPart;
+    renderCurrentPart();
+    essayInput.focus();
+  }
+
+  function updateProgressBottomBar() {
+    // Part 1 status
+    if (examState.task1.completed) {
+      progressStepPart1.classList.add("completed");
+    } else {
+      progressStepPart1.classList.remove("completed");
+    }
+
+    // Part 2 status
+    if (examState.task2.completed) {
+      progressStepPart2.classList.add("completed");
+    } else {
+      progressStepPart2.classList.remove("completed");
+    }
+
+    // Active status
+    if (examState.activePart === "task1") {
+      progressStepPart1.classList.add("active");
+      progressStepPart2.classList.remove("active");
+    } else {
+      progressStepPart2.classList.add("active");
+      progressStepPart1.classList.remove("active");
+    }
+  }
+
+  // Real-time word counter
+  function handleEssayInput() {
     const text = essayInput.value;
     const count = countWords(text);
-    wordCountBadge.textContent = count;
-    wordTargetBadge.textContent = `/ ${targetWords} từ`;
+    cdWordCountDisplay.textContent = count;
 
-    if (count < targetWords && count > 0) {
-      lengthStatusBadge.classList.remove("hidden");
-      lengthStatusBadge.textContent = `Thiếu ${targetWords - count} từ`;
-    } else {
-      lengthStatusBadge.classList.add("hidden");
-    }
-  }
-
-  async function fetchServerConfig() {
-    try {
-      const res = await fetch("/api/config");
-      if (res.ok) {
-        const config = await res.json();
-        mockModeToggle.checked = config.mock_mode;
-        updateModeBadge(config.mock_mode);
+    if (examState.activePart === "task1") {
+      examState.task1.essay = text;
+      examState.task1.wordCount = count;
+      if (count > 0) {
+        examState.task1.completed = true;
+        updateProgressBottomBar();
       }
-    } catch (e) {
-      console.warn("Could not fetch server config, using local defaults.", e);
-    }
-  }
-
-  function updateModeBadge(isMock) {
-    if (isMock) {
-      modeStatusBadge.className = "badge badge-mock";
-      modeStatusBadge.textContent = "⚡ Mock Agent";
     } else {
-      modeStatusBadge.className = "badge badge-live";
-      modeStatusBadge.textContent = "🤖 Live Agent";
-    }
-  }
-
-  async function fetchSamplePresets() {
-    try {
-      const res = await fetch("/api/sample-prompts");
-      if (res.ok) {
-        const list = await res.json();
-        presetsData = {};
-        list.forEach((item) => {
-          presetsData[item.id] = item;
-        });
+      examState.task2.essay = text;
+      examState.task2.wordCount = count;
+      if (count > 0) {
+        examState.task2.completed = true;
+        updateProgressBottomBar();
       }
-    } catch (e) {
-      console.warn("Could not load presets from server.", e);
     }
   }
 
-  function setTask(taskType) {
-    currentTask = taskType;
-    if (taskType === "task1") {
-      tabTask1.classList.add("active");
-      tabTask2.classList.remove("active");
-      targetWords = 150;
-    } else {
-      tabTask2.classList.add("active");
-      tabTask1.classList.remove("active");
-      targetWords = 250;
-    }
-    updateWordCountDisplay();
+  // --- Resizable Split-Screen (<-> Draggable Divider) ---
+
+  function setupResizer() {
+    let isDragging = false;
+
+    cdResizer.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      cdResizer.classList.add("active-drag");
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const containerRect = cdSplitContainer.getBoundingClientRect();
+      const newWidth = e.clientX - containerRect.left;
+      const minW = 280;
+      const maxW = containerRect.width - 280;
+
+      if (newWidth >= minW && newWidth <= maxW) {
+        cdLeftPane.style.width = `${newWidth}px`;
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        cdResizer.classList.remove("active-drag");
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      }
+    });
+
+    // Touch support for mobile/tablets
+    cdResizer.addEventListener("touchstart", (e) => {
+      isDragging = true;
+      cdResizer.classList.add("active-drag");
+    });
+
+    document.addEventListener("touchmove", (e) => {
+      if (!isDragging || !e.touches[0]) return;
+      const containerRect = cdSplitContainer.getBoundingClientRect();
+      const newWidth = e.touches[0].clientX - containerRect.left;
+      const minW = 220;
+      const maxW = containerRect.width - 220;
+
+      if (newWidth >= minW && newWidth <= maxW) {
+        cdLeftPane.style.width = `${newWidth}px`;
+      }
+    });
+
+    document.addEventListener("touchend", () => {
+      isDragging = false;
+      cdResizer.classList.remove("active-drag");
+    });
   }
 
-  function loadPreset(presetId) {
-    const preset = presetsData[presetId];
-    if (!preset) return;
+  // --- Review Screen Logic ---
 
-    setTask(preset.task_type);
-    promptInput.value = preset.prompt;
-    essayInput.value = preset.sample_essay;
-    updateWordCountDisplay();
+  function renderReviewScreen() {
+    saveCurrentPartText();
+    timeExpiredNotice.classList.add("hidden");
+
+    // Part 1 Review Content
+    reviewPart1WcBadge.textContent = `Words: ${examState.task1.wordCount}`;
+    reviewPart1PromptText.textContent = examState.task1.prompt || "(Chưa có đề bài)";
+    reviewPart1EssayText.textContent = examState.task1.essay || "(Học viên chưa nhập bài làm Part 1)";
+
+    // Part 2 Review Content
+    reviewPart2WcBadge.textContent = `Words: ${examState.task2.wordCount}`;
+    reviewPart2PromptText.textContent = examState.task2.prompt || "(Chưa có đề bài)";
+    reviewPart2EssayText.textContent = examState.task2.essay || "(Học viên chưa nhập bài làm Part 2)";
   }
 
-  function resetAssessmentDisplay() {
-    emptyResultState.classList.remove("hidden");
-    assessmentResults.classList.add("hidden");
-  }
-
-  // Timer controls
-  function updateTimerDisplay() {
-    const mins = Math.floor(timeLeftSeconds / 60);
-    const secs = timeLeftSeconds % 60;
-    timerDisplay.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  }
-
-  function toggleTimer() {
-    if (timerRunning) {
-      clearInterval(timerInterval);
-      timerRunning = false;
-      timerToggleBtn.textContent = "Tiếp tục";
-    } else {
-      timerRunning = true;
-      timerToggleBtn.textContent = "Tạm dừng";
-      timerInterval = setInterval(() => {
-        if (timeLeftSeconds > 0) {
-          timeLeftSeconds--;
-          updateTimerDisplay();
-        } else {
-          clearInterval(timerInterval);
-          timerRunning = false;
-          timerToggleBtn.textContent = "Hết giờ!";
-          alert("Hết 40 phút làm bài IELTS Writing!");
-        }
-      }, 1000);
-    }
-  }
-
-  function resetTimer() {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    timeLeftSeconds = 40 * 60;
-    timerToggleBtn.textContent = "Bắt đầu";
-    updateTimerDisplay();
-  }
-
-  // --- Essay Submission & Assessment Rendering ---
-
-  async function submitEssay() {
-    const essayText = essayInput.value.trim();
-    if (!essayText) {
-      alert("Vui lòng nhập bài viết trước khi nộp!");
-      essayInput.focus();
+  function handleReviewReject() {
+    // Kiểm tra nếu hết thời gian thì hiển thị thông báo "Đã hết thời gian làm bài"
+    if (examState.timeLeftSeconds <= 0) {
+      timeExpiredNotice.classList.remove("hidden");
+      alert("⚠️ Đã hết thời gian làm bài! Bạn không thể quay lại chỉnh sửa.");
       return;
     }
 
-    submitBtn.disabled = true;
-    submitSpinner.classList.remove("hidden");
-    submitText.textContent = "Đang thẩm định & Chấm bài...";
+    // Nếu còn thời gian, quay lại lúc làm bài
+    switchView("writing");
+  }
 
-    const payload = {
-      task_type: currentTask,
-      prompt: promptInput.value.trim(),
-      essay: essayText,
-      mock: mockModeToggle.checked,
-    };
+  async function handleReviewConfirm() {
+    // 1. Thêm tick và chuyển thanh tiến trình Part 2 sang màu xanh lá
+    examState.task2.completed = true;
+    updateProgressBottomBar();
+
+    // 2. Dừng đồng hồ làm bài
+    pauseExamTimer();
+
+    // 3. Kiểm tra xem có bài làm nào để chấm không
+    const hasPart1 = Boolean(examState.task1.essay.trim());
+    const hasPart2 = Boolean(examState.task2.essay.trim());
+
+    if (!hasPart1 && !hasPart2) {
+      alert("Vui lòng nhập bài làm cho ít nhất Part 1 hoặc Part 2 trước khi nộp!");
+      switchView("writing");
+      return;
+    }
+
+    // Hiển thị trạng thái đang chấm
+    submitReviewSpinner.classList.remove("hidden");
+    submitReviewText.textContent = "Đang thẩm định & Chấm bài...";
+    btnReviewConfirm.disabled = true;
 
     try {
-      const res = await fetch("/api/assess-writing", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Server error (${res.status})`);
+      // Đưa Agent chấm bài
+      if (hasPart2) {
+        examState.results.task2 = await requestAssessment("task2", examState.task2.prompt, examState.task2.essay);
+      }
+      if (hasPart1) {
+        examState.results.task1 = await requestAssessment("task1", examState.task1.prompt, examState.task1.essay);
       }
 
-      const data = await res.json();
-      currentAssessment = data.assessment;
+      // Mặc định hiển thị tab kết quả của bài viết có nội dung (ưu tiên Part 2)
+      examState.activeResultTab = hasPart2 ? "task2" : "task1";
 
-      renderResults(data, essayText);
+      // Chuyển sang màn hình kết quả phân tích
+      switchView("results");
+      renderAssessmentResults();
     } catch (err) {
-      alert(`Lỗi khi chấm bài: ${err.message}`);
+      alert(`Lỗi khi Agent thẩm định bài: ${err.message}`);
       console.error(err);
     } finally {
-      submitBtn.disabled = false;
-      submitSpinner.classList.add("hidden");
-      submitText.textContent = "🚀 Nộp bài & Chấm điểm ngay";
+      submitReviewSpinner.classList.add("hidden");
+      submitReviewText.textContent = "Đồng ý";
+      btnReviewConfirm.disabled = false;
     }
   }
 
-  function renderResults(apiResponse, rawEssay) {
-    const a = apiResponse.assessment;
+  async function requestAssessment(taskType, prompt, essay) {
+    const payload = {
+      task_type: taskType,
+      prompt: prompt.trim(),
+      essay: essay.trim(),
+    };
+
+    const res = await fetch("/api/assess-writing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Server error (${res.status})`);
+    }
+
+    return await res.json();
+  }
+
+  // --- Assessment Results Rendering (Giao diện chấm bài cũ) ---
+
+  function renderAssessmentResults() {
+    const currentRes = examState.results[examState.activeResultTab];
+    if (!currentRes || !currentRes.assessment) {
+      emptyResultState.classList.remove("hidden");
+      assessmentResults.classList.add("hidden");
+      return;
+    }
+
     emptyResultState.classList.add("hidden");
     assessmentResults.classList.remove("hidden");
 
+    const a = currentRes.assessment;
+    const isPart1 = examState.activeResultTab === "task1";
+
+    // Tab buttons state
+    if (isPart1) {
+      tabResultPart1.classList.add("active");
+      tabResultPart2.classList.remove("active");
+      scorePartCaption.textContent = "Điểm ước lượng Part 1";
+    } else {
+      tabResultPart2.classList.add("active");
+      tabResultPart1.classList.remove("active");
+      scorePartCaption.textContent = "Điểm ước lượng Part 2";
+    }
+
     // Score Header
     overallBandValue.textContent = a.overall_band.toFixed(1);
-    durationValue.textContent = `${apiResponse.duration_ms} ms`;
+    durationValue.textContent = `${currentRes.duration_ms} ms`;
     resWordCount.textContent = a.word_count;
-    resExecMode.textContent = apiResponse.execution_mode.toUpperCase();
+    resExecMode.textContent = currentRes.execution_mode.toUpperCase();
     disclaimerText.textContent = a.disclaimer;
 
     // Flags
@@ -651,6 +676,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Render Highlighted Essay
+    const rawEssay = isPart1 ? examState.task1.essay : examState.task2.essay;
     renderInteractiveEssay(rawEssay, a.criteria);
 
     // Render 4 Criteria Cards
@@ -658,13 +684,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Render Actionable Corrections
     renderCorrections(a.corrections);
-
-    // Scroll smoothly to results
-    document.getElementById("resultsSection").scrollIntoView({ behavior: "smooth" });
   }
 
   function renderInteractiveEssay(essayText, criteria) {
-    // Gather all evidence spans across criteria
     const spans = [];
     criteria.forEach((crit, critIdx) => {
       if (crit.evidence && Array.isArray(crit.evidence)) {
@@ -684,10 +706,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Sort by start position
     spans.sort((a, b) => a.start - b.start);
 
-    // Build highlighted HTML with no overlap issues
     let html = "";
     let lastIndex = 0;
 
@@ -708,7 +728,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     highlightedEssayContent.innerHTML = html;
 
-    // Attach click events on marks
     document.querySelectorAll(".quote-highlight").forEach((el) => {
       el.addEventListener("click", () => {
         highlightQuote(el.id);
@@ -801,14 +820,241 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function escapeHtml(text) {
-    if (!text) return "";
-    return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  // --- Modals & Sample Tests (Người 1) ---
+
+  async function fetchServerConfig() {
+    try {
+      await fetch("/api/config");
+    } catch (e) {
+      console.warn("Could not fetch server config, using local defaults.", e);
+    }
+  }
+
+  async function fetchSampleTests() {
+    try {
+      const res = await fetch("/api/sample-tests");
+      if (res.ok) {
+        examState.sampleTestsData = await res.json();
+      } else {
+        examState.sampleTestsData = DEFAULT_SAMPLE_TESTS;
+      }
+    } catch (e) {
+      console.warn("Could not fetch /api/sample-tests, using local default tests.", e);
+      examState.sampleTestsData = DEFAULT_SAMPLE_TESTS;
+    }
+  }
+
+  function openWritingOptionsModal() {
+    writingOptionsModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeWritingOptionsModal() {
+    writingOptionsModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  function openSampleTestsModal() {
+    closeWritingOptionsModal();
+    sampleTestsModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    renderSampleTestsList();
+  }
+
+  function closeSampleTestsModal() {
+    sampleTestsModal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  function renderSampleTestsList() {
+    sampleTestsList.innerHTML = "";
+    const list = examState.sampleTestsData.length > 0 ? examState.sampleTestsData : DEFAULT_SAMPLE_TESTS;
+
+    list.forEach((test, testIdx) => {
+      const card = document.createElement("div");
+      card.className = "sample-test-card";
+      card.id = `testCard-${test.id || testIdx}`;
+
+      const header = document.createElement("div");
+      header.className = "sample-test-header";
+      header.setAttribute("role", "button");
+      header.setAttribute("tabindex", "0");
+      header.setAttribute("title", "Nhấn vào đây để xem danh sách câu hỏi");
+      header.innerHTML = `
+        <div class="sample-test-info">
+          <div class="sample-test-name-row">
+            <span class="test-icon">📄</span>
+            <h4 class="sample-test-name">${escapeHtml(test.name)}</h4>
+          </div>
+          <div class="sample-test-source-row">
+            <span class="source-tag">🏛 Nguồn bài thi:</span>
+            <span class="sample-test-source">${escapeHtml(test.source)}</span>
+          </div>
+        </div>
+        <div class="sample-test-action-area">
+          <span class="expand-badge">
+            <span class="expand-chevron">▼</span>
+          </span>
+        </div>
+      `;
+
+      const drawer = document.createElement("div");
+      drawer.className = "sample-questions-drawer hidden";
+      drawer.id = `drawer-${testIdx}`;
+
+      // Lấy 2 câu hỏi Task 1 và Task 2 của bộ đề
+      let q1 = (test.questions || []).find(q => q.task_type === "task1");
+      let q2 = (test.questions || []).find(q => q.task_type === "task2" && q !== q1);
+
+      if (!q1 && !q2 && test.questions && test.questions.length > 0) {
+        q1 = test.questions[0];
+        if (test.questions.length > 1) q2 = test.questions[1];
+      } else if (!q1 && q2) {
+        q1 = (test.questions || []).find(q => q !== q2);
+      } else if (q1 && !q2) {
+        q2 = (test.questions || []).find(q => q !== q1);
+      }
+
+      // Giá trị mặc định nếu thiếu
+      if (!q1) {
+        q1 = {
+          task_type: "task1",
+          title: "Writing Task 1",
+          prompt: DEFAULT_SAMPLE_TESTS[0].questions[0].prompt,
+          suggested_time: "20 phút",
+          min_words: 150
+        };
+      }
+      if (!q2) {
+        q2 = {
+          task_type: "task2",
+          title: "Writing Task 2",
+          prompt: DEFAULT_SAMPLE_TESTS[0].questions[1].prompt,
+          suggested_time: "40 phút",
+          min_words: 250
+        };
+      }
+
+      const timeReq1 = q1.suggested_time || "20 phút";
+      const wordReq1 = q1.min_words ? `Min ${q1.min_words} từ` : "Min 150 từ";
+      const timeReq2 = q2.suggested_time || "40 phút";
+      const wordReq2 = q2.min_words ? `Min ${q2.min_words} từ` : "Min 250 từ";
+
+      // Hiển thị duy nhất một khối gồm: Writing Task 1, Writing Task 2, và nút Chọn đề thi màu xanh lá ở góc dưới bên phải
+      drawer.innerHTML = `
+        <div class="sample-test-bundle-block">
+          <!-- Đề Writing Task 1 -->
+          <div class="bundle-task-section">
+            <div class="question-item-header">
+              <span class="task-badge badge-task1">Writing Task 1</span>
+              <span class="question-meta-info">⏱ ${escapeHtml(timeReq1)} • 📝 ${escapeHtml(wordReq1)}</span>
+            </div>
+            <h5 class="question-item-title">${escapeHtml(q1.title || "Writing Task 1")}</h5>
+            <div class="question-prompt-text">${escapeHtml(q1.prompt)}</div>
+          </div>
+
+          <!-- Đường phân cách giữa Task 1 và Task 2 -->
+          <div class="bundle-task-divider"></div>
+
+          <!-- Đề Writing Task 2 -->
+          <div class="bundle-task-section">
+            <div class="question-item-header">
+              <span class="task-badge badge-task2">Writing Task 2</span>
+              <span class="question-meta-info">⏱ ${escapeHtml(timeReq2)} • 📝 ${escapeHtml(wordReq2)}</span>
+            </div>
+            <h5 class="question-item-title">${escapeHtml(q2.title || "Writing Task 2")}</h5>
+            <div class="question-prompt-text">${escapeHtml(q2.prompt)}</div>
+          </div>
+
+          <!-- Nút Chọn đề thi nằm phía dưới bên phải màu xanh lá -->
+          <div class="bundle-footer-row">
+            <button type="button" class="btn-select-test-green" data-test-idx="${testIdx}">
+              Chọn đề thi
+            </button>
+          </div>
+        </div>
+      `;
+
+      function toggleDrawer() {
+        const isHidden = drawer.classList.contains("hidden");
+        document.querySelectorAll(".sample-questions-drawer").forEach(d => {
+          if (d !== drawer) d.classList.add("hidden");
+        });
+        document.querySelectorAll(".sample-test-card").forEach(c => {
+          if (c !== card) c.classList.remove("expanded");
+        });
+
+        if (isHidden) {
+          drawer.classList.remove("hidden");
+          card.classList.add("expanded");
+        } else {
+          drawer.classList.add("hidden");
+          card.classList.remove("expanded");
+        }
+      }
+
+      header.addEventListener("click", toggleDrawer);
+      header.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleDrawer();
+        }
+      });
+
+      card.appendChild(header);
+      card.appendChild(drawer);
+      sampleTestsList.appendChild(card);
+    });
+
+    sampleTestsList.querySelectorAll(".btn-select-test-green").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const testIdx = parseInt(btn.dataset.testIdx, 10);
+        const loadSample = Boolean(e.shiftKey);
+        loadTestSetIntoExam(testIdx, loadSample);
+      });
+    });
+  }
+
+  function loadTestSetIntoExam(testIdx, loadSampleEssay = false) {
+    const list = examState.sampleTestsData.length > 0 ? examState.sampleTestsData : DEFAULT_SAMPLE_TESTS;
+    const test = list[testIdx];
+    if (!test || !test.questions) return;
+
+    let q1 = test.questions.find(q => q.task_type === "task1");
+    let q2 = test.questions.find(q => q.task_type === "task2" && q !== q1);
+
+    if (!q1 && !q2 && test.questions.length > 0) {
+      q1 = test.questions[0];
+      if (test.questions.length > 1) q2 = test.questions[1];
+    } else if (!q1 && q2) {
+      q1 = test.questions.find(q => q !== q2);
+    } else if (q1 && !q2) {
+      q2 = test.questions.find(q => q !== q1);
+    }
+
+    if (!q1) {
+      q1 = { prompt: DEFAULT_SAMPLE_TESTS[0].questions[0].prompt };
+    }
+    if (!q2) {
+      q2 = { prompt: DEFAULT_SAMPLE_TESTS[0].questions[1].prompt };
+    }
+
+    examState.task1.prompt = q1.prompt;
+    examState.task1.essay = (loadSampleEssay && q1.sample_essay) ? q1.sample_essay : "";
+    examState.task1.wordCount = countWords(examState.task1.essay);
+    examState.task1.completed = examState.task1.wordCount > 0;
+
+    examState.task2.prompt = q2.prompt;
+    examState.task2.essay = (loadSampleEssay && q2.sample_essay) ? q2.sample_essay : "";
+    examState.task2.wordCount = countWords(examState.task2.essay);
+    examState.task2.completed = examState.task2.wordCount > 0;
+
+    examState.activePart = "task1";
+    examState.timeLeftSeconds = 60 * 60;
+
+    closeSampleTestsModal();
+    switchView("writing");
   }
 
   // --- Event Listeners Setup ---
@@ -817,50 +1063,45 @@ document.addEventListener("DOMContentLoaded", () => {
     // Navigation bar buttons
     navHomeBtn.addEventListener("click", () => switchView("home"));
     navWritingBtn.addEventListener("click", () => switchView("writing"));
-    btnBackToHome.addEventListener("click", () => switchView("home"));
+    btnHomeFromResults.addEventListener("click", () => switchView("home"));
+    btnBackToExamFromResults.addEventListener("click", () => switchView("writing"));
 
+    // Home: Start writing test button opens options modal
     btnStartWriting.addEventListener("click", (e) => {
       e.stopPropagation();
       openWritingOptionsModal();
     });
 
-    // Option 1: "Chọn bài mẫu" -> opens Sample Tests modal
-    optSelectSampleBtn.addEventListener("click", () => {
-      openSampleTestsModal();
-    });
-
-    // Option 2: "Tự thiết kế" -> opens Writing workspace for custom design
+    // Options modal choices
+    optSelectSampleBtn.addEventListener("click", openSampleTestsModal);
     optCustomTestBtn.addEventListener("click", () => {
       closeWritingOptionsModal();
-      promptInput.value = "";
-      essayInput.value = "";
-      presetSelector.value = "";
-      updateWordCountDisplay();
-      resetAssessmentDisplay();
+      // Clean custom exam
+      examState.task1.prompt = "The table below shows information about water consumption. Summarise the information by selecting and reporting the main features.";
+      examState.task1.essay = "";
+      examState.task1.wordCount = 0;
+      examState.task1.completed = false;
+
+      examState.task2.prompt = "Some people believe that university education should be free for all students. Discuss both views and give your opinion.";
+      examState.task2.essay = "";
+      examState.task2.wordCount = 0;
+      examState.task2.completed = false;
+
+      examState.activePart = "task1";
+      examState.timeLeftSeconds = 60 * 60;
+
       switchView("writing");
-      promptInput.focus();
     });
 
-    // Close Options Modal
     closeWritingOptionsBtn.addEventListener("click", closeWritingOptionsModal);
-
-    // Open Sample Tests Modal from Writing Workspace
-    btnOpenSampleTestsFromEditor.addEventListener("click", openSampleTestsModal);
-
-    // Close Sample Tests Modal (dấu x ở góc trên bên phải để đóng)
     closeSampleTestsBtn.addEventListener("click", closeSampleTestsModal);
 
     // Close modals on clicking overlay backdrop
     writingOptionsModal.addEventListener("click", (e) => {
-      if (e.target === writingOptionsModal) {
-        closeWritingOptionsModal();
-      }
+      if (e.target === writingOptionsModal) closeWritingOptionsModal();
     });
-
     sampleTestsModal.addEventListener("click", (e) => {
-      if (e.target === sampleTestsModal) {
-        closeSampleTestsModal();
-      }
+      if (e.target === sampleTestsModal) closeSampleTestsModal();
     });
 
     // Close modals on Escape key
@@ -871,48 +1112,43 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Task tabs switching
-    tabTask1.addEventListener("click", () => setTask("task1"));
-    tabTask2.addEventListener("click", () => setTask("task2"));
-
-    // Real-time word count
-    essayInput.addEventListener("input", updateWordCountDisplay);
-
-    // Preset dropdown in editor
-    presetSelector.addEventListener("change", (e) => {
-      if (e.target.value) {
-        loadPreset(e.target.value);
-      }
+    // Header "Nộp bài" button: opens review screen
+    btnHeaderSubmitExam.addEventListener("click", () => {
+      saveCurrentPartText();
+      examState.task2.completed = true;
+      updateProgressBottomBar();
+      switchView("review");
     });
 
-    // Mode Toggle switch
-    mockModeToggle.addEventListener("change", async (e) => {
-      const isMock = e.target.checked;
-      updateModeBadge(isMock);
-      try {
-        await fetch("/api/config/toggle-mock", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ enabled: isMock }),
-        });
-      } catch (err) {
-        console.warn("Could not sync mock mode with server:", err);
-      }
+    // Review Screen Actions:
+    // Nút trái: "Không" ô màu xám (kiểm tra hết giờ thì thông báo, còn giờ thì quay lại)
+    btnReviewReject.addEventListener("click", handleReviewReject);
+
+    // Nút phải: "Đồng ý" ô màu xanh lá (chấm bài và hiển thị kết quả)
+    btnReviewConfirm.addEventListener("click", handleReviewConfirm);
+
+    // Bottom Navigation Arrows
+    btnArrowPrev.addEventListener("click", () => switchPart("task1"));
+    btnArrowNext.addEventListener("click", () => switchPart("task2"));
+
+    // Progress Bar Steps click
+    progressStepPart1.addEventListener("click", () => switchPart("task1"));
+    progressStepPart2.addEventListener("click", () => switchPart("task2"));
+
+    // Realtime word counter
+    essayInput.addEventListener("input", handleEssayInput);
+
+    // Results Tab Switch (Part 1 vs Part 2 results)
+    tabResultPart1.addEventListener("click", () => {
+      examState.activeResultTab = "task1";
+      renderAssessmentResults();
     });
 
-    // Timer buttons
-    timerToggleBtn.addEventListener("click", toggleTimer);
-    timerResetBtn.addEventListener("click", resetTimer);
-
-    // Clear button
-    clearBtn.addEventListener("click", () => {
-      if (confirm("Bạn có chắc muốn xóa toàn bộ nội dung bài viết?")) {
-        essayInput.value = "";
-        updateWordCountDisplay();
-      }
+    tabResultPart2.addEventListener("click", () => {
+      examState.activeResultTab = "task2";
+      renderAssessmentResults();
     });
 
-    // Submit button
-    submitBtn.addEventListener("click", submitEssay);
+
   }
 });

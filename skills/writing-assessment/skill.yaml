@@ -2,25 +2,39 @@
   "name": "writing-assessment",
   "version": "1.0.0",
   "description": "Assess one Academic Writing Task with evidence and retrieved descriptors.",
-  "contract_basis": "Uploaded Phan_Cong_Nhiem_Vu_Phase_1 (2).md; Member 3/4 handoffs apply only where consistent with this assignment.",
   "when_to_use": "After task bank resolution for UC-02; reusable for each independent UC-07 examiner.",
   "entrypoint": "instructions.md",
   "schema_authority": {
     "model": "WritingAssessment",
     "owner": "Member 3",
-    "status": "Handoff snapshot; the actual model is not present in this checkout.",
-    "sync_command": "python -m scripts.sync_writing_schema --module agent.schemas",
-    "generated_schema": "writing_assessment.schema.json"
+    "status": "Exported from the actual Member 3 model; run --check to detect drift.",
+    "sync_command": "python -m scripts.sync_writing_schema --module src.agent.schemas",
+    "generated_schema": "writing_assessment.schema.json",
+    "module": "src.agent.schemas"
   },
   "input": {
     "submission": {
       "type": "object",
-      "required": ["item_id", "task_type", "essay"],
+      "required": [
+        "item_id",
+        "task_type",
+        "essay"
+      ],
       "additionalProperties": false,
       "properties": {
-        "item_id": {"type": "string", "minLength": 1},
-        "task_type": {"enum": ["task1", "task2"]},
-        "essay": {"type": "string"}
+        "item_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task_type": {
+          "enum": [
+            "task1",
+            "task2"
+          ]
+        },
+        "essay": {
+          "type": "string"
+        }
       }
     },
     "trusted_context": [
@@ -34,12 +48,20 @@
   },
   "output": {
     "model": "WritingAssessment",
-    "required": ["task_type", "word_count", "criteria", "overall_band", "corrections", "flags", "disclaimer"],
+    "required": [
+      "task_type",
+      "word_count",
+      "criteria",
+      "overall_band",
+      "corrections",
+      "flags",
+      "disclaimer"
+    ],
     "fields": {
       "task_type": "task1 | task2",
       "word_count": "int; supplied by code",
       "criteria": "Exactly four CriterionAssessment objects",
-      "overall_band": "finite float in [0, 9]; supplied by compute_band, mean of four criteria rounded to nearest 0.5, ties upward (.25 -> .5, .75 -> 1.0); team policy for one Task",
+      "overall_band": "finite float; supplied by compute_band, arithmetic mean without Task-level rounding",
       "corrections": "list[{original: str, suggestion: str, reason: str, category: grammar|lexis|cohesion|task}]",
       "flags": "list[under_length|off_topic|possible_plagiarism|injection_detected]",
       "disclaimer": "Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức"
@@ -50,9 +72,216 @@
       "evidence": "non-empty list[{quote: str, start_char: int, end_char: int}]; Python Unicode offsets, end exclusive",
       "descriptor_refs": "non-empty list[str]; only retrieved IDs matching this Task and criterion",
       "comment": "str"
+    },
+    "json_schema": {
+      "$defs": {
+        "Correction": {
+          "additionalProperties": false,
+          "properties": {
+            "original": {
+              "minLength": 1,
+              "title": "Original",
+              "type": "string"
+            },
+            "suggestion": {
+              "minLength": 1,
+              "title": "Suggestion",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "category": {
+              "$ref": "#/$defs/CorrectionCategory"
+            }
+          },
+          "required": [
+            "original",
+            "suggestion",
+            "reason",
+            "category"
+          ],
+          "title": "Correction",
+          "type": "object"
+        },
+        "CorrectionCategory": {
+          "enum": [
+            "grammar",
+            "lexis",
+            "cohesion",
+            "task"
+          ],
+          "title": "CorrectionCategory",
+          "type": "string"
+        },
+        "Criterion": {
+          "enum": [
+            "task_achievement",
+            "task_response",
+            "coherence_cohesion",
+            "lexical_resource",
+            "grammatical_range_accuracy"
+          ],
+          "title": "Criterion",
+          "type": "string"
+        },
+        "CriterionAssessment": {
+          "additionalProperties": false,
+          "properties": {
+            "criterion": {
+              "$ref": "#/$defs/Criterion"
+            },
+            "band": {
+              "maximum": 9,
+              "minimum": 0,
+              "title": "Band",
+              "type": "number"
+            },
+            "evidence": {
+              "items": {
+                "$ref": "#/$defs/Evidence"
+              },
+              "minItems": 1,
+              "title": "Evidence",
+              "type": "array"
+            },
+            "descriptor_refs": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Descriptor Refs",
+              "type": "array"
+            },
+            "comment": {
+              "minLength": 1,
+              "title": "Comment",
+              "type": "string"
+            }
+          },
+          "required": [
+            "criterion",
+            "band",
+            "evidence",
+            "descriptor_refs",
+            "comment"
+          ],
+          "title": "CriterionAssessment",
+          "type": "object"
+        },
+        "Evidence": {
+          "additionalProperties": false,
+          "properties": {
+            "quote": {
+              "minLength": 1,
+              "title": "Quote",
+              "type": "string"
+            },
+            "start_char": {
+              "minimum": 0,
+              "title": "Start Char",
+              "type": "integer"
+            },
+            "end_char": {
+              "exclusiveMinimum": 0,
+              "title": "End Char",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "quote",
+            "start_char",
+            "end_char"
+          ],
+          "title": "Evidence",
+          "type": "object"
+        },
+        "Flag": {
+          "enum": [
+            "under_length",
+            "off_topic",
+            "possible_plagiarism",
+            "injection_detected"
+          ],
+          "title": "Flag",
+          "type": "string"
+        },
+        "TaskType": {
+          "enum": [
+            "task1",
+            "task2"
+          ],
+          "title": "TaskType",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "task_type": {
+          "$ref": "#/$defs/TaskType"
+        },
+        "word_count": {
+          "minimum": 0,
+          "title": "Word Count",
+          "type": "integer"
+        },
+        "criteria": {
+          "items": {
+            "$ref": "#/$defs/CriterionAssessment"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Criteria",
+          "type": "array"
+        },
+        "overall_band": {
+          "maximum": 9,
+          "minimum": 0,
+          "title": "Overall Band",
+          "type": "number"
+        },
+        "corrections": {
+          "items": {
+            "$ref": "#/$defs/Correction"
+          },
+          "title": "Corrections",
+          "type": "array"
+        },
+        "flags": {
+          "items": {
+            "$ref": "#/$defs/Flag"
+          },
+          "title": "Flags",
+          "type": "array"
+        },
+        "disclaimer": {
+          "minLength": 1,
+          "title": "Disclaimer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_type",
+        "word_count",
+        "criteria",
+        "overall_band",
+        "corrections",
+        "flags",
+        "disclaimer"
+      ],
+      "title": "WritingAssessment",
+      "type": "object"
     }
   },
-  "tools": ["retrieve_descriptors", "count_words", "check_plagiarism", "compute_band"],
+  "tools": [
+    "retrieve_descriptors",
+    "count_words",
+    "check_plagiarism",
+    "compute_band"
+  ],
   "validation": {
     "entrypoint": "checks.py:run_checks",
     "delegate": "Member 4 validators; injected object with quote_validator, refs_validator, consistency_validator",
@@ -70,8 +299,18 @@
     "No automatic Band 0 from short length or a possible_plagiarism flag"
   ],
   "examples": [
-    {"submission": {"item_id": "SYNTHETIC_T2_001", "task_type": "task2", "essay": "Public libraries provide access to shared books."}, "expected": "count_words supplies length; under_length is required; retrieve all four Task 2 criteria before scoring. No fixed score is implied."},
-    {"condition": "Task 1 lexical retrieval returns Task 2 metadata", "expected": "RETRIEVAL_INVALID; no assessment is published."}
+    {
+      "submission": {
+        "item_id": "SYNTHETIC_T2_001",
+        "task_type": "task2",
+        "essay": "Public libraries provide access to shared books."
+      },
+      "expected": "count_words supplies length; under_length is required; retrieve all four Task 2 criteria before scoring. No fixed score is implied."
+    },
+    {
+      "condition": "Task 1 lexical retrieval returns Task 2 metadata",
+      "expected": "RETRIEVAL_INVALID; no assessment is published."
+    }
   ],
   "final_checks": [
     "Pydantic schema passes and criteria match the Task exactly",

@@ -1,9 +1,10 @@
 """Adapters for the team's N2/N4 implementations."""
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import asdict, is_dataclass
 from math import isclose
-from typing import Any, Mapping
+from typing import Any
 
 from pydantic import TypeAdapter
 
@@ -214,7 +215,6 @@ def build_team_dependencies(
     try:
         from agent.tools import compute_tool, plagiarism_tool, security_tool  # type: ignore[import-not-found, import-untyped]
         from skills.writing_assessment import validators as n4_validators  # type: ignore[import-not-found]
-
         from src.tools.rag_descriptors import DescriptorRetriever  # type: ignore[import-not-found]
 
         retriever = DescriptorRetriever(

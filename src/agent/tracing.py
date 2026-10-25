@@ -1,9 +1,10 @@
 """Allowlisted trace DTOs only: never serialize state, inputs or exception messages."""
 
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
-from typing import Callable, TypedDict, TypeVar
+from typing import TypedDict, TypeVar
 
 from pydantic import Field, ValidationError
 

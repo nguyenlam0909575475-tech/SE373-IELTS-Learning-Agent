@@ -1,8 +1,9 @@
 """Unit tests for Member 3 (Agent Core & Writing Examiner Workflow)."""
 import unittest
 
+from pydantic import ValidationError
+
 from agent.core.loop import build_graph
-from agent.core.state import AgentState, GraphInput, GraphOutput
 from src.agent.contracts import (
     DescriptorChunk,
     LLMGradingDraft,
@@ -124,7 +125,7 @@ class AgentCoreTests(unittest.TestCase):
         self.assertIn(Flag.UNDER_LENGTH, assessment.flags)
 
     def test_input_contract_rejects_extra_fields(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValidationError):
             WritingSubmission.model_validate(
                 {
                     "item_id": "MOCK_T2_001",
@@ -135,7 +136,7 @@ class AgentCoreTests(unittest.TestCase):
             )
 
     def test_draft_cannot_override_computed_fields(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValidationError):
             LLMGradingDraft.model_validate(
                 {
                     "criteria": [],

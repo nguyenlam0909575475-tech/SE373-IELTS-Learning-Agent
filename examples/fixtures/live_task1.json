@@ -1,0 +1,5 @@
+{
+  "item_id": "MOCK_T1_001",
+  "task_type": "task1",
+  "essay": "The table compares the number of visits to a fictional village library in three years, from 2020 to 2022. Overall, attendance increased throughout the period, and the final figure was twice the starting value.\n\nIn 2020, the library recorded 100 visits. This figure rose to 150 in the following year, representing an increase of 50 visits. By 2022, the total had reached 200, with another rise of the same absolute size. The difference between the first and final years was therefore 100 visits.\n\nAlthough the numerical increase was identical in both intervals, the proportional change became smaller. The rise from 100 to 150 was one half of the original figure, while the next increase was one third of the 2021 total. The data show a steady upward pattern rather than a sudden change in direction. However, the table does not explain what caused this growth or whether the visits were made by different individuals. It is therefore appropriate to describe attendance without making claims about the number of unique readers."
+}

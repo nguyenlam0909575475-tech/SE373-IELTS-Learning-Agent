@@ -1,0 +1,9 @@
+[
+  {
+    "item_id": "MOCK_T2_001",
+    "task_type": "task2",
+    "task_prompt": "Should fictional villages fund free community libraries? Discuss both views and give your opinion.",
+    "source": "self_written",
+    "license": "CC0-1.0"
+  }
+]

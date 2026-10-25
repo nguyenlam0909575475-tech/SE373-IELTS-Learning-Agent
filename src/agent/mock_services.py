@@ -41,6 +41,32 @@ class FakeTaskBank:
                 source="self_written",
                 license="CC0-1.0",
             ),
+            "TASK1_CHILE_001": ResolvedWritingTask(
+                item_id="TASK1_CHILE_001",
+                task_type=TaskType.TASK1,
+                task_prompt="The graph below shows the population of Chile by age group between 1975 and 2035. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+                task_material_text=(
+                    "Line graph: Chile's population by age group (1975-2035) in percentages.\n"
+                    "- 15-64 years: 1975: 52%, 1985: 58%, 1995: 61%, 2005: 63%, 2015: 70% (peak), 2025: 64%, 2035: 60%\n"
+                    "- 0-14 years: 1975: 38%, 1985: 31%, 1995: 28%, 2005: 24%, 2015: 21%, 2025: 19%, 2035: 17%\n"
+                    "- 65 years and over: 1975: 5%, 1985: 6%, 1995: 7%, 2005: 7%, 2015: 9%, 2025: 12%, 2035: 15%"
+                ),
+                source="self_written",
+                license="CC0-1.0",
+            ),
+            "MY_TASK_001": ResolvedWritingTask(
+                item_id="MY_TASK_001",
+                task_type=TaskType.TASK1,
+                task_prompt="The graph below shows the population of Chile by age group between 1975 and 2035. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+                task_material_text=(
+                    "Line graph: Chile's population by age group (1975-2035) in percentages.\n"
+                    "- 15-64 years: 1975: 52%, 1985: 58%, 1995: 61%, 2005: 63%, 2015: 70% (peak), 2025: 64%, 2035: 60%\n"
+                    "- 0-14 years: 1975: 38%, 1985: 31%, 1995: 28%, 2005: 24%, 2015: 21%, 2025: 19%, 2035: 17%\n"
+                    "- 65 years and over: 1975: 5%, 1985: 6%, 1995: 7%, 2005: 7%, 2015: 9%, 2025: 12%, 2035: 15%"
+                ),
+                source="self_written",
+                license="CC0-1.0",
+            ),
             "MOCK_T2_001": ResolvedWritingTask(
                 item_id="MOCK_T2_001",
                 task_type=TaskType.TASK2,

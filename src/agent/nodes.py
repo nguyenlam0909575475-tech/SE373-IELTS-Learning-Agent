@@ -1,7 +1,8 @@
 """Injected node implementations. Operational failures stop; draft issues may repair."""
 
+from collections.abc import Callable
 from time import perf_counter
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol
 from uuid import uuid4
 
 from pydantic import TypeAdapter, ValidationError
@@ -27,7 +28,7 @@ from .contracts import (
     WritingSubmission,
 )
 from .prompts import SKILL_NAME, SKILL_VERSION
-from .schemas import DISCLAIMER, Band, Flag, WritingAssessment, criteria_for
+from .schemas import DISCLAIMER, Band, Evidence, Flag, WritingAssessment, criteria_for
 from .state import AgentState
 from .tracing import TraceContext, TraceEvent, timed_call, utc_now
 
@@ -159,7 +160,7 @@ class Nodes:
         for criterion in criteria_for(task):
             raw = call(
                 "retrieve_descriptors",
-                lambda: self.deps.retriever.retrieve_descriptors(task, criterion, top_k=3),
+                lambda crit=criterion: self.deps.retriever.retrieve_descriptors(task, crit, top_k=3),
             )
             try:
                 batch = TypeAdapter(list[DescriptorChunk]).validate_python(raw, strict=True)
@@ -239,6 +240,17 @@ class Nodes:
             flags.append(Flag.POSSIBLE_PLAGIARISM)
         if state["security_result"].injection_detected:
             flags.append(Flag.INJECTION_DETECTED)
+        for c in draft.criteria:
+            for i, ev in enumerate(c.evidence):
+                if ev.quote in request.essay and (
+                    ev.end_char > len(request.essay)
+                    or request.essay[ev.start_char : ev.end_char] != ev.quote
+                ):
+                    idx = request.essay.find(ev.quote)
+                    if idx != -1:
+                        c.evidence[i] = Evidence(
+                            quote=ev.quote, start_char=idx, end_char=idx + len(ev.quote)
+                        )
         try:
             assessment = WritingAssessment(
                 task_type=request.task_type,

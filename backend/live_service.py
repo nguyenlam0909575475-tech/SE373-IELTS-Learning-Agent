@@ -1,17 +1,24 @@
 """Live Agent Connector for UC-02.
 
-Invoked when USE_MOCK_AGENT is False. Integrates with the LangGraph StateGraph,
-the Dual-Examiner Committee, or the LangSmith tracing harness.
+Invoked when USE_MOCK_AGENT is False. Integrates with the LangGraph StateGraph
+and Examiner agent using OpenAI-compatible (Groq) or Gemini API.
 """
 
 from __future__ import annotations
 
 import logging
+from dataclasses import replace
+from pathlib import Path
 from typing import Literal
 
 from skills.writing_assessment.checks import WritingAssessment
+from src.agent.contracts import ResolvedWritingTask
+from src.agent.graph import build_graph
+from src.agent.mock_services import make_mock_dependencies
+from src.agent.openai_compatible import OpenAICompatibleExaminer, load_openai_settings
 
 logger = logging.getLogger("backend.live_service")
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
 
 def run_live_assessment(
@@ -19,28 +26,62 @@ def run_live_assessment(
     prompt: str,
     essay: str,
 ) -> WritingAssessment:
-    """Execute live assessment pipeline via agent core / committee.
-
-    Raises:
-        NotImplementedError: If the live LLM agent loop is not yet connected.
-        RuntimeError: If LLM API keys or dependencies are missing.
-    """
+    """Execute live assessment pipeline via LLM and LangGraph StateGraph."""
     try:
-        # Check if agent.core.loop or agent.core.committee has live implementation
-        from agent.core import committee
-
-        if hasattr(committee, "run_committee_assessment"):
-            logger.info("Attempting to run committee assessment...")
-            # Note: requires examiner_a_fn and examiner_b_fn implementations
-            raise NotImplementedError(
-                "Live LLM Examiner agents (Examiner A & B) are pending LLM API keys and model initialization. "
-                "Switch to Mock Mode (USE_MOCK_AGENT=true or click the Mock switch on UI) to test the complete application."
-            )
-        else:
-            raise NotImplementedError("Live agent loop is not yet fully initialized.")
-
-    except ImportError as err:
-        raise NotImplementedError(
-            f"Live agent dependencies could not be imported: {err}. "
-            "Ensure packages in requirements.txt are installed."
+        settings = load_openai_settings(ROOT_DIR / ".env")
+        examiner = OpenAICompatibleExaminer(settings)
+    except Exception as err:
+        logger.error("Failed to initialize live LLM examiner: %s", err)
+        raise RuntimeError(
+            f"Failed to initialize LLM provider. Check .env configuration: {err}"
         ) from err
+
+    item_id = f"LIVE_{task_type.upper()}_001"
+
+    class DynamicTaskBank:
+        def resolve(self, requested_id: str) -> ResolvedWritingTask:
+            return ResolvedWritingTask(
+                item_id=requested_id,
+                task_type=task_type,
+                task_prompt=prompt or "Evaluate this IELTS essay according to band descriptors.",
+                source="self_written",
+                license="CC0-1.0",
+            )
+
+    deps = replace(
+        make_mock_dependencies(),
+        task_bank=DynamicTaskBank(),
+        examiner=examiner,
+        model_version=getattr(settings, "trace_model_version", settings.model),
+    )
+
+    graph = build_graph(dependencies=deps)
+    output = graph.invoke(
+        {
+            "request": {
+                "item_id": item_id,
+                "task_type": task_type,
+                "essay": essay,
+            }
+        }
+    )
+
+    result = output["result"]
+    if result.status != "success":
+        error_msg = f"Live assessment failed with code: {result.code} (retry_count={result.retry_count})"
+        if getattr(result, "diagnostics", None):
+            diag = result.diagnostics
+            if diag.http_status == 429:
+                error_msg += f". Rate limit exceeded, please retry after {diag.retry_after_seconds}s."
+            else:
+                error_msg += f" [HTTP {diag.http_status}]"
+        raise RuntimeError(error_msg)
+
+    data = result.assessment.model_dump(mode="json")
+    for crit in data["criteria"]:
+        if crit["criterion"] == "coherence_cohesion":
+            crit["criterion"] = "coherence_and_cohesion"
+        elif crit["criterion"] == "grammatical_range_accuracy":
+            crit["criterion"] = "grammatical_range_and_accuracy"
+
+    return WritingAssessment.model_validate(data)

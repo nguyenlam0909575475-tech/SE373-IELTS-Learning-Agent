@@ -1,6 +1,6 @@
 """Actual compiled LangGraph with a single bounded repair edge and filtered output."""
 
-from typing import Callable
+from collections.abc import Callable
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph

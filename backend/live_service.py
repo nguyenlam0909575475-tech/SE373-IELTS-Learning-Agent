@@ -229,28 +229,39 @@ class DeterministicAgentExaminer:
         )
 
 
-def _get_examiner() -> tuple[Any, str]:
-    """Obtain examiner: real LLM if API key configured, otherwise DeterministicAgentExaminer."""
-    # 1. Try OpenAI / Groq
-    try:
-        openai_settings = load_openai_settings(ROOT_DIR / ".env")
-        logger.info("Using OpenAI-compatible live examiner (%s)", openai_settings.model)
-        return OpenAICompatibleExaminer(openai_settings), getattr(
-            openai_settings, "trace_model_version", openai_settings.model
-        )
-    except Exception:
-        pass
+def _ensure_vectorstore() -> None:
+    """Ensure ChromaDB exists before running live assessment."""
+    db_path = ROOT_DIR / "data" / "chroma_db"
+    if not (db_path / "chroma.sqlite3").is_file():
+        logger.info("ChromaDB vectorstore not found; auto-building from processed descriptors...")
+        from scripts.rebuild_vectorstore import rebuild
+        source = ROOT_DIR / "data" / "processed" / "writing_descriptors.json"
+        rebuild(source, db_path)
 
-    # 2. Try Gemini
-    try:
-        gemini_settings = load_gemini_settings(ROOT_DIR / ".env")
-        logger.info("Using Gemini live examiner (%s)", gemini_settings.model)
-        return GeminiExaminer(gemini_settings), gemini_settings.model
-    except Exception:
-        pass
 
-    # 3. Fallback to Member 3 Deterministic Examiner
-    logger.info("Using Member 3 Deterministic Agent Examiner (offline mode)")
+def _get_examiner(use_mock: bool = False) -> tuple[Any, str]:
+    """Obtain examiner: real LLM if API key configured and mock not requested, otherwise DeterministicAgentExaminer."""
+    if not use_mock:
+        # 1. Try OpenAI / Groq
+        try:
+            openai_settings = load_openai_settings(ROOT_DIR / ".env")
+            logger.info("Using OpenAI-compatible live examiner (%s)", openai_settings.model)
+            return OpenAICompatibleExaminer(openai_settings), getattr(
+                openai_settings, "trace_model_version", openai_settings.model
+            )
+        except Exception:
+            pass
+
+        # 2. Try Gemini
+        try:
+            gemini_settings = load_gemini_settings(ROOT_DIR / ".env")
+            logger.info("Using Gemini live examiner (%s)", gemini_settings.model)
+            return GeminiExaminer(gemini_settings), gemini_settings.model
+        except Exception:
+            pass
+
+    # Fallback to Member 3 Deterministic Examiner
+    logger.info("Using Member 3 Deterministic Agent Examiner (%s)", "mock mode" if use_mock else "offline mode")
     return DeterministicAgentExaminer(), "agent_core_tv3_offline"
 
 
@@ -258,9 +269,11 @@ def run_live_assessment(
     task_type: Literal["task1", "task2"],
     prompt: str,
     essay: str,
+    use_mock: bool = False,
 ) -> WritingAssessment:
     """Execute assessment pipeline via Member 3 LangGraph StateGraph."""
-    examiner, model_version = _get_examiner()
+    _ensure_vectorstore()
+    examiner, model_version = _get_examiner(use_mock=use_mock)
     item_id = f"LIVE_{task_type.upper()}_001"
     tt = TaskType.TASK1 if task_type == "task1" else TaskType.TASK2
 

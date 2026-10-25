@@ -44,6 +44,10 @@ jobs:
         run: |
           ruff check .
 
+      - name: Rebuild Chroma Vectorstore
+        run: |
+          python -B scripts/rebuild_vectorstore.py
+
       - name: Run Pytest Test Suite
         run: |
           pytest

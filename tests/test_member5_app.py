@@ -201,6 +201,7 @@ def test_harness_validation_passes() -> None:
         task_type="task2",
         prompt="Discuss global warming solutions.",
         essay=essay,
+        use_mock=True,
     )
     validation = validate_writing_assessment(
         raw_output=assessment,

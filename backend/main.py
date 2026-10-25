@@ -404,13 +404,16 @@ def assess_writing(payload: AssessmentRequest) -> AssessmentResponse:
     """Evaluate a student's Writing Task 1 or Task 2 essay using Member 3's LangGraph Agent."""
     start_time = time.perf_counter()
     w_count = count_words(payload.essay)
-    logger.info("Evaluating essay with Member 3 Agent Core (word count=%d)...", w_count)
+    use_mock = payload.mock if payload.mock is not None else get_mock_mode()
+    mode_str: Literal["mock", "live", "agent"] = "mock" if use_mock else "agent"
+    logger.info("Evaluating essay with Member 3 Agent Core (mode=%s, word count=%d)...", mode_str, w_count)
 
     try:
         assessment = run_agent_assessment(
             task_type=payload.task_type,
             prompt=payload.prompt,
             essay=payload.essay,
+            use_mock=use_mock,
         )
     except Exception as exc:
         logger.error("Error in agent assessment: %s", exc, exc_info=True)
@@ -423,11 +426,11 @@ def assess_writing(payload: AssessmentRequest) -> AssessmentResponse:
 
     return AssessmentResponse(
         success=True,
-        execution_mode="agent",
+        execution_mode=mode_str,
         duration_ms=round(duration, 2),
         word_count=w_count,
         assessment=assessment,
-        message="Evaluation completed successfully using Member 3 Agent Core.",
+        message=f"Evaluation completed successfully using Member 3 Agent Core ({mode_str} mode).",
     )
 
 

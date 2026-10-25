@@ -65,7 +65,12 @@ def evaluate_single_case(
     start_t = time.perf_counter()
     w_count = count_words(essay)
 
-    assessment = run_agent_assessment(task_type=task_type, prompt=topic, essay=essay)
+    assessment = run_agent_assessment(
+        task_type=task_type,
+        prompt=topic,
+        essay=essay,
+        use_mock=use_mock,
+    )
 
     duration_ms = (time.perf_counter() - start_t) * 1000.0
 

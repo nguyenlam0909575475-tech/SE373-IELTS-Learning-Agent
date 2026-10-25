@@ -1,4 +1,4 @@
-"""Read-only, local word n-gram comparison with exact essay offsets.
+"""Read-only, local word n-gram comparison with exact essay offsets for plagiarism check.
 
 Similarity is the fraction of essay tokens covered by shared n-grams with
 the best single corpus source. This is a copying heuristic, not a semantic

@@ -27,10 +27,15 @@ def run_checks(
 ) -> list[Any]:
     """Return N4 issues in stable order, separate from business flags."""
     issues = []
-    issues.extend(validators.quote_validator(assessment, essay))
-    issues.extend(validators.refs_validator(assessment, chunks))
-    issues.extend(validators.consistency_validator(
-        assessment, word_count=word_count, overall_band=overall_band,
-        plagiarism=plagiarism, security=security, off_topic=off_topic,
-    ))
+    for result in (
+        validators.quote_validator(assessment, essay),
+        validators.refs_validator(assessment, chunks),
+        validators.consistency_validator(
+            assessment, word_count=word_count, overall_band=overall_band,
+            plagiarism=plagiarism, security=security, off_topic=off_topic,
+        ),
+    ):
+        if not isinstance(result, list):
+            raise TypeError("Member 4 validators must return list[ValidationIssue]")
+        issues.extend(result)
     return issues

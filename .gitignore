@@ -51,6 +51,7 @@ service-account*.json
 logs/
 data/private/
 traces/raw/
+artifacts/traces/
 # Temporary Office files
 ~$*
 # Editor, OS and temporary files

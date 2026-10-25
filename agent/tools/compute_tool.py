@@ -1,4 +1,4 @@
-"""Deterministic word count and one-Task band calculation."""
+"""Deterministic word count and one-Task band calculation for IELTS Writing."""
 
 from __future__ import annotations
 

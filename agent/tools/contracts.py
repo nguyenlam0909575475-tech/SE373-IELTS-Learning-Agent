@@ -1,4 +1,4 @@
-"""Small transport records for N4, shared with the existing WritingAssessment schema.
+"""Small transport records for Member 4 tools, shared with WritingAssessment schema.
 
 Inputs can be mappings or schema objects. The authoritative assessment schema stays in skills.writing_assessment.checks.
 No record/error here contains the full submission or credentials.

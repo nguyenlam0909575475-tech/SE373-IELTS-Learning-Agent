@@ -14,3 +14,7 @@ gán điểm chuẩn cho benchmark Writing; không tạo dữ liệu người h�
 Thành viên cần đọc, chạy lại và giải thích được code trước khi nộp/vấn đáp.
 Việc khai báo AI không thay cho kiểm tra chéo dữ liệu hoặc nghiệm thu tích hợp.
 Phần AI hỗ trợ thành viên 1 được ghi trong tài liệu bàn giao của thành viên 1.
+
+## Member 1
+
+Codex hỗ trợ khảo sát nguồn public, trích/chuẩn hóa dữ liệu, viết script kiểm tra và tài liệu bàn giao. Benchmark giữ các điểm do nguồn công bố; AI không tạo điểm band mới. Basic cases có scores=null. Kiểm tra dữ liệu/test giả lập không thay đánh giá Agent live hoặc nghiệm thu tích hợp.

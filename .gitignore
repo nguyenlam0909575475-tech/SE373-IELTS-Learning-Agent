@@ -65,3 +65,8 @@ desktop.ini
 *.bak
 *.tmp
 *~
+
+# Member 1 caches; public benchmark and corpus remain versioned
+data/benchmark_local/
+data/corpus_plagiarism/raw/
+tmp/

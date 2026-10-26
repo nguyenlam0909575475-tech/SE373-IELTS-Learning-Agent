@@ -1,37 +1,26 @@
-# Nguồn dữ liệu Người 1
+# Nguồn dữ liệu
 
-## Band Descriptors
+## IELTS Writing Band Descriptors
 
-- Nguồn chính thức: https://ielts.org/cdn/ielts-guides/ielts-writing-band-descriptors.pdf
-- Tác giả/chủ thể công bố: các tổ chức đồng sở hữu IELTS; tài liệu công bố trên IELTS.org.
-- Phiên bản: Updated May 2023; bản ghi tải ban đầu: 2026-10-18 trong data/raw/descriptors/download_info.json.
-- PDF đã có tại thư mục gốc. Extractor không tự tải hoặc tự xác nhận ngày tải.
-- Quyền phân phối lại: CHƯA XÁC MINH. Publicly accessible không phải giấy phép mở.
-- PDF, JSON trích xuất và provenance để local và được ignore; nếu đã tracked, ignore không tự gỡ khỏi Git.
-- Không sử dụng đề Cambridge, sách thương mại hoặc tài liệu không được phép để làm ngân hàng đề.
+- Nguồn: [IELTS.org — Writing Band Descriptors](https://ielts.org/cdn/ielts-guides/ielts-writing-band-descriptors.pdf).
+- Đơn vị công bố: các tổ chức đồng sở hữu IELTS; phiên bản Updated May 2023.
+- Trích theo ô tiêu chí × band, tách Task 1 và Task 2; giữ nguyên các cấp band của nguồn.
+- Hướng dẫn tạo ChromaDB và bàn giao retrieval: [member1_to_member2_handoff.md](member1_to_member2_handoff.md).
 
-## Cấu trúc và tái tạo
+## Benchmark Academic Writing
 
-Xem docs/member1_to_member2_handoff.md để biết schema, lệnh chạy và cách Người 2 mở collection.
-72 chunks riêng Task 1/Task 2, mỗi chunk là một ô criterion × band 1–9.
-Band 0 được giữ riêng trong descriptor_provenance.json, không gán enum all_criteria hoặc task1_task2.
-Provenance lưu SHA256 PDF và trang/bounding box từng ô. Chưa có người thứ hai kiểm tra chéo.
-Không đưa corpus hoặc benchmark vào collection descriptors.
+Bộ dữ liệu gồm **84 bài: 31 Task 1 và 53 Task 2**, chia **69 dev / 15 test**, band tổng 4.0–8.0. Mỗi bài có đủ bốn điểm tiêu chí, điểm tổng, nhận xét và URL nguồn. Task 1 đi kèm ảnh đề trong repository.
 
-## Corpus plagiarism
+Nguồn gồm IELTS Juice, IELTS Online Tests, IELTS-Blog, Mc IELTS, IELTS Answers và Belajar IELTS. Nhãn được trích từ **điểm do nguồn công bố**; giữ bài gốc và lỗi gốc, ánh xạ tên tiêu chí theo Task, không tự tạo band bằng LLM hoặc thay điểm tổng bằng trung bình tự tính.
 
-data/corpus_plagiarism/manifest.json hiện chưa có tài liệu.
-Định dạng bàn giao dự kiến theo Người 4: corpus.jsonl, mỗi dòng có source_id, text, source_url, license.
-Chỉ thêm nguồn khi đã ghi tác giả và quyền sử dụng; nguồn không cho phân phối phải giữ ngoài repo.
+Danh sách nguồn, schema tám trường và hướng dẫn dùng/dev/test/GitHub: [evals/README.md](../evals/README.md). URL chính xác của từng bài ở trường `source` trong file dữ liệu. Những đề này chỉ dùng cho đánh giá, không đưa vào ngân hàng đề sản phẩm.
 
-## Benchmark và basic cases
+## Corpus đối chiếu đạo văn
 
-evals/benchmark_dev/ và evals/benchmark_test/ hiện chưa có bài chấm chuẩn.
-Benchmark cần tối thiểu 30 bài hai Task, band 4–8, bốn điểm tiêu chí cùng điểm tổng từ nguồn chấm hợp lệ.
-Không dùng LLM gán điểm chuẩn. Điểm nguồn phải được giữ nguyên.
-evals/data/5_basic_cases.json vẫn là placeholder; không tính là eval đã hoàn thành.
+**1.800 bài**, gồm 600 Task 1 từ [hai2131/IELTS-essays-task-1](https://huggingface.co/datasets/hai2131/IELTS-essays-task-1) và 1.200 Task 2 từ [chillies/ielts-writing-task2-essays](https://huggingface.co/datasets/chillies/ielts-writing-task2-essays). Publisher lần lượt là hai tài khoản `hai2131` và `chillies`; nguồn Task 2 mô tả thu thập từ Writing9.
 
-## Minh bạch AI
+Dùng nguồn public, giữ nguyên văn bản, loại thư và bản trùng chuẩn hóa, chọn đa dạng chủ đề; không lấy điểm nguồn làm nhãn. Corpus không trộn với benchmark hoặc descriptors. Chi tiết nguồn và cách tạo lại: [corpus README](../data/corpus_plagiarism/README.md).
 
-AI hỗ trợ xây parser theo tọa độ PDF, contract, validation, tests và script ChromaDB.
-Test không thay kiểm tra nội dung độc lập hoặc đánh giá chất lượng chấm của Agent.
+## Basic cases
+
+[5_basic_cases.json](../evals/data/5_basic_cases.json) gồm 5 nhóm/6 bài kiểm tra hành vi, `scores=null`. Bài viết và đề lấy từ IELTS.org; câu hỏi sức khỏe đối chiếu IDP; biểu đồ phương tiện đến trường lấy từ IELTS Luminary. Case lạc đề dùng bài và đề được cung cấp cho tình huống kiểm thử. Nguồn cụ thể và hướng dẫn chạy ở [member1_to_member5_handoff.md](member1_to_member5_handoff.md).

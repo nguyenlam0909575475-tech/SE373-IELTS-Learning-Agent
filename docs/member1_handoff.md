@@ -36,10 +36,10 @@ Các kiểm tra dữ liệu không gọi LLM và không yêu cầu API key. JSON
 - Descriptors, corpus và benchmark là ba nguồn riêng; không đưa bài benchmark/corpus vào collection descriptors hoặc ngân hàng đề sản phẩm.
 - Benchmark giữ nguyên 84 bài, điểm công bố và cách chia dev/test. Không dùng LLM để tạo điểm chuẩn mới.
 - Nguồn public được tiếp nhận theo quy định cập nhật; không bắt buộc trường `license` hoặc danh tính thật người viết/người chấm.
-- Schema Member 1 được giữ như bộ dữ liệu đã chốt. Những điều chỉnh loader, DTO, runner và luồng ảnh thuộc Member 4/5 được chỉ rõ trong handoff; PR dữ liệu không thay code Agent/UI của họ.
+- Basic cases dùng `id` để khớp runner Member 5; benchmark giữ `case_id`. Các nội dung bài, nhãn, điều kiện kiểm tra và dev/test được giữ nguyên. Những điều chỉnh loader, DTO, runner và luồng ảnh thuộc Member 4/5 được chỉ rõ trong handoff; PR dữ liệu không thay code Agent/UI của họ.
 - Kiểm tra cấu trúc và smoke test dữ liệu không thay cho đánh giá mô hình. Kết quả mock không được báo cáo như độ chính xác chấm band hoặc tỷ lệ phát hiện đạo văn thực tế.
 
 ## Kết quả kiểm tra bộ bàn giao
 
-- 24 tests Member 1 pass; lint và kiểm tra file/secrets trong index pass.
-- Toàn suite hiện 300 pass, 1 fail: runner Member 5 chưa ánh xạ `case_id` của basic cases sang ID nội bộ. [Handoff Member 5](member1_to_member5_handoff.md) ghi cách điều chỉnh; PR dữ liệu không sửa runner hoặc các test thuộc phần đó.
+- 25 tests Member 1 pass; lint và kiểm tra file/secrets trong index pass.
+- Toàn suite: **302 tests pass**. Basic cases đã khớp trường `id` của runner; cách dùng các trường còn lại và ảnh được mô tả trong [handoff Member 5](member1_to_member5_handoff.md).

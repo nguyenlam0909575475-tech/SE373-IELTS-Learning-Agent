@@ -21,6 +21,12 @@ def test_full_member1_package():
     assert report["basic_cases"] == 6
 
 
+def test_basic_cases_use_member5_id():
+    rows = basic_cases()
+    assert len({row["id"] for row in rows}) == 6
+    assert all("case_id" not in row for row in rows)
+
+
 def test_basic_cases_do_not_acquire_invented_score_labels():
     rows = basic_cases()
     rows[0]["scores"] = {"overall_band": 6}

@@ -115,4 +115,4 @@ git push
 
 Các file JSON benchmark và `evals/materials/` không bị ignore. Thư mục `data/benchmark_local/` chỉ là cache làm việc, không cần gửi cho người nhận. Nếu gọi API bắt buộc dùng URL ảnh, dùng URL Raw của ảnh **sau khi ảnh đã được push**; repository private cần cơ chế truy cập phù hợp, hoặc nạp bytes từ bản clone như ví dụ trên.
 
-Basic cases nằm ở [data/5_basic_cases.json](data/5_basic_cases.json), có [hướng dẫn riêng](../docs/member1_to_member5_handoff.md); không dùng `scores=null` của bộ này để tính sai số band.
+Basic cases nằm ở [data/5_basic_cases.json](data/5_basic_cases.json), dùng trường định danh `id` để khớp runner Member 5; benchmark dùng `case_id` như bảng schema phía trên. Có [hướng dẫn riêng](../docs/member1_to_member5_handoff.md); không dùng `scores=null` của basic cases để tính sai số band.

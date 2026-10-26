@@ -13,11 +13,11 @@ Benchmark có **84 bài**, band tổng 4.0–8.0, đủ bốn điểm tiêu chí
 
 ## Ánh xạ cho runner
 
-Benchmark có 8 trường: `case_id`, `task_type`, `exam_question`, `essay`, `material`, `scores`, `feedback`, `source`. Basic cases thay `feedback` bằng `expected`; cả sáu bài có `scores=null`.
+Benchmark có 8 trường: `case_id`, `task_type`, `exam_question`, `essay`, `material`, `scores`, `feedback`, `source`. Basic cases dùng `id` thay `case_id`, thay `feedback` bằng `expected`; cả sáu bài có `scores=null`. Trường `id` khớp trực tiếp với runner Member 5.
 
 | Dữ liệu Member 1 | Runner / adapter sử dụng |
 | --- | --- |
-| `case_id` | ID kết quả; `item_id` khi gửi Agent |
+| `case_id` (benchmark) / `id` (basic cases) | ID kết quả; `item_id` khi gửi Agent |
 | `exam_question` | Đề bài; ánh xạ sang `prompt`, `topic` hoặc `task_prompt` theo API runner |
 | `essay` | Bài làm gửi chấm |
 | `material` | Đường dẫn ảnh theo hướng dẫn bên dưới |
@@ -25,9 +25,7 @@ Benchmark có 8 trường: `case_id`, `task_type`, `exam_question`, `essay`, `ma
 | Bốn điểm trong `scores` | Tính MAE từng tiêu chí; Task 1 dùng TA, Task 2 dùng TR |
 | `expected` | Điều kiện kiểm tra hành vi của basic cases |
 
-`evals/run.py` hiện đọc `id`, `topic`, `ground_truth_band`; cần Member 5 ánh xạ từ các tên trên, không đổi JSON Member 1 về schema cũ. Runner cần đọc đúng 69 dev / 15 test, thay bộ minh họa `writing_benchmark_30.json` khi báo cáo kết quả benchmark thật. Các giá trị enum tiêu chí có thể khác ở DTO của service: ánh xạ `coherence_and_cohesion` → `coherence_cohesion`, `grammatical_range_and_accuracy` → `grammatical_range_accuracy` khi so điểm.
-
-Nếu chạy runner cũ ngay với basic cases mới, `id` trở thành `None` và `run_full_evaluation` lỗi ở bước phân loại under-length. Cập nhật ánh xạ `case_id` trước, rồi dùng `expected` để kiểm tra từng điều kiện; không sửa fixture hoặc bỏ test để che lỗi tích hợp này.
+`evals/run.py` hiện đọc `id`, `topic`, `ground_truth_band`. Basic cases đã dùng đúng `id`; Member 5 còn cần ánh xạ `exam_question` sang đề của runner và đọc các điều kiện trong `expected`. Với benchmark, ánh xạ thêm `case_id` sang ID nội bộ và `scores.overall_band` sang `ground_truth_band`. Runner cần đọc đúng 69 dev / 15 test, thay bộ minh họa `writing_benchmark_30.json` khi báo cáo kết quả benchmark thật. Các giá trị enum tiêu chí có thể khác ở DTO của service: ánh xạ `coherence_and_cohesion` → `coherence_cohesion`, `grammatical_range_and_accuracy` → `grammatical_range_accuracy` khi so điểm.
 
 ## Nạp ảnh Task 1
 
@@ -42,14 +40,15 @@ root = Path.cwd()  # Thư mục gốc repository
 material = row["material"]
 relative_path = material["path"] if isinstance(material, dict) else material
 image_bytes = (root / relative_path).read_bytes() if relative_path else None
+item_id = row["id"] if "id" in row else row["case_id"]
 submission = {
-    "item_id": row["case_id"],
+    "item_id": item_id,
     "task_type": row["task_type"],
     "essay": row["essay"]
 }
 ```
 
-Member 5 đăng ký đề và ảnh theo `case_id` trong TaskBank/adapter. Đường dẫn ảnh trong JSON không tự chuyển thành đầu vào thị giác: service/examiner phải nhận bytes/base64 hoặc nội dung bảng/biểu đồ tương đương đầy đủ. DTO `ResolvedWritingTask` hiện còn enum nguồn và `license` bắt buộc theo quy định cũ; phối hợp bên sở hữu DTO để nhận nguồn public, không gán `self_written`/CC0 cho đề public chỉ để vượt validation.
+Member 5 đăng ký đề và ảnh theo `case_id` của benchmark hoặc `id` của basic cases trong TaskBank/adapter. Đường dẫn ảnh trong JSON không tự chuyển thành đầu vào thị giác: service/examiner phải nhận bytes/base64 hoặc nội dung bảng/biểu đồ tương đương đầy đủ. DTO `ResolvedWritingTask` hiện còn enum nguồn và `license` bắt buộc theo quy định cũ; phối hợp bên sở hữu DTO để nhận nguồn public, không gán `self_written`/CC0 cho đề public chỉ để vượt validation.
 
 Không gửi `scores`, `feedback`, `expected` hoặc trang nguồn có đáp án vào prompt chấm. Nguồn/nhãn chỉ dùng để đối chiếu và báo cáo sau khi có dự đoán. Backend live hiện dùng dependency mock ở một số khâu; không báo cáo như đã chấm với RAG/corpus thật nếu chưa nối các dependency này.
 

@@ -16,7 +16,7 @@ except ImportError:
     from descriptor_data import load_dataset
 
 ROOT = Path(__file__).resolve().parents[1]
-BASIC_FIELDS = {"case_id", "task_type", "exam_question", "essay", "material", "scores", "expected", "source"}
+BASIC_FIELDS = {"id", "task_type", "exam_question", "essay", "material", "scores", "expected", "source"}
 BASIC_IDS = {
     "case_01_task1_normal",
     "case_02_task2_normal",
@@ -38,7 +38,7 @@ def public_url(value):
 def validate_basic_cases(rows, *, root=ROOT):
     if not isinstance(rows, list) or len(rows) != 6:
         raise ValueError("Need six basic cases for five functional groups")
-    if {r.get("case_id") for r in rows} != BASIC_IDS:
+    if {r.get("id") for r in rows} != BASIC_IDS:
         raise ValueError("Unexpected or duplicate basic case IDs")
     for row in rows:
         if set(row) != BASIC_FIELDS:
@@ -72,12 +72,12 @@ def validate_basic_cases(rows, *, root=ROOT):
                 raise ValueError("Missing or invalid basic-case image")
         elif row["material"] is not None:
             raise ValueError("Task 2 material must be null")
-    off_topic = next(r for r in rows if r["case_id"] == "case_04_off_topic_advanced")["expected"]
+    off_topic = next(r for r in rows if r["id"] == "case_04_off_topic_advanced")["expected"]
     if "off_topic" not in off_topic.get("required_flags", []) or off_topic.get("criterion_band_max") != {
         "task_response": 5.0
     }:
         raise ValueError("Off-topic case must enforce Task Response <=5.0")
-    grammar = next(r for r in rows if r["case_id"] == "case_05_grammar_errors")["expected"]
+    grammar = next(r for r in rows if r["id"] == "case_05_grammar_errors")["expected"]
     if "grammar" not in grammar.get("correction_categories_contains", []):
         raise ValueError("Grammar case must require a grammar correction")
     return len(rows)

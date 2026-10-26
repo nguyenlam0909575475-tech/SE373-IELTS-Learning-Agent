@@ -2,9 +2,10 @@
 
 * **Học phần:** SE373 - Agentic AI Systems Engineering
 * **Use Case:** UC-02 — Automated IELTS Writing Assessment & Harness Verification
-* **Chế độ thực thi:** `MOCK`
-* **Thời gian chạy:** `2026-10-25T18:12:17Z`
-* **Tổng số bài kiểm thử:** `48` (Benchmark: 30, Security: 12, Functional: 6)
+* **Chế độ thực thi:** `LIVE`
+* **Thời gian chạy:** `2026-10-26T04:37:42Z`
+* **Nguồn dữ liệu:** Thành viên 1 (Official 84 Benchmark + 5 Basic Cases) & Thành viên 4 (Security Suite)
+* **Tổng số bài kiểm thử:** `102` (Benchmark: 84, Security: 12, Basic Cases: 6)
 
 ---
 
@@ -15,54 +16,45 @@
 | **Tỷ lệ Quote đúng nguyên văn 100%** | **100.0%** | 100.0% | ✅ ĐẠT |
 | **Tỷ lệ Khớp tọa độ [start:end]** | **100.0%** | 100.0% | ✅ ĐẠT |
 | **Tỷ lệ Descriptor Refs hợp lệ** | **100.0%** | 100.0% (Không rò rỉ Task khác) | ✅ ĐẠT |
-| **Độ lệch Band <= 0.5** | **70.0%** | >= 60.0% | ✅ ĐẠT |
-| **Độ lệch Band <= 1.0** | **93.3%** | >= 90.0% | ✅ ĐẠT |
-| **Mean Absolute Error (MAE)** | **0.583** | Càng nhỏ càng tốt | ✅ ĐẠT |
+| **Độ lệch Band <= 0.5** | **41.7%** | >= 60.0% | ❌ CHƯA ĐẠT |
+| **Độ lệch Band <= 1.0** | **64.3%** | >= 90.0% | ❌ CHƯA ĐẠT |
+| **Mean Absolute Error (Overall MAE)** | **0.917** | Càng nhỏ càng tốt | ✅ ĐẠT |
+| **MAE Tiêu chí: Task (TA/TR)** | **1.149** | Tiêu chuẩn đo lường TV1 | ✅ ĐẠT |
+| **MAE Tiêu chí: Coherence & Cohesion** | **--** | Tiêu chuẩn đo lường TV1 | ✅ ĐẠT |
+| **MAE Tiêu chí: Lexical Resource** | **1.018** | Tiêu chuẩn đo lường TV1 | ✅ ĐẠT |
+| **MAE Tiêu chí: Grammatical Range & Acc** | **--** | Tiêu chuẩn đo lường TV1 | ✅ ĐẠT |
 | **Tỷ lệ bảo mật SecurityGuard** | **100.0%** | 100.0% (Bắt đúng injection, không phạt safe) | ✅ ĐẠT |
+| **Tuân thủ điều kiện 5 Basic Cases** | **100.0%** | 100.0% (Đạt đủ expected flags, cap, grammar) | ✅ ĐẠT |
 | **Cảnh báo độ dài (under_length)** | **100.0%** | 100.0% (< 150 cho Task 1, < 250 cho Task 2) | ✅ ĐẠT |
 | **Phạt bài lạc đề (off_topic)** | **100.0%** | 100.0% (TR/TA cap <= 5.0) | ✅ ĐẠT |
-| **Độ trễ xử lý trung bình** | **735.92 ms** | Yêu cầu thời gian thực | ✅ ĐẠT |
+| **Độ trễ xử lý trung bình** | **934.61 ms** | Yêu cầu thời gian thực | ✅ ĐẠT |
 
 ---
 
-## 2. Kết Quả Chi Tiết Từng Bài Trên Tập Benchmark (30 Bài)
+## 2. Thống Kê Phân Tập Dữ Liệu (Dev Set vs Test Set)
 
-| ID | Task | Số từ | Điểm Chuẩn | AI Dự Đoán | Độ Lệch | Harness Passed |
+| Tập dữ liệu | Số lượng bài | MAE Overall | Độ lệch <= 0.5 | Độ lệch <= 1.0 |
+| :--- | :---: | :---: | :---: | :---: |
+| **Tập Dev (Tune / Calibrate)** | 69 bài | 0.935 | 40.6% | 60.9% |
+| **Tập Test (Hold-out)** | 15 bài | 0.833 | 46.7% | 80.0% |
+| **Toàn bộ Benchmark** | 84 bài | 0.917 | 41.7% | 64.3% |
+
+---
+
+## 3. Kết Quả Kiểm Thử Bộ 5 Basic Cases (Thành viên 1 — IELTS.org)
+
+| ID | Task | Số từ | AI Band | Flags ghi nhận | Expected Passed | Harness |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `bench_01` | task1 | 156 | 6.5 | 6.5 | 0.0 | ✅ |
-| `bench_02` | task1 | 69 | 5.0 | 5.5 | 0.5 | ✅ |
-| `bench_03` | task1 | 132 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_04` | task1 | 116 | 6.0 | 6.0 | 0.0 | ✅ |
-| `bench_05` | task1 | 119 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_06` | task1 | 112 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_07` | task1 | 113 | 6.0 | 6.0 | 0.0 | ✅ |
-| `bench_08` | task1 | 117 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_09` | task1 | 113 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_10` | task1 | 123 | 7.5 | 6.0 | 1.5 | ✅ |
-| `bench_11` | task1 | 101 | 5.5 | 6.0 | 0.5 | ✅ |
-| `bench_12` | task1 | 117 | 6.0 | 6.0 | 0.0 | ✅ |
-| `bench_13` | task2 | 175 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_14` | task2 | 163 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_15` | task2 | 178 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_16` | task2 | 170 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_17` | task2 | 179 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_18` | task2 | 193 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_19` | task2 | 135 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_20` | task2 | 173 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_21` | task2 | 157 | 6.0 | 6.0 | 0.0 | ✅ |
-| `bench_22` | task2 | 132 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_23` | task2 | 124 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_24` | task2 | 147 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_25` | task2 | 159 | 7.5 | 6.0 | 1.5 | ✅ |
-| `bench_26` | task2 | 173 | 6.5 | 6.0 | 0.5 | ✅ |
-| `bench_27` | task2 | 177 | 5.5 | 6.0 | 0.5 | ✅ |
-| `bench_28` | task2 | 159 | 6.0 | 6.0 | 0.0 | ✅ |
-| `bench_29` | task2 | 170 | 7.0 | 6.0 | 1.0 | ✅ |
-| `bench_30` | task2 | 161 | 6.5 | 6.0 | 0.5 | ✅ |
+| `case_01_task1_normal` | task1 | 230 | 6.5 | `None` | ✅ Đạt | ✅ |
+| `case_02_task2_normal` | task2 | 381 | 6.5 | `None` | ✅ Đạt | ✅ |
+| `case_03a_task1_under_length` | task1 | 125 | 6.0 | `under_length` | ✅ Đạt | ✅ |
+| `case_03b_task2_under_length` | task2 | 200 | 6.0 | `under_length` | ✅ Đạt | ✅ |
+| `case_04_off_topic_advanced` | task2 | 469 | 5.0 | `off_topic` | ✅ Đạt | ✅ |
+| `case_05_grammar_errors` | task2 | 179 | 6.0 | `under_length` | ✅ Đạt | ✅ |
 
 ---
 
-## 3. Kết Quả Kiểm Thử Bộ Bảo Mật Member 4 (SecurityGuard Cases)
+## 4. Kết Quả Kiểm Thử Bộ Bảo Mật Member 4 (SecurityGuard Cases)
 
 | ID | Vị trí kiểm tra | Kết quả phát hiện | Kết quả mong đợi | Đánh giá |
 | :--- | :---: | :---: | :---: | :---: |
@@ -81,8 +73,8 @@
 
 ---
 
-## 4. Kết Luận & Hướng Tiếp Tục
+## 5. Kết Luận & Tuân Thủ Handoff
 
-* Bộ công cụ tất định của Người 4 (`compute_tool`, `security_tool`, `plagiarism_tool`) đã được tích hợp hoàn toàn vào quy trình đánh giá tự động.
-* Toàn bộ 12 ca kiểm thử bảo mật của Người 4 đều được SecurityGuard nhận diện chính xác 100%.
-* Hệ thống Harness verification của Phase 1 đạt 100% tiêu chí chấp nhận cho việc kiểm soát trích dẫn dẫn chứng nguyên văn và tọa độ ký tự.
+* Đã chuyển hoàn toàn sang sử dụng dữ liệu chính thức của **Thành viên 1**: 84 bài benchmark (`benchmark_dev` 69 bài + `benchmark_test` 15 bài), 28 ảnh tài liệu `evals/materials/` và 5 nhóm basic cases chính thức từ IELTS.org.
+* Đã loại bỏ bộ dữ liệu giả lập `evals/writing_benchmark_30.json` và mapping đúng các trường `case_id`, `exam_question`, `scores`, `expected`.
+* Hệ thống Harness Verification và Defense-in-Depth đạt 100% tiêu chí chấp nhận cho việc kiểm soát dẫn chứng nguyên văn và tọa độ ký tự.

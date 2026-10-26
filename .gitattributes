@@ -1,2 +1,11 @@
 # Git hooks must keep LF line endings, including on Windows.
 .githooks/* text eol=lf
+
+# Stable bytes for Member 1 public data and recorded checksums on every OS.
+data/corpus_plagiarism/corpus.jsonl text eol=lf
+data/corpus_plagiarism/manifest.json text eol=lf
+evals/benchmark_dev/benchmark.json text eol=lf
+evals/benchmark_test/benchmark.json text eol=lf
+evals/data/5_basic_cases.json text eol=lf
+evals/materials/*.png binary
+evals/materials/*.jpg binary

@@ -90,7 +90,7 @@ class TeamTools:
         if len(bands) != 4:
             raise DependencyFailure()
         try:
-            return sum(bands) / 4
+            return float(self._compute.compute_band(bands))
         except Exception:
             raise DependencyFailure() from None
 

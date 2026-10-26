@@ -37,6 +37,7 @@ credentials.json
 client_secret*.json
 service-account*.json
 # Local state, raw traces and private learner data
+latest_assessment_result.json
 *.db
 *.sqlite
 *.sqlite3

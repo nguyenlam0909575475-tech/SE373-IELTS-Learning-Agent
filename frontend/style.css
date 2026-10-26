@@ -1247,11 +1247,36 @@ input:checked + .slider:before {
 }
 
 .quote-highlight.active-glow {
-  background-color: #67e8f9;
-  color: #0e7490;
-  border-bottom: 2px solid #06b6d4;
+  background-color: #67e8f9 !important;
+  color: #0e7490 !important;
+  border-bottom: 2px solid #06b6d4 !important;
   box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
   font-weight: 600;
+}
+
+.quote-highlight.crit-task_achievement,
+.quote-highlight.crit-task_response {
+  border-bottom: 2px solid #3b82f6;
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.quote-highlight.crit-coherence_and_cohesion {
+  border-bottom: 2px solid #10b981;
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.quote-highlight.crit-lexical_resource {
+  border-bottom: 2px solid #8b5cf6;
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.quote-highlight.crit-grammatical_range_and_accuracy {
+  border-bottom: 2px solid #f59e0b;
+  background-color: #fef3c7;
+  color: #92400e;
 }
 
 /* Criteria Grid */
@@ -1343,6 +1368,133 @@ input:checked + .slider:before {
   background: var(--primary-light);
 }
 
+/* Enhanced Criterion Whole-Essay Multi-Evidence Styling */
+.crit-evidence-container {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.evidence-container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.evidence-container-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.evidence-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crit-evidence-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.825rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.criterion-card[data-crit*="task"] .crit-evidence-item {
+  border-left-color: #2563eb;
+}
+
+.criterion-card[data-crit*="coherence"] .crit-evidence-item {
+  border-left-color: #059669;
+}
+
+.criterion-card[data-crit*="lexical"] .crit-evidence-item {
+  border-left-color: #7c3aed;
+}
+
+.criterion-card[data-crit*="grammatical"] .crit-evidence-item {
+  border-left-color: #d97706;
+}
+
+.crit-evidence-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.crit-evidence-item.active-evidence-glow {
+  background: #eff6ff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+}
+
+.evidence-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.evidence-item-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.evidence-type-badge {
+  font-weight: 700;
+  font-size: 0.725rem;
+  color: #1e3a8a;
+  background: #dbeafe;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.evidence-para-tag {
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: #0f766e;
+  background: #ccfbf1;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #99f6e4;
+}
+
+.evidence-offset-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.evidence-quote-content {
+  font-style: italic;
+  color: #334155;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px dashed #cbd5e1;
+}
+
+.evidence-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 /* Corrections */
 .corrections-list {
   display: flex;
@@ -1398,6 +1550,259 @@ input:checked + .slider:before {
 .corr-reason {
   font-size: 0.8rem;
   color: var(--text-muted);
+}
+
+/* Pedagogical Feedback Sections */
+.pedagogical-section {
+  margin-top: 24px;
+}
+
+.pedagogical-section h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 1. Top Priorities */
+.priorities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.priority-card {
+  border: 1px solid #fed7aa;
+  background: #fffaf5;
+  border-left: 4px solid #f97316;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+.priority-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.priority-rank-badge {
+  background: #ea580c;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.priority-title {
+  font-weight: 700;
+  color: #9a3412;
+  font-size: 0.925rem;
+}
+
+.priority-quote-box {
+  background: #ffffff;
+  border: 1px dashed #fdba74;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-style: italic;
+  color: #7c2d12;
+  margin: 6px 0;
+  font-size: 0.825rem;
+}
+
+.priority-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 0.825rem;
+  margin-top: 4px;
+}
+
+/* 2. Error Patterns */
+.patterns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pattern-card {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  border-left: 4px solid #64748b;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+}
+
+.pattern-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pattern-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.pattern-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.badge-priority-high {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-priority-medium {
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-priority-low {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.pattern-rule {
+  color: #1e293b;
+  font-size: 0.825rem;
+  margin: 4px 0 8px;
+}
+
+/* 3. Sentence Rewrites */
+.rewrites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rewrite-card {
+  border: 1px solid #bfdbfe;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+.rewrite-orig {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.rewrite-new {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.rewrite-changes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.change-pill {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.725rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+/* 4. Paragraph Breakdown */
+.paragraphs-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.para-card {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+}
+
+.para-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.para-role {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.875rem;
+}
+
+.para-works {
+  color: #15803d;
+  margin-bottom: 4px;
+}
+
+.para-improve {
+  color: #b45309;
+}
+
+/* 5. Grammar Rules & Model Sentences */
+.rules-list, .model-sentences-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.grammar-rule-card, .model-sentence-card {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.85rem;
+}
+
+.rule-name {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.model-phrase-pill {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 4px;
 }
 
 /* Spinner */

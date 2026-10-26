@@ -1,7 +1,7 @@
 """Public UC-02 assessment SSOT; team choices are documented in docs/contracts.md."""
 
 from enum import StrEnum
-from typing import Annotated, Literal, Self
+from typing import Annotated, Self
 
 from pydantic import (
     AfterValidator,

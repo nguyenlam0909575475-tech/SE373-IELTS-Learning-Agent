@@ -15,7 +15,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from agent.tools.compute_tool import compute_band
 
@@ -71,6 +71,8 @@ class CorrectionItem(BaseModel):
 
 
 class WritingAssessment(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     task_type: Literal["task1", "task2"]
     word_count: int = Field(..., ge=1)
     criteria: list[CriterionAssessment] = Field(..., min_length=4, max_length=4)

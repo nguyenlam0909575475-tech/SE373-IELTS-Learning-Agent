@@ -1,4 +1,4 @@
-"""Opt-in Groq/OpenAI-compatible or Gemini examiner; other dependencies stay MOCK."""
+"""Opt-in live OpenAI examiner demo; other dependencies stay MOCK."""
 
 import argparse
 import json
@@ -8,7 +8,6 @@ from pathlib import Path
 from uuid import uuid4
 
 from src.agent.contracts import AgentError, DependencyFailure, ErrorCode, WritingSubmission
-from src.agent.gemini import GeminiExaminer, load_gemini_settings
 from src.agent.graph import build_graph
 from src.agent.mock_services import make_mock_dependencies
 from src.agent.openai_compatible import OpenAICompatibleExaminer, load_openai_settings
@@ -20,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--provider", choices=("openai", "gemini"), default="openai")
     parser.add_argument("--task", choices=("task1", "task2"), default="task2")
     parser.add_argument("--submission", type=Path, help="Optional self-authored submission JSON")
     parser.add_argument(
@@ -28,11 +26,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     try:
-        settings = (
-            load_openai_settings(ROOT / ".env")
-            if args.provider == "openai"
-            else load_gemini_settings(ROOT / ".env")
-        )
+        settings = load_openai_settings(ROOT / ".env")
     except DependencyFailure as exc:
         error = AgentError(
             run_id=str(uuid4()),
@@ -43,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(error.model_dump_json())
         print(
-            "Configure provider API key/model/base URL in .env; see docs/live_llm.md.",
+            "Configure OPENAI_API_KEY in .env.",
             file=sys.stderr,
         )
         return 2
@@ -62,11 +56,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     examiner = None
     try:
-        examiner = (
-            OpenAICompatibleExaminer(settings)
-            if args.provider == "openai"
-            else GeminiExaminer(settings)
-        )
+        examiner = OpenAICompatibleExaminer(settings)
         deps = replace(
             make_mock_dependencies(),
             examiner=examiner,

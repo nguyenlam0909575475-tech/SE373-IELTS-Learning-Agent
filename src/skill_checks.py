@@ -1,22 +1,31 @@
-"""Delegate skill checks to the supplied Member 4 validators; no scoring logic."""
+"""Shared skill entry point; checks delegate to injected N4 validators."""
+from __future__ import annotations
+
 from typing import Any, Protocol
 
 
 class Validators(Protocol):
-    def quote_validator(self, assessment, essay: str) -> list: ...
-    def refs_validator(self, assessment, chunks: list) -> list: ...
-    def consistency_validator(self, assessment, *, word_count, overall_band,
-                              plagiarism, security, off_topic) -> list: ...
+    def quote_validator(self, assessment: Any, essay: str) -> list[Any]: ...
+    def refs_validator(self, assessment: Any, chunks: list[Any]) -> list[Any]: ...
+    def consistency_validator(
+        self, assessment: Any, *, word_count: int, overall_band: float,
+        plagiarism: Any, security: Any, off_topic: bool,
+    ) -> list[Any]: ...
 
 
-def run_checks(assessment: Any, essay: str, chunks: list, *, validators: Validators,
-               word_count: int, overall_band: float, plagiarism: Any,
-               security: Any, off_topic: bool) -> list:
-    """Run after Member 3 Pydantic validation, using independent tool results.
-
-    Preserve Member 4 issue objects. Operational errors propagate to the graph;
-    an unavailable validator must never look like an empty/successful result.
-    """
+def run_checks(
+    assessment: Any,
+    essay: str,
+    chunks: list[Any],
+    *,
+    validators: Validators,
+    word_count: int,
+    overall_band: float,
+    plagiarism: Any,
+    security: Any,
+    off_topic: bool,
+) -> list[Any]:
+    """Return N4 issues in stable order, separate from business flags."""
     issues = []
     for result in (
         validators.quote_validator(assessment, essay),

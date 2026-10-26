@@ -1,0 +1,133 @@
+{
+  "label": "MOCK synthetic examples; not real IELTS grades",
+  "submission_N5": {
+    "item_id": "MOCK_T2_001",
+    "task_type": "task2",
+    "essay": "Synthetic library essay."
+  },
+  "success_N3_to_N5": {
+    "status": "success",
+    "run_id": "5a50d210-b305-4448-9ea0-f15329396e12",
+    "assessment": {
+      "task_type": "task2",
+      "word_count": 3,
+      "criteria": [
+        {
+          "criterion": "task_response",
+          "band": 6.0,
+          "evidence": [
+            {
+              "quote": "Synthetic library essay.",
+              "start_char": 0,
+              "end_char": 24
+            }
+          ],
+          "descriptor_refs": [
+            "MOCK_task2_task_response_6"
+          ],
+          "comment": "MOCK fixed fixture; not an IELTS evaluation."
+        },
+        {
+          "criterion": "coherence_cohesion",
+          "band": 6.0,
+          "evidence": [
+            {
+              "quote": "Synthetic library essay.",
+              "start_char": 0,
+              "end_char": 24
+            }
+          ],
+          "descriptor_refs": [
+            "MOCK_task2_coherence_cohesion_6"
+          ],
+          "comment": "MOCK fixed fixture; not an IELTS evaluation."
+        },
+        {
+          "criterion": "lexical_resource",
+          "band": 6.0,
+          "evidence": [
+            {
+              "quote": "Synthetic library essay.",
+              "start_char": 0,
+              "end_char": 24
+            }
+          ],
+          "descriptor_refs": [
+            "MOCK_task2_lexical_resource_6"
+          ],
+          "comment": "MOCK fixed fixture; not an IELTS evaluation."
+        },
+        {
+          "criterion": "grammatical_range_accuracy",
+          "band": 6.0,
+          "evidence": [
+            {
+              "quote": "Synthetic library essay.",
+              "start_char": 0,
+              "end_char": 24
+            }
+          ],
+          "descriptor_refs": [
+            "MOCK_task2_grammatical_range_accuracy_6"
+          ],
+          "comment": "MOCK fixed fixture; not an IELTS evaluation."
+        }
+      ],
+      "overall_band": 6.0,
+      "corrections": [],
+      "flags": [
+        "under_length"
+      ],
+      "disclaimer": "Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức"
+    }
+  },
+  "error_N3_to_N5": {
+    "status": "error",
+    "run_id": "b119a594-34a7-401d-b830-313c33cd49ac",
+    "code": "ASSESSMENT_VALIDATION_FAILED",
+    "retry_count": 2,
+    "errors": [
+      {
+        "code": "evidence_invalid",
+        "criterion": "task_response"
+      },
+      {
+        "code": "evidence_invalid",
+        "criterion": "coherence_cohesion"
+      },
+      {
+        "code": "evidence_invalid",
+        "criterion": "lexical_resource"
+      },
+      {
+        "code": "evidence_invalid",
+        "criterion": "grammatical_range_accuracy"
+      }
+    ]
+  },
+  "retrieval_N2_to_N3": [
+    {
+      "chunk_id": "MOCK_task2_task_response_6",
+      "test_part": "task2",
+      "criterion": "task_response",
+      "band": 6.0,
+      "version": "MOCK_v1",
+      "source_url": "mock://synthetic/rubric",
+      "text": "MOCK fixture for task_response; not official IELTS content."
+    }
+  ],
+  "plagiarism_N4_to_N3": {
+    "possible_plagiarism": false,
+    "max_similarity": 0.0,
+    "matches": []
+  },
+  "security_N4_to_N3": {
+    "injection_detected": false
+  },
+  "validator_N4_to_N3": [
+    {
+      "code": "evidence_invalid",
+      "criterion": "task_response"
+    }
+  ]
+}

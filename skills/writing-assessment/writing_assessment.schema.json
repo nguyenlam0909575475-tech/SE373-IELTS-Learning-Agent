@@ -1,0 +1,202 @@
+{
+  "$defs": {
+    "Correction": {
+      "additionalProperties": false,
+      "properties": {
+        "original": {
+          "minLength": 1,
+          "title": "Original",
+          "type": "string"
+        },
+        "suggestion": {
+          "minLength": 1,
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/CorrectionCategory"
+        }
+      },
+      "required": [
+        "original",
+        "suggestion",
+        "reason",
+        "category"
+      ],
+      "title": "Correction",
+      "type": "object"
+    },
+    "CorrectionCategory": {
+      "enum": [
+        "grammar",
+        "lexis",
+        "cohesion",
+        "task"
+      ],
+      "title": "CorrectionCategory",
+      "type": "string"
+    },
+    "Criterion": {
+      "enum": [
+        "task_achievement",
+        "task_response",
+        "coherence_cohesion",
+        "lexical_resource",
+        "grammatical_range_accuracy"
+      ],
+      "title": "Criterion",
+      "type": "string"
+    },
+    "CriterionAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "$ref": "#/$defs/Criterion"
+        },
+        "band": {
+          "maximum": 9,
+          "minimum": 0,
+          "title": "Band",
+          "type": "number"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "descriptor_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Descriptor Refs",
+          "type": "array"
+        },
+        "comment": {
+          "minLength": 1,
+          "title": "Comment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion",
+        "band",
+        "evidence",
+        "descriptor_refs",
+        "comment"
+      ],
+      "title": "CriterionAssessment",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "start_char": {
+          "minimum": 0,
+          "title": "Start Char",
+          "type": "integer"
+        },
+        "end_char": {
+          "exclusiveMinimum": 0,
+          "title": "End Char",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "quote",
+        "start_char",
+        "end_char"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Flag": {
+      "enum": [
+        "under_length",
+        "off_topic",
+        "possible_plagiarism",
+        "injection_detected"
+      ],
+      "title": "Flag",
+      "type": "string"
+    },
+    "TaskType": {
+      "enum": [
+        "task1",
+        "task2"
+      ],
+      "title": "TaskType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "task_type": {
+      "$ref": "#/$defs/TaskType"
+    },
+    "word_count": {
+      "minimum": 0,
+      "title": "Word Count",
+      "type": "integer"
+    },
+    "criteria": {
+      "items": {
+        "$ref": "#/$defs/CriterionAssessment"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "title": "Criteria",
+      "type": "array"
+    },
+    "overall_band": {
+      "maximum": 9,
+      "minimum": 0,
+      "title": "Overall Band",
+      "type": "number"
+    },
+    "corrections": {
+      "items": {
+        "$ref": "#/$defs/Correction"
+      },
+      "title": "Corrections",
+      "type": "array"
+    },
+    "flags": {
+      "items": {
+        "$ref": "#/$defs/Flag"
+      },
+      "title": "Flags",
+      "type": "array"
+    },
+    "disclaimer": {
+      "minLength": 1,
+      "title": "Disclaimer",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_type",
+    "word_count",
+    "criteria",
+    "overall_band",
+    "corrections",
+    "flags",
+    "disclaimer"
+  ],
+  "title": "WritingAssessment",
+  "type": "object"
+}

@@ -2,7 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main, xac_dinh_nhiem_vu_phase_1, "feature/**" ]
+    branches: [ main, xac_dinh_nhiem_vu_phase_1, "feature/**", "feat/**" ]
   pull_request:
     branches: [ main ]
 
@@ -47,3 +47,11 @@ jobs:
       - name: Run Pytest Test Suite
         run: |
           pytest
+
+      - name: Set up Node for frontend evidence checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check evidence highlighting
+        run: node --test tests/test_frontend_evidence.cjs

@@ -116,7 +116,7 @@ Core điều khiển retry, tối đa 3 lần sinh. Tools lỗi vận hành tr�
 
 ## 5. Quy tắc điểm và xử lý đã chốt
 
-- **`compute_band` = tổng bốn điểm / 4, không làm tròn ở cấp Task.** Ví dụ `[6,6,6,7]` → `6.25`.
+- **Cập nhật 26/10: `compute_band` gọi hàm TV4, trung bình rồi làm tròn 0.5, hòa thì lên theo quy ước repository.** Ví dụ `[6,6,6,7]` → `6.5`. Quyết định raw mean cũ đã được thay trong adapter tích hợp.
   Bốn tiêu chí có trọng số bằng nhau. Quy tắc `.25/.75` công bố cho tổng bốn kỹ năng không được
   tự suy rộng sang từng Task; đây là lựa chọn tính toán của dự án dựa trên thông tin công khai.
   [Nguồn IELTS về cách tính điểm](https://ielts.org/take-a-test/your-results/ielts-scoring-in-detail).

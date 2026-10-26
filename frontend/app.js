@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabTask2 = document.getElementById("tabTask2");
   const presetSelector = document.getElementById("presetSelector");
   const promptInput = document.getElementById("promptInput");
+  const taskMaterialInput = document.getElementById("taskMaterialInput");
+  const taskMaterialGroup = document.getElementById("taskMaterialGroup");
   const essayInput = document.getElementById("essayInput");
   const wordCountBadge = document.getElementById("wordCountBadge");
   const wordTargetBadge = document.getElementById("wordTargetBadge");
@@ -419,6 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Set prompt
     promptInput.value = question.prompt;
+    taskMaterialInput.value = question.task_material_text || "";
 
     // Set or clear essay
     if (loadSampleEssay && question.sample_essay) {
@@ -508,6 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setTask(taskType) {
     currentTask = taskType;
+    taskMaterialGroup.classList.toggle("hidden", taskType !== "task1");
     if (taskType === "task1") {
       tabTask1.classList.add("active");
       tabTask2.classList.remove("active");
@@ -526,6 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTask(preset.task_type);
     promptInput.value = preset.prompt;
+    taskMaterialInput.value = preset.task_material_text || "";
     essayInput.value = preset.sample_essay;
     updateWordCountDisplay();
   }
@@ -575,8 +580,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Essay Submission & Assessment Rendering ---
 
   async function submitEssay() {
-    const essayText = essayInput.value.trim();
-    if (!essayText) {
+    const essayText = essayInput.value;
+    if (!essayText.trim()) {
       alert("Vui lòng nhập bài viết trước khi nộp!");
       essayInput.focus();
       return;
@@ -590,6 +595,7 @@ document.addEventListener("DOMContentLoaded", () => {
       task_type: currentTask,
       prompt: promptInput.value.trim(),
       essay: essayText,
+      task_material_text: currentTask === "task1" ? taskMaterialInput.value.trim() || null : null,
       mock: mockModeToggle.checked,
     };
 
@@ -602,7 +608,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Server error (${res.status})`);
+        const detail = errorData.detail;
+        const messages = {
+          RETRIEVAL_INVALID: "Dữ liệu tiêu chí chấm chưa sẵn sàng.",
+          DEPENDENCY_UNAVAILABLE: "Dữ liệu hoặc công cụ chấm chưa sẵn sàng.",
+          LLM_CONFIGURATION_ERROR: "Dịch vụ chấm chưa được cấu hình đầy đủ.",
+          LLM_RATE_LIMITED: "Dịch vụ đang quá tải. Vui lòng thử lại sau.",
+          LLM_TIMEOUT: "Dịch vụ chấm phản hồi chậm. Vui lòng thử lại.",
+          ASSESSMENT_VALIDATION_FAILED: "Chưa tạo được kết quả qua kiểm tra. Vui lòng thử lại.",
+        };
+        throw new Error(typeof detail === "string" ? detail :
+          messages[detail?.code] || "Không thể chấm bài lúc này. Vui lòng thử lại.");
       }
 
       const data = await res.json();
@@ -664,16 +680,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderInteractiveEssay(essayText, criteria) {
+    // Backend offsets count Unicode code points; JS slice counts UTF-16 units.
+    const offsets = [0];
+    for (const character of essayText) {
+      offsets.push(offsets[offsets.length - 1] + character.length);
+    }
     // Gather all evidence spans across criteria
     const spans = [];
     criteria.forEach((crit, critIdx) => {
       if (crit.evidence && Array.isArray(crit.evidence)) {
         crit.evidence.forEach((ev, evIdx) => {
-          if (ev.quote && typeof ev.start_char === "number" && typeof ev.end_char === "number") {
+          if (ev.quote && Number.isInteger(ev.start_char) && Number.isInteger(ev.end_char) &&
+              ev.start_char >= 0 && ev.end_char > ev.start_char && ev.end_char < offsets.length &&
+              essayText.slice(offsets[ev.start_char], offsets[ev.end_char]) === ev.quote) {
             spans.push({
               quote: ev.quote,
-              start: ev.start_char,
-              end: ev.end_char,
+              start: offsets[ev.start_char],
+              end: offsets[ev.end_char],
               criterion: crit.criterion,
               comment: crit.comment,
               critIdx: critIdx,
@@ -684,26 +707,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Sort by start position
-    spans.sort((a, b) => a.start - b.start);
-
-    // Build highlighted HTML with no overlap issues
+    // Split at all boundaries so overlapping evidence remains clickable for
+    // every criterion without duplicating or dropping any essay characters.
+    const boundaries = [...new Set([0, essayText.length,
+      ...spans.flatMap((span) => [span.start, span.end])])].sort((a, b) => a - b);
     let html = "";
-    let lastIndex = 0;
-
-    spans.forEach((sp) => {
-      if (sp.start > lastIndex) {
-        html += escapeHtml(essayText.slice(lastIndex, sp.start));
+    for (let index = 0; index < boundaries.length - 1; index++) {
+      const start = boundaries[index];
+      const end = boundaries[index + 1];
+      const active = spans.filter((span) => span.start <= start && span.end >= end);
+      const text = escapeHtml(essayText.slice(start, end));
+      if (active.length) {
+        const ids = active.map((span) => span.id).join(" ");
+        const title = active.map((span) => `${span.criterion}: ${span.comment}`).join(" | ");
+        html += `<mark class="quote-highlight" data-quote-ids="${ids}" title="${escapeHtml(title)}">${text}</mark>`;
+      } else {
+        html += text;
       }
-      if (sp.start >= lastIndex && sp.end <= essayText.length) {
-        const sliceText = essayText.slice(sp.start, sp.end);
-        html += `<mark class="quote-highlight" id="${sp.id}" data-crit="${sp.criterion}" title="Tiêu chí: ${sp.criterion} - Nhận xét: ${sp.comment}">${escapeHtml(sliceText)}</mark>`;
-        lastIndex = sp.end;
-      }
-    });
-
-    if (lastIndex < essayText.length) {
-      html += escapeHtml(essayText.slice(lastIndex));
     }
 
     highlightedEssayContent.innerHTML = html;
@@ -711,7 +731,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Attach click events on marks
     document.querySelectorAll(".quote-highlight").forEach((el) => {
       el.addEventListener("click", () => {
-        highlightQuote(el.id);
+        highlightQuote(el.dataset.quoteIds.split(" ")[0]);
       });
     });
   }
@@ -720,10 +740,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".quote-highlight").forEach((el) => {
       el.classList.remove("active-glow");
     });
-    const target = document.getElementById(quoteId);
-    if (target) {
-      target.classList.add("active-glow");
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    const targets = document.querySelectorAll(`[data-quote-ids~="${quoteId}"]`);
+    targets.forEach((target) => target.classList.add("active-glow"));
+    if (targets.length) {
+      targets[0].scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
 
@@ -733,8 +753,10 @@ document.addEventListener("DOMContentLoaded", () => {
       task_achievement: "Task Achievement (Task 1)",
       task_response: "Task Response (Task 2)",
       coherence_and_cohesion: "Coherence & Cohesion",
+      coherence_cohesion: "Coherence & Cohesion",
       lexical_resource: "Lexical Resource",
       grammatical_range_and_accuracy: "Grammatical Range & Accuracy",
+      grammatical_range_accuracy: "Grammatical Range & Accuracy",
     };
 
     criteria.forEach((crit, idx) => {
@@ -833,6 +855,7 @@ document.addEventListener("DOMContentLoaded", () => {
     optCustomTestBtn.addEventListener("click", () => {
       closeWritingOptionsModal();
       promptInput.value = "";
+      taskMaterialInput.value = "";
       essayInput.value = "";
       presetSelector.value = "";
       updateWordCountDisplay();

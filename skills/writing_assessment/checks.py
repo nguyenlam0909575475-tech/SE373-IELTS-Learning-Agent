@@ -2,7 +2,7 @@
 
 This module belongs to the Harness verification layer. It validates:
 1. Schema compliance of `WritingAssessment` (Pydantic v2).
-2. Valid IELTS band increments [1.0, 1.5, ..., 9.0] and the repository Task-band rounding policy.
+2. Finite criterion bands [0,9] and the repository Task-band rounding policy.
 3. Exact 4 IELTS criteria matching `task1` (`task_achievement`) or `task2` (`task_response`).
 4. 100% verbatim existence of `evidence.quote` in `essay_text` and exact `[start_char:end_char]` slice matching.
 5. 100% validity of `descriptor_refs` against retrieved RAG chunk IDs and `task_type` (`task1` vs `task2`).
@@ -15,13 +15,12 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from agent.tools.compute_tool import compute_band
+from agent.tools.contracts import is_band
 
 from .validators import consistency_validator, format_issue, quote_validator, refs_validator
-
-VALID_BANDS: set[float] = {i / 2.0 for i in range(2, 19)}  # {1.0, 1.5, ..., 9.0}
 
 DEFAULT_DISCLAIMER = (
     "Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức."
@@ -50,17 +49,24 @@ class EvidenceSpan(BaseModel):
         ..., min_length=1, description="Verbatim substring from the student's essay."
     )
     start_char: int = Field(
-        ..., ge=0, description="0-indexed start character offset in essay_text."
+        ..., strict=True, ge=0, description="0-indexed start character offset in essay_text."
     )
-    end_char: int = Field(..., gt=0, description="0-indexed end character offset in essay_text.")
+    end_char: int = Field(..., strict=True, gt=0, description="0-indexed end character offset in essay_text.")
 
 
 class CriterionAssessment(BaseModel):
     criterion: CriterionName
-    band: float
+    band: float = Field(strict=True, ge=0, le=9, allow_inf_nan=False)
     evidence: list[EvidenceSpan] = Field(..., min_length=1)
     descriptor_refs: list[str] = Field(..., min_length=1)
     comment: str = Field(..., min_length=1)
+
+    @field_validator("criterion", mode="before")
+    @classmethod
+    def accept_canonical_names(cls, name):
+        aliases = {"coherence_cohesion": "coherence_and_cohesion",
+                   "grammatical_range_accuracy": "grammatical_range_and_accuracy"}
+        return aliases.get(name, name) if isinstance(name, str) else name
 
 
 class CorrectionItem(BaseModel):
@@ -72,9 +78,9 @@ class CorrectionItem(BaseModel):
 
 class WritingAssessment(BaseModel):
     task_type: Literal["task1", "task2"]
-    word_count: int = Field(..., ge=1)
+    word_count: int = Field(..., strict=True, ge=0)
     criteria: list[CriterionAssessment] = Field(..., min_length=4, max_length=4)
-    overall_band: float
+    overall_band: float = Field(strict=True, ge=0, le=9, allow_inf_nan=False)
     corrections: list[CorrectionItem] = Field(default_factory=list)
     flags: list[FlagType] = Field(default_factory=list)
     disclaimer: str = Field(default=DEFAULT_DISCLAIMER, min_length=10)
@@ -147,6 +153,8 @@ def validate_writing_assessment(
         assessment = raw_output
     else:
         try:
+            if callable(getattr(raw_output, "model_dump", None)):
+                raw_output = raw_output.model_dump(mode="python")
             assessment = WritingAssessment.model_validate(raw_output)
         except ValidationError as exc:
             for err in exc.errors():
@@ -186,19 +194,19 @@ def validate_writing_assessment(
     task_criterion_band: float | None = None
 
     for crit in assessment.criteria:
-        if crit.band not in VALID_BANDS:
+        if not is_band(crit.band):
             errors.append(
-                f"Invalid band {crit.band} for '{crit.criterion}'. Must be in [1.0, 1.5, ..., 9.0]."
+                f"Invalid band {crit.band} for '{crit.criterion}'. Must be finite and in [0,9]."
             )
         criterion_bands.append(crit.band)
         if crit.criterion in ("task_achievement", "task_response"):
             task_criterion_band = crit.band
 
-    if assessment.overall_band not in VALID_BANDS:
+    if not is_band(assessment.overall_band):
         errors.append(
-            f"Invalid overall_band {assessment.overall_band}. Must be in [1.0, 1.5, ..., 9.0]."
+            f"Invalid overall_band {assessment.overall_band}. Must be finite and in [0,9]."
         )
-    elif len(criterion_bands) == 4 and all(band in VALID_BANDS for band in criterion_bands):
+    elif len(criterion_bands) == 4 and all(is_band(band) for band in criterion_bands):
         expected_overall = compute_ielts_overall_band(criterion_bands)
         if abs(assessment.overall_band - expected_overall) > 1e-6:
             errors.append(

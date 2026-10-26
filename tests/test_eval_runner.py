@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import patch
 
 from evals.run import evaluate_security_guard_cases, evaluate_single_case, run_full_evaluation
 
@@ -67,3 +68,28 @@ def test_full_evaluation_execution(tmp_path: Path) -> None:
     assert summary["metrics"]["offset_match_rate"] == 100.0
     assert summary["metrics"]["descriptor_ref_valid_rate"] == 100.0
     assert summary["metrics"]["security_guard_pass_rate"] == 100.0
+
+
+def test_member1_benchmark_maps_question_id_and_published_score():
+    import json
+
+    row = next(r for r in json.loads((ROOT_DIR / "evals/benchmark_dev/benchmark.json").read_text(encoding="utf-8"))
+               if r["task_type"] == "task2")
+    from backend.mock_service import mock_assess_writing
+
+    with patch("evals.run.mock_assess_writing", wraps=mock_assess_writing) as assess:
+        result = evaluate_single_case(row)
+    assert assess.call_args.kwargs["prompt"] == row["exam_question"]
+    assert result["id"] == row["case_id"]
+    assert result["ground_truth_band"] == row["scores"]["overall_band"]
+
+
+def test_failed_live_case_is_reported_without_fabricated_score():
+    from backend.live_service import LiveAssessmentError
+    from src.agent.contracts import ErrorCode
+
+    with patch("evals.run.run_live_assessment", side_effect=LiveAssessmentError(ErrorCode.RETRIEVAL_INVALID)):
+        result = evaluate_single_case({"case_id": "PUBLIC_1", "exam_question": "Discuss education.",
+                                       "essay": "An original synthetic essay.", "task_type": "task2"}, use_mock=False)
+    assert result["id"] == "PUBLIC_1" and result["predicted_band"] is None
+    assert not result["harness_passed"] and result["harness_errors"] == ["RETRIEVAL_INVALID"]

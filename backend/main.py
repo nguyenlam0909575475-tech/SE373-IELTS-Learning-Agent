@@ -22,8 +22,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from agent.tools.compute_tool import count_words
+from agent.tools.contracts import Member4DependencyError
 from backend.config import FRONTEND_DIR, WORD_COUNT_REGEX, get_mock_mode, set_mock_mode
-from backend.live_service import run_live_assessment
+from backend.live_service import LiveAssessmentError, run_live_assessment
 from backend.mock_service import mock_assess_writing
 from skills.writing_assessment.checks import WritingAssessment
 
@@ -59,6 +60,10 @@ class AssessmentRequest(BaseModel):
     essay: str = Field(
         ..., min_length=1, description="Student's raw essay text"
     )
+    task_material_text: str | None = Field(
+        default=None, description="Actual chart/table data for the text-only Task 1 examiner"
+    )
+    source_url: str | None = Field(default=None, pattern=r"^https://[^\s]+$")
     mock: bool | None = Field(
         default=None,
         description="Optional override switch: True to force Mock, False to force Live agent. If null, follows server configuration.",
@@ -424,6 +429,8 @@ def assess_writing(payload: AssessmentRequest) -> AssessmentResponse:
     2. USE_MOCK_AGENT global switch flag
     """
     start_time = time.perf_counter()
+    if not payload.essay.strip():
+        raise HTTPException(status_code=422, detail="Vui lòng nhập nội dung bài viết.")
 
     # Determine execution mode: per-request override takes precedence over global setting
     use_mock = payload.mock if payload.mock is not None else get_mock_mode()
@@ -439,31 +446,46 @@ def assess_writing(payload: AssessmentRequest) -> AssessmentResponse:
                 prompt=payload.prompt,
                 essay=payload.essay,
             )
+        except Member4DependencyError as exc:
+            raise HTTPException(status_code=503, detail={"code": "DEPENDENCY_UNAVAILABLE"}) from exc
         except Exception as exc:
-            logger.error("Error in mock assessment: %s", exc, exc_info=True)
+            logger.error("Mock assessment failed (%s)", type(exc).__name__)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Mock evaluation error: {exc}",
+                detail="Không thể xử lý bài viết lúc này.",
             ) from exc
     else:
+        if not payload.prompt.strip():
+            raise HTTPException(status_code=422, detail="Vui lòng cung cấp đề bài để chấm.")
+        if payload.task_type == "task1" and not (
+            payload.task_material_text and payload.task_material_text.strip()
+        ):
+            raise HTTPException(status_code=422, detail="Task 1 cần số liệu hoặc mô tả đầy đủ của biểu đồ/bảng.")
         logger.info("Evaluating essay in LIVE AGENT mode (word count=%d)...", w_count)
         try:
             assessment = run_live_assessment(
                 task_type=payload.task_type,
                 prompt=payload.prompt,
                 essay=payload.essay,
+                task_material_text=payload.task_material_text,
+                source_url=payload.source_url,
             )
-        except NotImplementedError as exc:
-            logger.warning("Live agent is not ready: %s", exc)
-            raise HTTPException(
-                status_code=status.HTTP_501_NOT_IMPLEMENTED,
-                detail=str(exc),
-            ) from exc
+        except LiveAssessmentError as exc:
+            status_code = {
+                "INVALID_TASK": 422, "INVALID_INPUT": 422,
+                "LLM_RATE_LIMITED": 429, "LLM_TIMEOUT": 504,
+                "RETRIEVAL_INVALID": 503, "DEPENDENCY_UNAVAILABLE": 503,
+                "LLM_CONFIGURATION_ERROR": 503,
+            }.get(exc.code.value, 502)
+            raise HTTPException(status_code=status_code, detail={
+                "code": exc.code.value, "retry_count": exc.retry_count,
+                "errors": exc.errors, "diagnostics": exc.diagnostics,
+            }) from None
         except Exception as exc:
-            logger.error("Error in live assessment: %s", exc, exc_info=True)
+            logger.error("Live assessment failed (%s)", type(exc).__name__)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Live agent execution failed: {exc}",
+                detail="Không thể chấm bài lúc này.",
             ) from exc
 
     duration = (time.perf_counter() - start_time) * 1000.0

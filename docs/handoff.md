@@ -1,3 +1,5 @@
+> Cập nhật tích hợp 26/10/2026: chính sách hiện hành và cách nối thật ở [member4_handoff.md](member4_handoff.md) và [team_integration.md](team_integration.md). Các nhận định raw mean/adapter cũ dưới đây là lịch sử; code hiện gọi compute_band TV4 theo quy ước repository.
+
 # Người 3 — Tên hàm và dữ liệu dùng chung
 
 Contract chốt ngày 18/10/2026; trạng thái tích hợp nhóm cập nhật 24/10/2026. Quy ước đối chiếu nguồn IELTS chính thức.

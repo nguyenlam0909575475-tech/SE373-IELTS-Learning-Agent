@@ -26,8 +26,10 @@ Descriptor band giữ numeric; nhóm N1 dự kiến integer1–9 cho corpus th�
 `WritingSubmission(item_id, task_type, essay)` là input duy nhất. Browser gửi task_prompt
 hay bất kỳ field thừa nào đều INVALID_INPUT. Đề resolve theo item_id từ TaskBank.
 `ResolvedWritingTask`: item_id/task_type/task_prompt, task_material_text optional,
-source (self_written/llm_generated_verified/open_license), license nonblank.
-**[GỐC]** source/license bắt buộc. **[ĐỀ XUẤT]** Trong harness text-only, Task1 thiếu material
+source (self_written/llm_generated_verified/open_license/public/user_provided).
+Nguồn public cần source_url HTTPS; license có thể null. Các kiểu nguồn cũ vẫn cần license
+đã khai báo; user_provided không tự nhận quyền sở hữu hoặc giấy phép cho đề người dùng nhập.
+**[CẬP NHẬT 26/10]** source bắt buộc; license theo loại nguồn ở trên. **[ĐỀ XUẤT]** Trong harness text-only, Task1 thiếu material
 sẽ INVALID_TASK: cần dữ liệu bảng/biểu đồ để đánh giá Task Achievement. N1 quản lý toàn bộ
 metadata bank theo §2.1 và xác minh quyền sử dụng; graph chỉ kiểm tra DTO tối thiểu, không tự
 xác nhận license bất kỳ là hợp pháp.
@@ -84,8 +86,10 @@ kiểm công thức/rounding thuộc unit tests tool N4, không gọi tool lại
 
 **[NHÓM]** regex mock dùng `\b[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*\b` từ phân công.
 **[CHƯA CHỐT]** Đây không phải tiêu chuẩn đếm từ IELTS được xác minh; N4/N5 thống nhất Unicode,
-hyphen, apostrophe, số. **[ĐÃ CHỐT 18/10]** compute_band dùng trung bình bốn tiêu chí chưa làm tròn ở cấp Task;
-không áp `.25→.5` của overall bốn kỹ năng sang Task. Lý do và nguồn: handoff.md mục 5.
+hyphen, apostrophe, số. **[CẬP NHẬT 26/10]** compute_band dùng hàm N4 trong
+agent/tools/compute_tool.py, trung bình bốn tiêu chí rồi làm tròn gần nhất 0.5, hòa thì lên.
+Ví dụ [6,6,6,7] -> 6.5. Đây là quy ước repository theo AGENTS.md/phân công và tests,
+không phải khẳng định quy tắc điểm Task chính thức. Adapter không giữ công thức raw mean riêng.
 
 ## Examiner và flags [ĐỀ XUẤT]
 

@@ -7,6 +7,15 @@ from agent.tools.compute_tool import compute_band
 from agent.tools.contracts import ShapeError, ValidationIssue, is_band, read_field, value
 
 COMMON_CRITERIA = {"coherence_and_cohesion", "lexical_resource", "grammatical_range_and_accuracy"}
+_CRITERION_ALIASES = {
+    "coherence_cohesion": "coherence_and_cohesion",
+    "grammatical_range_accuracy": "grammatical_range_and_accuracy",
+}
+
+
+def criterion_name(item: object):
+    name = value(read_field(item, "criterion"))
+    return _CRITERION_ALIASES.get(name, name) if isinstance(name, str) else name
 
 def criteria_for(assessment: object) -> tuple[str, list]:
     task = value(read_field(assessment, "task_type"))
@@ -15,7 +24,7 @@ def criteria_for(assessment: object) -> tuple[str, list]:
     criteria = read_field(assessment, "criteria")
     if not isinstance(criteria, list) or len(criteria) != 4:
         raise ShapeError("four criteria are required")
-    names = [value(read_field(item, "criterion")) for item in criteria]
+    names = [criterion_name(item) for item in criteria]
     first = "task_achievement" if task == "task1" else "task_response"
     if any(not isinstance(name, str) for name in names) or set(names) != COMMON_CRITERIA | {first}:
         raise ShapeError("criterion set is invalid")
@@ -36,7 +45,7 @@ def quote_validator(assessment: object, essay: str) -> list[ValidationIssue]:
         return [ValidationIssue("schema_invalid")]
     issues = []
     for ci, item in enumerate(criteria):
-        name = value(read_field(item, "criterion"))
+        name = criterion_name(item)
         base = f"criteria[{ci}].evidence"
         try:
             evidence = read_field(item, "evidence")
@@ -82,7 +91,7 @@ def refs_validator(assessment: object, chunks: list) -> list[ValidationIssue]:
         for chunk in chunks:
             chunk_id = read_field(chunk, "chunk_id")
             version = read_field(chunk, "version")
-            criterion = value(read_field(chunk, "criterion"))
+            criterion = criterion_name(chunk)
             if (
                 not isinstance(chunk_id, str) or not _ID.fullmatch(chunk_id)
                 or chunk_id in lookup
@@ -99,7 +108,7 @@ def refs_validator(assessment: object, chunks: list) -> list[ValidationIssue]:
         return [ValidationIssue("refs_invalid", reason="retrieved chunks are empty or have invalid metadata", path="retrieved_descriptors")]
     issues = []
     for item in criteria:
-        name = value(read_field(item, "criterion"))
+        name = criterion_name(item)
         try:
             refs = read_field(item, "descriptor_refs")
             valid = (

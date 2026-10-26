@@ -15,8 +15,15 @@ from src.agent.schemas import (
     CorrectionCategory,
     Criterion,
     CriterionAssessment,
+    ErrorPattern,
     Evidence,
     Flag,
+    GrammarRule,
+    ImprovementPriority,
+    ModelSentence,
+    ParagraphAnalysis,
+    PriorityLevel,
+    SentenceRewrite,
     TaskType,
     WritingAssessment,
     criteria_for,
@@ -146,6 +153,90 @@ class AgentCoreTests(unittest.TestCase):
                 }
             )
 
+    def test_pedagogical_models_and_draft_passthrough(self):
+        priority = ImprovementPriority(
+            rank=1,
+            title="Eliminate Subject-Verb Agreement Errors",
+            example_quote="The percentage of students are increasing",
+            why_it_matters="Recurring agreement errors cap Grammatical Range and Accuracy at Band 5.0.",
+            fix_principle="Match verb to the head noun 'percentage' (singular), not the modifier 'students'.",
+            related_criterion=Criterion.GRAMMATICAL_RANGE_ACCURACY,
+        )
+        pattern = ErrorPattern(
+            pattern_name="Subject-Verb Agreement",
+            category=CorrectionCategory.GRAMMAR,
+            frequency=3,
+            priority=PriorityLevel.HIGH,
+            rule="Singular subject takes singular verb.",
+            instances=[
+                Correction(
+                    original="are increasing",
+                    suggestion="is increasing",
+                    reason="Subject is singular noun phrase",
+                    category=CorrectionCategory.GRAMMAR,
+                )
+            ],
+        )
+        rewrite = SentenceRewrite(
+            original_sentence="The percentage of students are increasing fast in 2020.",
+            rewritten_sentence="The proportion of students increased substantially in 2020.",
+            changes_made=["Changed plural verb to past tense", "Upgraded 'fast' to 'substantially'"],
+        )
+        p_analysis = ParagraphAnalysis(
+            paragraph_number=1,
+            paragraph_role="Introduction & Overview",
+            what_works="Clear identification of the main trend across all four nations.",
+            what_to_improve="Add specific comparison between highest and lowest performers.",
+        )
+        rule = GrammarRule(
+            rule_name="Proportions and Percentages",
+            explanation="'The percentage of X' takes a singular verb.",
+            incorrect_example="The percentage of boys are 40%.",
+            correct_example="The percentage of boys is 40%.",
+        )
+        model_sent = ModelSentence(
+            sentence="While Country A experienced substantial growth, Country B saw a modest decline.",
+            useful_phrases=["While X experienced substantial growth", "saw a modest decline"],
+        )
+
+        draft = LLMGradingDraft(
+            criteria=[
+                CriterionAssessment(
+                    criterion=c,
+                    band=6.0,
+                    evidence=[Evidence(quote="Education", start_char=0, end_char=9)],
+                    descriptor_refs=[f"mock_{c.value}"],
+                    comment="Well developed response.",
+                )
+                for c in criteria_for(TaskType.TASK1)
+            ],
+            corrections=[
+                Correction(
+                    original="Education",
+                    suggestion="education",
+                    reason="lowercase",
+                    category=CorrectionCategory.GRAMMAR,
+                )
+            ],
+            off_topic=False,
+            top_priorities=[priority],
+            error_patterns=[pattern],
+            sentence_rewrites=[rewrite],
+            paragraph_analyses=[p_analysis],
+            grammar_rules=[rule],
+            model_sentences=[model_sent],
+        )
+
+        draft_json = draft.model_dump(mode="json")
+        self.assertEqual(len(draft_json["top_priorities"]), 1)
+        self.assertEqual(draft_json["top_priorities"][0]["rank"], 1)
+        self.assertEqual(len(draft_json["error_patterns"]), 1)
+        self.assertEqual(len(draft_json["sentence_rewrites"]), 1)
+        self.assertEqual(len(draft_json["paragraph_analyses"]), 1)
+        self.assertEqual(len(draft_json["grammar_rules"]), 1)
+        self.assertEqual(len(draft_json["model_sentences"]), 1)
+
+
     def test_descriptor_chunk_validation(self):
         chunk = FakeRetriever().retrieve_descriptors(TaskType.TASK2, Criterion.TASK_RESPONSE)[0]
         self.assertIsInstance(chunk, DescriptorChunk)
@@ -155,3 +246,5 @@ class AgentCoreTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+

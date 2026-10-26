@@ -11,8 +11,14 @@ from .schemas import (
     Correction,
     Criterion,
     CriterionAssessment,
+    ErrorPattern,
     Evidence,
+    GrammarRule,
+    ImprovementPriority,
+    ModelSentence,
+    ParagraphAnalysis,
     PublicModel,
+    SentenceRewrite,
     TaskType,
     Text,
     WritingAssessment,
@@ -57,6 +63,13 @@ class LLMGradingDraft(PublicModel):
     criteria: Annotated[list[CriterionAssessment], Field(min_length=4, max_length=4)]
     corrections: list[Correction]
     off_topic: StrictBool
+    # --- Pedagogical feedback (optional — LLM may or may not produce these) ---
+    top_priorities: list[ImprovementPriority] = []
+    error_patterns: list[ErrorPattern] = []
+    sentence_rewrites: list[SentenceRewrite] = []
+    paragraph_analyses: list[ParagraphAnalysis] = []
+    grammar_rules: list[GrammarRule] = []
+    model_sentences: list[ModelSentence] = []
 
 
 class PlagiarismMatch(PublicModel):

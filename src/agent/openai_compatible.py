@@ -1,4 +1,4 @@
-"""Optional OpenAI-compatible examiner, configured for Groq by default."""
+"""OpenAI-compatible examiner for live LLM writing assessment."""
 
 import json
 import os
@@ -23,8 +23,8 @@ from .schemas import PublicModel
 
 class OpenAICompatibleSettings(PublicModel):
     api_key: Annotated[SecretStr, Field(min_length=1)]
-    model: Annotated[str, Field(pattern=r"^[A-Za-z0-9_./:-]{1,100}$")] = "openai/gpt-oss-20b"
-    base_url: str = "https://api.groq.com/openai/v1"
+    model: Annotated[str, Field(pattern=r"^[A-Za-z0-9_./:-]{1,100}$")] = "gpt-4o-mini"
+    base_url: str = "https://api.openai.com/v1"
     response_format: Literal["json_object", "json_schema"] = "json_object"
     timeout_ms: int = Field(default=45000, ge=1000, le=120000)
     max_output_tokens: int = Field(default=4096, ge=512, le=16384)
@@ -34,14 +34,14 @@ class OpenAICompatibleSettings(PublicModel):
         url = urlsplit(self.base_url)
         if (
             not self.api_key.get_secret_value().strip()
-            or url.scheme != "https"
+            or url.scheme not in ("http", "https")
             or not url.hostname
             or url.username
             or url.password
             or url.query
             or url.fragment
         ):
-            raise ValueError("explicit key and HTTPS API base URL required")
+            raise ValueError("explicit key and valid HTTP/HTTPS API base URL required")
         return self
 
     @property
@@ -53,17 +53,18 @@ def load_openai_settings(dotenv_path: Path | None = None) -> OpenAICompatibleSet
     try:
         from dotenv import dotenv_values
 
-        values = dotenv_values(dotenv_path, interpolate=False) if dotenv_path else {}
+        target_path = dotenv_path or Path(".env")
+        values = dotenv_values(target_path, interpolate=False) if target_path.is_file() else {}
 
         def setting(name: str, default: Any = None) -> Any:
             return os.environ.get(name, values.get(name, default))
 
         return OpenAICompatibleSettings(
-            api_key=setting("OPENAI_API_KEY") or setting("GROQ_API_KEY"),
-            model=setting("OPENAI_MODEL", "openai/gpt-oss-20b"),
-            base_url=setting("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
+            api_key=setting("OPENAI_API_KEY"),
+            model=setting("OPENAI_MODEL", "gpt-4o-mini"),
+            base_url=setting("OPENAI_BASE_URL", "https://api.openai.com/v1"),
             response_format=setting("OPENAI_RESPONSE_FORMAT", "json_object"),
-            timeout_ms=setting("OPENAI_TIMEOUT_MS", 45000),
+            timeout_ms=int(setting("OPENAI_TIMEOUT_MS", 90000)),
             max_output_tokens=setting("OPENAI_MAX_OUTPUT_TOKENS", 4096),
         )
     except (ImportError, OSError, ValidationError, ValueError):

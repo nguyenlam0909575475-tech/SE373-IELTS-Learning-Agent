@@ -176,3 +176,7 @@ After rebuilding the Member 1 index, run from the repository root:
 The retriever does not need an LLM API key. The first real embedding call may
 download the Chroma ONNX model. The skill delegates validation to Member 4;
 Member 3's actual Pydantic model remains the schema authority.
+
+## Bộ dữ liệu và bàn giao Member 1
+
+Xem [tổng hợp Member 1](docs/member1_handoff.md), [bàn giao Member 4](docs/member1_to_member4_handoff.md) và [bàn giao Member 5](docs/member1_to_member5_handoff.md). Bộ dữ liệu gồm 72 descriptor chunks, 1.800 bài corpus đối chiếu, 84 bài benchmark và 6 basic cases; ảnh Task 1 đi kèm repository.

@@ -1,44 +1,112 @@
 [
   {
-    "id": "case_01_task1_standard",
+    "case_id": "case_01_task1_normal",
     "task_type": "task1",
-    "topic": "The chart below shows the percentage of electricity generated from renewable sources in four countries between 2010 and 2020.",
-    "ground_truth_band": 6.5,
-    "essay": "The bar chart illustrates the proportion of electricity produced from renewable energy sources in four different countries from 2010 to 2020. Overall, it is evident that all four nations experienced an upward trend in renewable power generation over the ten-year period. In 2010, Country A was the leader, accounting for approximately 30% of total electricity production. By 2020, this figure surged dramatically to reach nearly 55%. Country B followed a similar trajectory, rising steadily from 20% to 38%. In contrast, Country C and Country D registered comparatively modest growth throughout the observed timeframe. Country C started at 10% in 2010 and climbed incrementally to finish at 22% in 2020. Finally, Country D remained the lowest throughout, increasing from a mere 5% to 15%. In summary, while renewable electricity output expanded significantly across all four examined countries, Country A maintained the most commanding share throughout the entire decade, demonstrating the most substantial commitment to green energy transition."
+    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.\n\nChart key: solid black bars = 1990; hatched bars = 2010. The chart covers children aged 5-12. The vertical axis shows the total number of trips per year, in millions.",
+    "essay": "The chart gives you information on how children travelled to and from school in the years 1990 and 2010. The modes of transport were by car, walking, cycling, walking and by bus and by bus only.\n\nA striking feature in this chart is that the number of children who travelled by car has increased from 1990 to 2010. In 1990 the most number of trips per year by children were by walking. However in 2010 it reduced to up to 6 million trips per year. The total number of trips to school by cycling and walking and bus were approximately 6 million in 1990. However the number of trips to school by cycling reduced to 2 million and the number of trips to school by walking and bus reduced to about 3 million in 2010. There isn’t a significant change to the number of trips to school by bus. In 1990 it was about 7 million and in 2010 it came down to approximately 5 million.\n\nIn 1990 the amount of children who travelled to and from school by car was significantly lower than the children who travelled by walking. In contrast in 2010 the number of children who travelled to school by car increased and the number of children walking to school has decreased. In 2010 children travelled to school by bus more than they cycled to school.",
+    "material": {
+      "path": "evals/materials/basic_cases_school_trips.jpg",
+      "url": "https://static.wixstatic.com/media/6d9e77_0c72a2d16d484dacafb656cc8e8515dd~mv2.jpg"
+    },
+    "scores": null,
+    "expected": {
+      "forbidden_flags": [
+        "under_length",
+        "off_topic"
+      ]
+    },
+    "source": "https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf#page=2"
   },
   {
-    "id": "case_02_task2_standard",
+    "case_id": "case_02_task2_normal",
     "task_type": "task2",
-    "topic": "Some people believe that working from home brings more benefits to employees and employers than working in an office. To what extent do you agree or disagree?",
-    "ground_truth_band": 7.0,
-    "essay": "In recent years, remote working has emerged as a prominent arrangement across numerous modern industries. I firmly agree that telecommuting provides far greater advantages to both workers and organizations compared to traditional office-based routines.\n\nFirst and foremost, employees experience profound improvements in productivity and work-life balance when working from home. By eliminating exhausting daily commutes, individuals conserve valuable hours each day, which can subsequently be channeled into focused intellectual tasks or healthy personal activities. Moreover, workers operate within a personalized and comfortable domestic environment, significantly minimizing ambient office distractions and stress levels.\n\nFrom the corporate standpoint, businesses can substantially reduce operating expenses through remote work models. Employers are no longer burdened by exorbitant rental costs for commercial office premises, utility bills, and workplace maintenance. Furthermore, companies can recruit exceptional talent globally regardless of geographical constraints, thereby fostering innovation and maintaining a highly competitive advantage in global markets.\n\nIn conclusion, telecommuting delivers indispensable benefits for work flexibility and fiscal efficiency. Both employees and corporate entities should actively embrace flexible remote working policies in the digital age."
+    "exam_question": "The average standard of people's health is likely to be lower in the future than it is now. To what extent do you agree or disagree with this statement? Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.",
+    "essay": "Recently, there have been a lot of discussions about health and whether it is going to improve or not. In my opinion, I think that people will become unhealthier in the future than they are now.\n\nThere are many reasons that support the idea of people becoming unhealthy in the future. Firstly, one reason is that of food. People tend to eat more fast food nowadays. They tend to treat themselves with sweets and chocolate whenever they want. This appears to be because people are busier now than they used to be. So, people don’t have a chance to cook or even learn the art of cookery. Also, having a lot of unhealthy food can lead to obesity and it could be a serious issue in the future. Another reason is that technology is developing everyday. Young people enjoy buying new gadgets and the latest devices. This has a negative impact on their health, especially when they enjoy video games. Spending long hours looking at a screen can lead to bad eyesight and obesity as well. Yet another reason is that laziness is a big issue. Different forms of exercise might disappear in the future because people don’t like sports. Also, people prefer spending most of their time on the internet and the internet is growing every single day.\n\nOther people might disagree and say that health will improve in the future. They believe that new sports and new ways to exercise will appear in the future. However, I don’t think it can happen since the majority of people spend less time outdoors. Moreover, other people believe that technology will try and help people improve their health. For example, there have been some games released on the Wii console that makes people exercise but technology is developing more in a negative way. For instance, many phone industries are developing new applications everyday and today’s generation likes to follow every trend. This prevents people to go outside to exercise. They like to spend more time on the internet downloading new programmes or reading gossips about celebraties. This affects people’s health badly.\n\nIn conclusion, I believe that people’s health is affected negatively by fast food, technology and sports and it will be a problem in the future.",
+    "material": null,
+    "scores": null,
+    "expected": {
+      "forbidden_flags": [
+        "under_length",
+        "off_topic"
+      ]
+    },
+    "source": "https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf#page=5"
   },
   {
-    "id": "case_03a_task1_under_length",
+    "case_id": "case_03a_task1_under_length",
     "task_type": "task1",
-    "topic": "The table compares water use in three different sectors in 2015.",
-    "ground_truth_band": 5.0,
-    "essay": "The table compares water use in three sectors in 2015. Agriculture consumed 65%, industry consumed 20%, and domestic households consumed 15%. In summary, agricultural activities dominated global water consumption throughout the entire recorded period."
+    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.\n\nChart key: solid black bars = 1990; hatched bars = 2010. The chart covers children aged 5-12. The vertical axis shows the total number of trips per year, in millions.",
+    "essay": "The statistice show the number of tripe mad by children in one country over the past to years to travel to end from school using different modes of transport. children walking (13 million) are the by far highset, while, the children use bus (7 million) are a bit higher than the children use car in 1990. However, The children use car (11 million) in 2010 significant higher than The children use bus (5 million) in 2010. In contrest, The children walking (6 million) are Twice as high as the children use cycling (3 million) in 2010. overall, At the end priod there were 12,000,000 children walking in 1990, 11,000,000 children use care in 2010 and 5,000,000 children use bus.",
+    "material": {
+      "path": "evals/materials/basic_cases_school_trips.jpg",
+      "url": "https://static.wixstatic.com/media/6d9e77_0c72a2d16d484dacafb656cc8e8515dd~mv2.jpg"
+    },
+    "scores": null,
+    "expected": {
+      "required_flags": [
+        "under_length"
+      ],
+      "forbidden_flags": [
+        "off_topic"
+      ]
+    },
+    "source": "https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf#page=3"
   },
   {
-    "id": "case_03b_task2_under_length",
+    "case_id": "case_03b_task2_under_length",
     "task_type": "task2",
-    "topic": "Some people believe that university education should be free for all students. Discuss.",
-    "ground_truth_band": 5.0,
-    "essay": "Free university education is very good for students. When university is free, poor people can study and get good jobs in the future. However, governments need a lot of money to pay for schools, teachers, and libraries. In conclusion, I think tertiary education should be supported by the state."
+    "exam_question": "The average standard of people's health is likely to be lower in the future than it is now. To what extent do you agree or disagree with this statement? Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.",
+    "essay": "I completly disagree with the written statment. I believe that most of the people in the world have more information about their health and also about how they can improve their healthy conditions. Nowadays, information about how harmful is to smoke for our bodies can be seen in many packets of cigars. This is a clear example how things can change from our recent past. There is a clear trend in the diminishing of smokers and if this continues it will have a positive impact in our health. On the other hand, the alimentation habbits are changing all over the world and this can affect people’s health. However every one can choose what to eat every day. Mostly everybody, from developed societies, know the importance of having a healthy diet. Advances such as the information showed in the menus of fast food restaurants will help people to have a clever choice before they choose what to eat. Another important issue that I would like to mention is how medicine is changing. There are new discovers and treatments almost every week and that is an inequivoque sintom of how things are changing in order to improve the world’s health.",
+    "material": null,
+    "scores": null,
+    "expected": {
+      "required_flags": [
+        "under_length"
+      ],
+      "forbidden_flags": [
+        "off_topic"
+      ]
+    },
+    "source": "https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf#page=4"
   },
   {
-    "id": "case_04_off_topic_advanced_vocab",
+    "case_id": "case_04_off_topic_advanced",
     "task_type": "task2",
-    "topic": "Nuclear energy provides a clean source of electricity, but its safety risks are significant. Discuss both views and give your opinion.",
-    "ground_truth_band": 4.5,
-    "essay": "Baking a rich chocolate cake requires high-quality ingredients, particularly Dutch-processed cocoa powder and unsalted butter. First, preheat the oven to 175 degrees Celsius and grease two round cake pans thoroughly with flour. In a large bowl, whisk together the dry ingredients including granulated sugar, baking powder, and a pinch of fine salt. Next, gently incorporate fresh eggs, whole milk, and vanilla extract until the batter achieves a smooth, glossy consistency. Carefully pour the batter into the prepared pans and bake for approximately thirty minutes. After allowing the sponges to cool completely on a wire rack, apply decadent chocolate ganache between the layers. This dessert is universally cherished for celebratory gatherings and family celebrations."
+    "exam_question": "International travel can bring considerable economic benefits to destinations, but it may also impose costs on local communities and natural ecosystems. Do the disadvantages of international tourism outweigh the advantages? Support your position with reasons and examples. Write at least 250 words.",
+    "essay": "The ability to cope with the demands of adult life is not determined solely by the financial circumstances into which a child is born. It is shaped by early responsibilities, parental expectations, access to guidance, and opportunities to make consequential decisions. In my view, children from less affluent households may develop practical independence at an earlier age, but this advantage is conditional rather than inevitable. Material hardship can encourage resourcefulness; it can also undermine the very confidence and stability that young people need to flourish.\n\nOne reason for associating modest family incomes with greater maturity is that financial constraints make everyday trade-offs unusually visible. A teenager who helps plan a household budget, compares the cost of essential purchases, or contributes to domestic responsibilities may gain an appreciation of scarcity that cannot easily be acquired through theoretical instruction. Such experiences can cultivate prudence, delayed gratification, and a more discriminating attitude towards consumption. Moreover, when parents cannot resolve every difficulty through expenditure, children may be encouraged to negotiate disagreements, repair possessions, and devise workable alternatives. These habits are valuable because adult life repeatedly demands decisions under conditions of imperfect information and limited resources.\n\nNevertheless, it would be simplistic to assume that wealth necessarily produces dependence. Financially secure parents can deliberately foster autonomy by setting boundaries, expecting their children to undertake paid work, and allowing them to experience the consequences of their choices. They may also provide access to mentors, extracurricular programmes, and educational institutions that strengthen analytical thinking and emotional self-regulation. A young person who learns to manage a demanding academic schedule while participating in community activities can acquire substantial organisational skills, regardless of the family's income. The decisive variable is therefore not prosperity itself, but the extent to which adults combine support with meaningful accountability.\n\nEqually important, persistent economic insecurity should not be romanticised as a character-building exercise. A household struggling to meet basic needs may expose children to prolonged anxiety, interrupted schooling, or obligations that are inappropriate for their developmental stage. Under these circumstances, apparent self-reliance may conceal exhaustion rather than genuine resilience. The distinction matters: being forced to cope with adversity is not equivalent to receiving the psychological tools needed to process it constructively. Supportive relationships, predictable routines, and opportunities for reflection are essential if difficult experiences are to become lessons rather than lasting disadvantages.\n\nUltimately, preparation for adulthood depends on a balance between protection and responsibility. Children benefit when they are trusted with age-appropriate decisions, taught to evaluate competing priorities, and encouraged to recover from manageable setbacks. Families with limited means sometimes provide these lessons through necessity, whereas affluent families must often create them intentionally. Neither background guarantees competence. What matters most is whether children emerge from their upbringing with sound judgement, emotional resilience, and the confidence to act independently without losing the capacity to seek help.",
+    "material": null,
+    "scores": null,
+    "expected": {
+      "required_flags": [
+        "off_topic"
+      ],
+      "forbidden_flags": [
+        "under_length"
+      ],
+      "criterion_band_max": {
+        "task_response": 5.0
+      }
+    },
+    "source": "https://ielts.org/cdn/Sample-tests/ielts-academic-writing-sample-tasks-2023.pdf"
   },
   {
-    "id": "case_05_basic_grammar_errors",
+    "case_id": "case_05_grammar_errors",
     "task_type": "task2",
-    "topic": "Do advantages of social media outweigh disadvantages?",
-    "ground_truth_band": 5.5,
-    "essay": "Nowadays many people uses social network every day. It have many advantage because people can chat with friends easily. However, some people spends too much times on phone and forget to do homework. In addition, there is many fake news on internet which make people confuse. If government do not control this problem, it will become more worse in the future. In conclusion, social media is useful but we must use it carefully."
+    "exam_question": "Children who are brought up in families that do not have large amounts of money are better prepared to deal with the problems of adult life than children brought up by wealthy parents. To what extent do you agree or disagree with this opinion? Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.",
+    "essay": "I disagree that point about children brought up in families. because I show that situation arounds me at our country parents. They want they had everything give to their children. but. their behavior is not good effect to them On the other hands, children brought up by wealthy parents. they are strong. that means they can do prepare to deal with the problems of adult life In my case I start work from 20 ages. I had social experience and I got a money for myself. however, My age is late to work by children ages and I heard about child doing work by another countries that countries had a culture about childrens That is they doing work for their pocketmoney they could their money buy something or entrance to the bank also our country childrens do this. but many childrens accept the money by their parents. which persons got a pocketmoney over the 20 ages. I think if childrens had a work and they study at money. they perfectly prepared their adult life after they must be parents",
+    "material": null,
+    "scores": null,
+    "expected": {
+      "required_flags": [
+        "under_length"
+      ],
+      "forbidden_flags": [
+        "off_topic"
+      ],
+      "correction_categories_contains": [
+        "grammar"
+      ]
+    },
+    "source": "https://ielts.org/cdn/Sample-tests/ielts-academic-writing-sample-tasks-2023.pdf#page=18"
   }
 ]

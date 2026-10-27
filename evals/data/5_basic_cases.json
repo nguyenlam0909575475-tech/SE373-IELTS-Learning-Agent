@@ -2,11 +2,11 @@
   {
     "id": "case_01_task1_normal",
     "task_type": "task1",
-    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.\n\nChart key: solid black bars = 1990; hatched bars = 2010. The chart covers children aged 5-12. The vertical axis shows the total number of trips per year, in millions.",
+    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
     "essay": "The chart gives you information on how children travelled to and from school in the years 1990 and 2010. The modes of transport were by car, walking, cycling, walking and by bus and by bus only.\n\nA striking feature in this chart is that the number of children who travelled by car has increased from 1990 to 2010. In 1990 the most number of trips per year by children were by walking. However in 2010 it reduced to up to 6 million trips per year. The total number of trips to school by cycling and walking and bus were approximately 6 million in 1990. However the number of trips to school by cycling reduced to 2 million and the number of trips to school by walking and bus reduced to about 3 million in 2010. There isn’t a significant change to the number of trips to school by bus. In 1990 it was about 7 million and in 2010 it came down to approximately 5 million.\n\nIn 1990 the amount of children who travelled to and from school by car was significantly lower than the children who travelled by walking. In contrast in 2010 the number of children who travelled to school by car increased and the number of children walking to school has decreased. In 2010 children travelled to school by bus more than they cycled to school.",
     "material": {
       "path": "evals/materials/basic_cases_school_trips.jpg",
-      "url": "https://static.wixstatic.com/media/6d9e77_0c72a2d16d484dacafb656cc8e8515dd~mv2.jpg"
+      "url": "https://engnovatewebsitestorage.blob.core.windows.net/ielts-writing-task-1-images/e09afbc097379824"
     },
     "scores": null,
     "expected": {
@@ -35,11 +35,11 @@
   {
     "id": "case_03a_task1_under_length",
     "task_type": "task1",
-    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.\n\nChart key: solid black bars = 1990; hatched bars = 2010. The chart covers children aged 5-12. The vertical axis shows the total number of trips per year, in millions.",
+    "exam_question": "The chart below shows the number of trips made by children in one country in 1990 and 2010 to travel to and from school using different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
     "essay": "The statistice show the number of tripe mad by children in one country over the past to years to travel to end from school using different modes of transport. children walking (13 million) are the by far highset, while, the children use bus (7 million) are a bit higher than the children use car in 1990. However, The children use car (11 million) in 2010 significant higher than The children use bus (5 million) in 2010. In contrest, The children walking (6 million) are Twice as high as the children use cycling (3 million) in 2010. overall, At the end priod there were 12,000,000 children walking in 1990, 11,000,000 children use care in 2010 and 5,000,000 children use bus.",
     "material": {
       "path": "evals/materials/basic_cases_school_trips.jpg",
-      "url": "https://static.wixstatic.com/media/6d9e77_0c72a2d16d484dacafb656cc8e8515dd~mv2.jpg"
+      "url": "https://engnovatewebsitestorage.blob.core.windows.net/ielts-writing-task-1-images/e09afbc097379824"
     },
     "scores": null,
     "expected": {

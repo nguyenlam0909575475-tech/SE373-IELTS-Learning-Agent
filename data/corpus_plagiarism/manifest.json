@@ -23,7 +23,7 @@
     "files": [
       {
         "path": "evals/data/5_basic_cases.json",
-        "sha256": "83b6847b758c3033cc3ed875a9f62f686d660b75c4990eb7b2ae09a5b1ea9cfe"
+        "sha256": "188b73ef0dbe6e2eadec6ac9793daf6ff664f0cc6659615535836672e1223e26"
       },
       {
         "path": "evals/benchmark_dev/benchmark.json",

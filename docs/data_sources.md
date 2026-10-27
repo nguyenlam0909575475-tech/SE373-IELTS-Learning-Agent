@@ -23,4 +23,4 @@ Dùng nguồn public, giữ nguyên văn bản, loại thư và bản trùng chu
 
 ## Basic cases
 
-[5_basic_cases.json](../evals/data/5_basic_cases.json) gồm 5 nhóm/6 bài kiểm tra hành vi, `scores=null`. Bài viết và đề lấy từ IELTS.org; câu hỏi sức khỏe đối chiếu IDP; biểu đồ phương tiện đến trường lấy từ IELTS Luminary. Case lạc đề dùng bài và đề được cung cấp cho tình huống kiểm thử. Nguồn cụ thể và hướng dẫn chạy ở [member1_to_member5_handoff.md](member1_to_member5_handoff.md).
+[5_basic_cases.json](../evals/data/5_basic_cases.json) gồm 5 nhóm/6 bài kiểm tra hành vi, `scores=null`. Bài viết và đề lấy từ IELTS.org; câu hỏi sức khỏe đối chiếu IDP; biểu đồ phương tiện đến trường có đủ chú giải lấy từ Engnovate. Task 1 dùng cả `exam_question` và ảnh trong `material`. Case lạc đề dùng bài và đề được cung cấp cho tình huống kiểm thử. Nguồn cụ thể và hướng dẫn chạy ở [member1_to_member5_handoff.md](member1_to_member5_handoff.md).

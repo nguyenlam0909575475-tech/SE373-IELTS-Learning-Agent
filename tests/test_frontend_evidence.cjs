@@ -76,3 +76,66 @@ test("PR22 feedback renders supplied fields, escapes text and hides absent secti
   context.renderPedagogicalFeedback({});
   for (const [section] of names) assert.equal(context[section].classList.contains("hidden"), true);
 });
+
+function resultsContext(mode) {
+  function element() {
+    const classes = new Set();
+    return {
+      children: [], dataset: {}, textContent: "", html: "",
+      set innerHTML(value) { this.html = value; this.children = []; },
+      get innerHTML() { return this.html; },
+      appendChild(child) { this.children.push(child); },
+      querySelectorAll: () => [], addEventListener() {},
+      classList: { add: name => classes.add(name), remove: name => classes.delete(name),
+        contains: name => classes.has(name) },
+    };
+  }
+  const elements = {};
+  const context = { window: {}, console: { log() {} }, document: {
+    createElement: element, querySelectorAll: () => [],
+    getElementById: id => elements[id] || null,
+  } };
+  for (const [, name, id] of source.matchAll(/const (\w+) = document.getElementById\("([^"]+)"\)/g)) {
+    context[name] = elements[id] = element();
+  }
+  const examState = { mode, activeResultTab: "task1", results: {}, timeSpentSeconds: 65 };
+  for (const task of ["task1", "task2"]) {
+    const quote = `${task} detail.`;
+    const essay = `😀 Introduction.\n\n${quote}\n\nConclusion.`;
+    const start = Array.from(essay.slice(0, essay.indexOf(quote))).length;
+    examState[task] = { essay };
+    examState.results[task] = { duration_ms: 4500, assessment: {
+      overall_band: 6, word_count: 5, disclaimer: "Synthetic practice assessment.",
+      flags: ["under_length"], corrections: [],
+      criteria: [task === "task1" ? "task_achievement" : "task_response",
+        "coherence_and_cohesion", "lexical_resource", "grammatical_range_and_accuracy"]
+        .map(criterion => ({ criterion, band: 6, comment: "Synthetic feedback.",
+          descriptor_refs: [], evidence: [{ quote, start_char: start, end_char: start + quote.length }] })),
+    } };
+  }
+  context.examState = examState;
+  const start = source.indexOf("  function renderAssessmentResults(");
+  const end = source.indexOf("  async function fetchServerConfig(", start);
+  vm.runInNewContext(`${escapeFunction}\n${source.slice(start, end)}`, context);
+  return context;
+}
+
+for (const mode of ["task1", "task2", "full"]) {
+  test(`assessment results render scores, essay and criterion locations in ${mode} mode`, () => {
+    const context = resultsContext(mode);
+    const tabs = mode === "full" ? ["task1", "task2"] : [mode];
+    for (const task of tabs) {
+      context.examState.activeResultTab = task;
+      context.renderAssessmentResults();
+      assert.equal(context.overallBandValue.textContent, "6.0");
+      assert.equal(context.assessmentResults.classList.contains("hidden"), false);
+      assert.equal(plainText(context.highlightedEssayContent.innerHTML), context.examState[task].essay);
+      assert.equal(context.criteriaGrid.children.length, 4);
+      assert.match(context.criteriaGrid.children[0].innerHTML, /Đoạn 2 \(Thân bài 1\)/);
+      assert.match(context.criteriaGrid.children[0].innerHTML, new RegExp(`${task} detail\\.`));
+      assert.equal(context.window.lastAssessmentResult, context.examState.results[task]);
+      assert.deepEqual(JSON.parse(context.document.getElementById("jsonViewerContent").textContent),
+        context.examState.results[task]);
+    }
+  });
+}

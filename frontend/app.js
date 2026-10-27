@@ -1074,7 +1074,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderInteractiveEssay(rawEssay, a.criteria);
 
     // Render 4 Criteria Cards
-    renderCriteriaCards(a.criteria, essayText);
+    renderCriteriaCards(a.criteria, rawEssay);
 
     // Render Actionable Corrections
     renderCorrections(a.corrections);

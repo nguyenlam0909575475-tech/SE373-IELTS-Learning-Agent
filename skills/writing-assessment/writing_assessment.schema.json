@@ -97,6 +97,50 @@
       "title": "CriterionAssessment",
       "type": "object"
     },
+    "ErrorPattern": {
+      "additionalProperties": false,
+      "description": "Recurring error pattern with frequency count and grouped instances.",
+      "properties": {
+        "pattern_name": {
+          "minLength": 1,
+          "title": "Pattern Name",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/CorrectionCategory"
+        },
+        "frequency": {
+          "minimum": 1,
+          "title": "Frequency",
+          "type": "integer"
+        },
+        "priority": {
+          "$ref": "#/$defs/PriorityLevel"
+        },
+        "rule": {
+          "minLength": 1,
+          "title": "Rule",
+          "type": "string"
+        },
+        "instances": {
+          "items": {
+            "$ref": "#/$defs/Correction"
+          },
+          "title": "Instances",
+          "type": "array"
+        }
+      },
+      "required": [
+        "pattern_name",
+        "category",
+        "frequency",
+        "priority",
+        "rule",
+        "instances"
+      ],
+      "title": "ErrorPattern",
+      "type": "object"
+    },
     "Evidence": {
       "additionalProperties": false,
       "properties": {
@@ -133,6 +177,184 @@
       ],
       "title": "Flag",
       "type": "string"
+    },
+    "GrammarRule": {
+      "additionalProperties": false,
+      "description": "High-impact grammar or vocabulary rule derived from the student's recurring errors.",
+      "properties": {
+        "rule_name": {
+          "minLength": 1,
+          "title": "Rule Name",
+          "type": "string"
+        },
+        "explanation": {
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "incorrect_example": {
+          "minLength": 1,
+          "title": "Incorrect Example",
+          "type": "string"
+        },
+        "correct_example": {
+          "minLength": 1,
+          "title": "Correct Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_name",
+        "explanation",
+        "incorrect_example",
+        "correct_example"
+      ],
+      "title": "GrammarRule",
+      "type": "object"
+    },
+    "ImprovementPriority": {
+      "additionalProperties": false,
+      "description": "Ranked improvement action: tells the student what to fix first and why.",
+      "properties": {
+        "rank": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "example_quote": {
+          "minLength": 1,
+          "title": "Example Quote",
+          "type": "string"
+        },
+        "why_it_matters": {
+          "minLength": 1,
+          "title": "Why It Matters",
+          "type": "string"
+        },
+        "fix_principle": {
+          "minLength": 1,
+          "title": "Fix Principle",
+          "type": "string"
+        },
+        "related_criterion": {
+          "$ref": "#/$defs/Criterion"
+        }
+      },
+      "required": [
+        "rank",
+        "title",
+        "example_quote",
+        "why_it_matters",
+        "fix_principle",
+        "related_criterion"
+      ],
+      "title": "ImprovementPriority",
+      "type": "object"
+    },
+    "ModelSentence": {
+      "additionalProperties": false,
+      "description": "Reusable model sentence with highlighted useful phrases.",
+      "properties": {
+        "sentence": {
+          "minLength": 1,
+          "title": "Sentence",
+          "type": "string"
+        },
+        "useful_phrases": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Useful Phrases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sentence",
+        "useful_phrases"
+      ],
+      "title": "ModelSentence",
+      "type": "object"
+    },
+    "ParagraphAnalysis": {
+      "additionalProperties": false,
+      "description": "Per-paragraph feedback on structure and content.",
+      "properties": {
+        "paragraph_number": {
+          "minimum": 1,
+          "title": "Paragraph Number",
+          "type": "integer"
+        },
+        "paragraph_role": {
+          "minLength": 1,
+          "title": "Paragraph Role",
+          "type": "string"
+        },
+        "what_works": {
+          "minLength": 1,
+          "title": "What Works",
+          "type": "string"
+        },
+        "what_to_improve": {
+          "minLength": 1,
+          "title": "What To Improve",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paragraph_number",
+        "paragraph_role",
+        "what_works",
+        "what_to_improve"
+      ],
+      "title": "ParagraphAnalysis",
+      "type": "object"
+    },
+    "PriorityLevel": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "PriorityLevel",
+      "type": "string"
+    },
+    "SentenceRewrite": {
+      "additionalProperties": false,
+      "description": "Minimal sentence-level edit that preserves the student's original ideas.",
+      "properties": {
+        "original_sentence": {
+          "minLength": 1,
+          "title": "Original Sentence",
+          "type": "string"
+        },
+        "rewritten_sentence": {
+          "minLength": 1,
+          "title": "Rewritten Sentence",
+          "type": "string"
+        },
+        "changes_made": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Changes Made",
+          "type": "array"
+        }
+      },
+      "required": [
+        "original_sentence",
+        "rewritten_sentence",
+        "changes_made"
+      ],
+      "title": "SentenceRewrite",
+      "type": "object"
     },
     "TaskType": {
       "enum": [
@@ -186,6 +408,54 @@
       "minLength": 1,
       "title": "Disclaimer",
       "type": "string"
+    },
+    "top_priorities": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ImprovementPriority"
+      },
+      "title": "Top Priorities",
+      "type": "array"
+    },
+    "error_patterns": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ErrorPattern"
+      },
+      "title": "Error Patterns",
+      "type": "array"
+    },
+    "sentence_rewrites": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SentenceRewrite"
+      },
+      "title": "Sentence Rewrites",
+      "type": "array"
+    },
+    "paragraph_analyses": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ParagraphAnalysis"
+      },
+      "title": "Paragraph Analyses",
+      "type": "array"
+    },
+    "grammar_rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GrammarRule"
+      },
+      "title": "Grammar Rules",
+      "type": "array"
+    },
+    "model_sentences": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ModelSentence"
+      },
+      "title": "Model Sentences",
+      "type": "array"
     }
   },
   "required": [

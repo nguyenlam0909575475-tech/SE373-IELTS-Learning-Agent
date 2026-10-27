@@ -11,8 +11,14 @@ from .schemas import (
     Correction,
     Criterion,
     CriterionAssessment,
+    ErrorPattern,
     Evidence,
+    GrammarRule,
+    ImprovementPriority,
+    ModelSentence,
+    ParagraphAnalysis,
     PublicModel,
+    SentenceRewrite,
     TaskType,
     Text,
     WritingAssessment,
@@ -33,8 +39,17 @@ class ResolvedWritingTask(PublicModel):
     task_type: TaskType
     task_prompt: Text
     task_material_text: Text | None = None
-    source: Literal["self_written", "llm_generated_verified", "open_license"]
-    license: Text
+    source: Literal["self_written", "llm_generated_verified", "open_license", "public", "user_provided"]
+    license: Text | None = None
+    source_url: Annotated[str, Field(pattern=r"^https://[^\s]+$")] | None = None
+
+    @model_validator(mode="after")
+    def source_metadata(self) -> Self:
+        if self.source in {"self_written", "llm_generated_verified", "open_license"} and self.license is None:
+            raise ValueError("legacy bank sources require their declared license")
+        if self.source == "public" and self.source_url is None:
+            raise ValueError("public tasks require a source URL")
+        return self
 
 
 class DescriptorChunk(PublicModel):
@@ -57,6 +72,13 @@ class LLMGradingDraft(PublicModel):
     criteria: Annotated[list[CriterionAssessment], Field(min_length=4, max_length=4)]
     corrections: list[Correction]
     off_topic: StrictBool
+    # --- Pedagogical feedback (optional — LLM may or may not produce these) ---
+    top_priorities: list[ImprovementPriority] = []
+    error_patterns: list[ErrorPattern] = []
+    sentence_rewrites: list[SentenceRewrite] = []
+    paragraph_analyses: list[ParagraphAnalysis] = []
+    grammar_rules: list[GrammarRule] = []
+    model_sentences: list[ModelSentence] = []
 
 
 class PlagiarismMatch(PublicModel):

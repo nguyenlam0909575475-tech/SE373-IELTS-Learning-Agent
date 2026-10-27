@@ -22,11 +22,10 @@ FRONTEND_DIR = ROOT_DIR / "frontend"
 EVALS_DIR = ROOT_DIR / "evals"
 
 # ==============================================================================
-# SWITCH FLAG: Mock vs. Live Agent
+# Execution Mode: 100% Member 3 Live Agent
 # ==============================================================================
-# Set USE_MOCK_AGENT=true to run in fast, offline, deterministic mock mode.
-# Set USE_MOCK_AGENT=false to run in live agent mode (calls real LLM / LangGraph pipeline).
-USE_MOCK_AGENT: bool = os.getenv("USE_MOCK_AGENT", "true").lower() in ("true", "1", "yes")
+# Mock agent has been completely removed.
+USE_MOCK_AGENT: bool = False
 
 # Standard regex for word count (harmonized from Member 4 deterministic tool)
 WORD_COUNT_REGEX: str = WORD_PATTERN
@@ -38,11 +37,10 @@ DEBUG: bool = os.getenv("DEBUG", "false").lower() in ("true", "1", "yes")
 
 
 def get_mock_mode() -> bool:
-    """Return the current global mock mode state."""
-    return USE_MOCK_AGENT
+    """Return False: mock agent is disabled and removed."""
+    return False
 
 
 def set_mock_mode(enabled: bool) -> None:
-    """Dynamically toggle the global mock mode at runtime."""
-    global USE_MOCK_AGENT
-    USE_MOCK_AGENT = enabled
+    """Mock agent is disabled. This is a no-op."""
+    pass

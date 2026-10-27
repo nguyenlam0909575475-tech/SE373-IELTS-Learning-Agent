@@ -37,6 +37,7 @@ credentials.json
 client_secret*.json
 service-account*.json
 # Local state, raw traces and private learner data
+latest_assessment_result.json
 *.db
 *.sqlite
 *.sqlite3
@@ -65,3 +66,8 @@ desktop.ini
 *.bak
 *.tmp
 *~
+
+# Member 1 caches; public benchmark and corpus remain versioned
+data/benchmark_local/
+data/corpus_plagiarism/raw/
+tmp/

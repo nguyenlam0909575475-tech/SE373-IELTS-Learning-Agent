@@ -1,4 +1,4 @@
-"""Read-only, local word n-gram comparison with exact essay offsets.
+"""Read-only, local word n-gram comparison with exact essay offsets for plagiarism check.
 
 Similarity is the fraction of essay tokens covered by shared n-grams with
 the best single corpus source. This is a copying heuristic, not a semantic
@@ -10,7 +10,9 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
+from threading import Lock
 
 from .contracts import (
     Evidence,
@@ -20,7 +22,9 @@ from .contracts import (
 )
 
 _TOKENS = re.compile(r"[^\W_]+(?:['’-][^\W_]+)*", re.UNICODE)
-DEFAULT_CORPUS_PATH = Path(__file__).resolve().parents[2] / "data/knowledge/sample_corpus_links.json"
+DEFAULT_CORPUS_PATH = Path(__file__).resolve().parents[2] / "data/corpus_plagiarism/corpus.jsonl"
+_SOURCE_ID = re.compile(r"[A-Za-z0-9_.:-]{1,100}\Z")
+_CHECKER_LOCK = Lock()
 
 
 @dataclass(frozen=True)
@@ -28,7 +32,19 @@ class CorpusEntry:
     source_id: str
     text: str
     source_url: str
-    license: str
+    license: str | None = None
+    task_type: str | None = None
+    exam_question: str | None = None
+    topic: str | None = None
+
+    @classmethod
+    def from_record(cls, record):
+        """Accept Member 1's six fields and legacy records without inventing a license."""
+        if not isinstance(record, dict):
+            raise ValueError("corpus record must be an object")
+        required = {key: record[key] for key in ("source_id", "text", "source_url")}
+        optional = {key: record[key] for key in ("license", "task_type", "exam_question", "topic") if key in record}
+        return cls(**required, **optional)
 
 
 class PlagiarismChecker:
@@ -42,7 +58,10 @@ class PlagiarismChecker:
             raise ValueError("ngram_size must be an integer >= 2")
         if type(min_shared_words) is not int or min_shared_words < ngram_size:
             raise ValueError("min_shared_words must be >= ngram_size")
-        entries = tuple(corpus)
+        try:
+            entries = tuple(corpus)
+        except TypeError:
+            raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID") from None
         if not entries:
             raise Member4DependencyError("PLAGIARISM_CORPUS_MISSING")
         seen = set()
@@ -50,8 +69,13 @@ class PlagiarismChecker:
         for entry in entries:
             if not isinstance(entry, CorpusEntry) or any(
                 not isinstance(item, str) or not item.strip()
-                for item in (entry.source_id, entry.text, entry.source_url, entry.license)
+                for item in (entry.source_id, entry.text, entry.source_url)
             ) or entry.source_id in seen:
+                raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID")
+            if not _SOURCE_ID.fullmatch(entry.source_id) or any(
+                item is not None and (not isinstance(item, str) or not item.strip())
+                for item in (entry.license, entry.exam_question, entry.topic)
+            ) or entry.task_type not in (None, "task1", "task2"):
                 raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID")
             tokens = [m.group().casefold() for m in _TOKENS.finditer(entry.text)]
             if len(tokens) < ngram_size:
@@ -59,6 +83,7 @@ class PlagiarismChecker:
             grams = {tuple(tokens[i:i + ngram_size]) for i in range(len(tokens) - ngram_size + 1)}
             self._sources.append((entry.source_id, grams))
             seen.add(entry.source_id)
+        self.entries = entries
         self.threshold = float(threshold)
         self.ngram_size = ngram_size
         self.min_shared_words = min_shared_words
@@ -67,7 +92,7 @@ class PlagiarismChecker:
     def from_file(cls, path: str | Path, **options):
         """Load a JSON array, or JSONL for an explicitly named .jsonl file.
 
-        Every source needs its text, URL and license; a list of links alone
+        Every source needs its ID, text and URL; a list of links alone
         cannot be compared. No network calls or silent clean fallback.
         """
         if Path(path).suffix.lower() == ".jsonl":
@@ -76,10 +101,10 @@ class PlagiarismChecker:
             data = json.loads(Path(path).read_text(encoding="utf-8"))
             if not isinstance(data, list):
                 raise ValueError("corpus must be an array")
-            entries = [CorpusEntry(**record) for record in data]
+            entries = [CorpusEntry.from_record(record) for record in data]
         except FileNotFoundError:
             raise Member4DependencyError("PLAGIARISM_CORPUS_MISSING") from None
-        except (OSError, UnicodeError, ValueError, TypeError):
+        except (OSError, UnicodeError, ValueError, TypeError, KeyError):
             raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID") from None
         return cls(entries, **options)
 
@@ -88,10 +113,10 @@ class PlagiarismChecker:
         """Load permitted sources explicitly; never download or write a corpus."""
         try:
             with Path(path).open(encoding="utf-8") as stream:
-                entries = [CorpusEntry(**json.loads(line)) for line in stream if line.strip()]
+                entries = [CorpusEntry.from_record(json.loads(line)) for line in stream if line.strip()]
         except FileNotFoundError:
             raise Member4DependencyError("PLAGIARISM_CORPUS_MISSING") from None
-        except (OSError, UnicodeError, ValueError, TypeError):
+        except (OSError, UnicodeError, ValueError, TypeError, KeyError):
             raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID") from None
         return cls(entries, **options)
 
@@ -125,10 +150,25 @@ class PlagiarismChecker:
         return PlagiarismResult(possible, maximum, matches)
 
 
-def check_plagiarism(essay: str) -> PlagiarismResult:
-    """Default tool. Missing corpus is an error, never a clean result.
+@lru_cache(maxsize=1)
+def _load_checker(path: str, modified_ns: int, size: int) -> PlagiarismChecker:
+    # The file signature invalidates the index after a corpus update.
+    return PlagiarismChecker.from_file(path)
 
-    The agent can construct one PlagiarismChecker and reuse its bound method
-    across requests rather than rebuilding the corpus index each time.
-    """
-    return PlagiarismChecker.from_file(DEFAULT_CORPUS_PATH).check_plagiarism(essay)
+
+def get_default_checker() -> PlagiarismChecker:
+    """Reuse the read-only index; missing/changed/broken data never becomes a clean result."""
+    path = Path(DEFAULT_CORPUS_PATH)
+    try:
+        stat = path.stat()
+    except FileNotFoundError:
+        raise Member4DependencyError("PLAGIARISM_CORPUS_MISSING") from None
+    except OSError:
+        raise Member4DependencyError("PLAGIARISM_CORPUS_INVALID") from None
+    with _CHECKER_LOCK:
+        return _load_checker(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+
+
+def check_plagiarism(essay: str) -> PlagiarismResult:
+    """Check the shipped corpus, reusing its index across requests."""
+    return get_default_checker().check_plagiarism(essay)

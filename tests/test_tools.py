@@ -1,4 +1,4 @@
-"""Protect the new repository Task rounding policy and reject bad inputs."""
+"""Unit tests for repository Task rounding policy and input verification."""
 
 from math import nextafter
 

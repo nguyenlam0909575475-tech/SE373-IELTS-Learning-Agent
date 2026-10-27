@@ -32,7 +32,7 @@ def _detect_off_topic(topic: str, text: str) -> bool:
     # If topic has specific keywords and text completely misses them
     topic_words = set(re.findall(r"\b[A-Za-z]{4,}\b", topic.lower()))
     text_words = set(re.findall(r"\b[A-Za-z]{4,}\b", text.lower()))
-    
+
     # Check explicit marker in test cases
     if "nuclear energy" in topic.lower() and "chocolate cake" in text.lower():
         return True
@@ -89,13 +89,9 @@ def mock_assess_writing(
         flags.append("injection_detected")
 
     # 3. Plagiarism detection using Member 4 Plagiarism tool
-    try:
-        plag_res = check_plagiarism(essay)
-        if plag_res.possible_plagiarism:
-            flags.append("possible_plagiarism")
-    except Exception:
-        # Fallback if corpus not available in isolated unit test
-        pass
+    plag_res = check_plagiarism(essay)
+    if plag_res.possible_plagiarism:
+        flags.append("possible_plagiarism")
 
     # 4. Off-topic detection
     is_off_topic = _detect_off_topic(prompt, essay)

@@ -1,4 +1,4 @@
-"""Copy spans, thresholds and corpus failure handling without real essays."""
+"""Unit tests for plagiarism copy spans, thresholds and corpus handling."""
 
 import json
 from dataclasses import asdict
@@ -120,3 +120,47 @@ def test_json_placeholder_or_links_only_cannot_report_clean(tmp_path, content):
     path.write_text(content, encoding="utf-8")
     with pytest.raises(Member4DependencyError):
         PlagiarismChecker.from_file(path)
+
+
+def test_member1_record_preserves_text_metadata_without_invented_license(tmp_path, essay):
+    record = dict(source_id="PUBLIC_1", text="\n" + essay, source_url="https://example.org/essay",
+                  task_type="task2", exam_question="Discuss libraries.", topic="Education")
+    path = tmp_path / "public.jsonl"
+    content = json.dumps(record) + "\n"
+    path.write_text(content, encoding="utf-8")
+    checker = PlagiarismChecker.from_file(path)
+    assert checker.entries[0].license is None
+    assert checker.entries[0].text == record["text"]
+    assert checker.entries[0].topic == record["topic"]
+    assert checker.check_plagiarism(essay).possible_plagiarism
+    assert path.read_text(encoding="utf-8") == content
+
+
+@pytest.mark.parametrize("changes", [
+    {"source_id": "bad/id"}, {"task_type": "speaking"}, {"topic": 1}, {"exam_question": ""}, {"license": False},
+])
+def test_invalid_public_metadata_is_rejected(tmp_path, essay, changes):
+    record = dict(source_id="PUBLIC_1", text=essay, source_url="https://example.org/essay")
+    record.update(changes)
+    path = tmp_path / "public.jsonl"
+    path.write_text(json.dumps(record), encoding="utf-8")
+    with pytest.raises(Member4DependencyError, match="INVALID"):
+        PlagiarismChecker.from_file(path)
+
+
+def test_default_index_reused_but_changed_or_missing_corpus_fails(monkeypatch, tmp_path, essay):
+    from agent.tools import plagiarism_tool
+
+    path = tmp_path / "public.jsonl"
+    path.write_text(json.dumps(dict(source_id="PUBLIC_1", text=essay, source_url="https://example.org/essay")),
+                    encoding="utf-8")
+    monkeypatch.setattr(plagiarism_tool, "DEFAULT_CORPUS_PATH", path)
+    first = plagiarism_tool.get_default_checker()
+    assert plagiarism_tool.get_default_checker() is first
+    assert check_plagiarism(essay).possible_plagiarism
+    path.write_text("broken corpus", encoding="utf-8")
+    with pytest.raises(Member4DependencyError, match="INVALID"):
+        check_plagiarism(essay)
+    path.unlink()
+    with pytest.raises(Member4DependencyError, match="MISSING"):
+        check_plagiarism(essay)

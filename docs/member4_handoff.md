@@ -1,204 +1,137 @@
-# Bàn giao N4 trong SE373-Agent
+# Bàn giao TV4 — tích hợp corpus và công cụ kiểm chứng
 
-Cập nhật: 21/10/2026. N4 tiếp tục phụ trách tools theo phân công đã xác nhận.
-Code được chuyển từ repo SE373 cũ sang nhánh `feature/m4-tools` của repo thử nghiệm.
-Repo cũ được giữ nguyên. Chưa commit hoặc push phần chuyển code này.
+Cập nhật 26/10/2026 trên nhánh `feat/linh/deterministic-tools`.
 
-## 1. Code đã được đặt ở đâu?
+## 1. Những gì đã nối
 
-| File trong repo mới | Công việc |
-| --- | --- |
-| `agent/tools/compute_tool.py` | `count_words`, `compute_band`, tên tương thích `compute_task_band` |
-| `agent/tools/plagiarism_tool.py` | Đọc kho bài mẫu và so sánh các cụm từ liên tiếp |
-| `agent/tools/security_tool.py` | `SecurityGuard.inspect` phát hiện một số mẫu chỉ dẫn đáng ngờ |
-| `agent/tools/contracts.py` | Các kiểu kết quả tool, lỗi kiểm tra, lỗi thiếu dữ liệu |
-| `skills/writing_assessment/validators.py` | Kiểm tra trích dẫn, tham chiếu tiêu chí và sự nhất quán của kết quả |
-| `skills/writing_assessment/checks.py` | Giữ schema N3, gọi các hàm N4 để kiểm tra kết quả AI |
-| `tests/` và `evals/member4_security_cases.json` | Kiểm thử bằng dữ liệu tự soạn, gồm ca kiểm tra ghép với N3 |
-| `scripts/check_repository.py`, `.githooks/` | Kiểm tra file riêng tư, file sinh tự động và mẫu khóa bí mật trước commit/push |
+- Đọc trực tiếp corpus TV1 `data/corpus_plagiarism/corpus.jsonl`: 1.800 bài, 600 Task 1 và 1.200 Task 2.
+- Chấp nhận sáu trường TV1, giữ nguyên `text`, `source_id`, URL và metadata; không tự thêm giấy phép.
+- Giữ tương thích mảng JSON/JSONL cũ với `license` nếu nguồn đã có trường đó.
+- Chỉ mục corpus mặc định được dùng lại giữa các request. File thay đổi mtime/kích thước sẽ nạp lại; thiếu/hỏng vẫn báo lỗi.
+- Validators nhận tên tiêu chí canonical lẫn tên cũ có `_and_`; không sửa `chunk_id` hoặc nội dung descriptors.
+- Adapter TV3 gọi đúng hàm `compute_band` của TV4, không có phép tính raw mean riêng.
+- Chế độ live dùng retriever TV2, công cụ TV4, validators/security thật; không dùng `FakeTools`/`FakeRetriever`.
+- API giữ tên tiêu chí cũ cho frontend hiện tại; graph vẫn dùng enum canonical.
+- Frontend giữ nguyên bài nộp, đổi tọa độ Unicode Python sang UTF-16 JavaScript và xử lý dẫn chứng chồng nhau.
+- Runner TV5 đọc được `case_id`/`id`, `exam_question`, `scores.overall_band` và điều kiện `expected` của TV1.
 
-Code sử dụng cấu trúc sẵn có của repo mới. Các lớp adapter/factory của repo cũ không được chép sang,
-vì repo mới sử dụng trực tiếp schema Pydantic và `validate_writing_assessment` của N3.
-Các file backend, agent loop, RAG và dữ liệu chưa hoàn thành không được tự điền dữ liệu giả.
-
-## 2. N4 đã ghép với N3 như thế nào?
-
-Schema chính vẫn là `WritingAssessment` trong `skills/writing_assessment/checks.py`.
-N4 đã dùng đúng tên tiêu chí của N3:
-
-- Task 1: `task_achievement`; Task 2: `task_response`.
-- Cả hai Task: `coherence_and_cohesion`, `lexical_resource`, `grammatical_range_and_accuracy`.
-
-Các tên có `_and_` khác bản bàn giao ở repo cũ. Tool và kiểm thử đã được đổi theo tên trong repo mới.
-N3 vẫn gọi được `compute_ielts_overall_band`; hàm này chuyển tiếp sang `compute_band` của N4.
-Như vậy, bộ kiểm tra và hội đồng chấm cùng dùng một cách tính điểm.
-Hàm sửa vị trí trích dẫn `repair_evidence_offsets` của N3 được giữ nguyên; bộ kiểm tra không tự gọi hàm sửa này.
-
-### Chính sách tính điểm hiện đang áp dụng
-
-`compute_band([6, 6, 6, 7])` trả về **6.5**. Trung bình trước khi làm tròn là 6.25.
-`compute_band([6, 7, 7, 7])` trả về **7.0**. Trung bình trước khi làm tròn là 6.75.
-Hàm không làm tròn riêng từng đầu vào. Schema N3 yêu cầu band tiêu chí nằm trong 1.0–9.0, bước 0.5;
-tool tính toán nhận bốn số hữu hạn trong 0–9, còn kiểm tra schema áp dụng giới hạn chặt hơn của N3.
-
-Đây là chính sách đang được code và kiểm thử N3 trong repo mới yêu cầu, khác bản N4 cũ giữ nguyên trung bình.
-Tài liệu này không khẳng định quy tắc làm tròn điểm Task là quy định chính thức của IELTS.
-Hàm này chưa tính điểm Writing kết hợp hai Task và chưa tính Overall của bốn kỹ năng.
-
-## 3. Thứ tự các phần cần gọi
-
-1. Agent nhận bài viết nguyên bản và đề bài.
-2. Trước khi AI chấm, agent gọi `count_words`, công cụ so bài mẫu và `SecurityGuard.inspect`.
-3. Bộ RAG cung cấp các đoạn tiêu chí đúng Task. AI dùng các đoạn đó để chấm bốn tiêu chí và trích dẫn bài viết.
-4. Sau khi AI trả kết quả, code gọi `compute_band` từ bốn band tiêu chí để tạo điểm Task.
-5. Agent gọi `validate_writing_assessment` với kết quả AI và kết quả tool đã tính độc lập.
-6. Nếu `passed` là `False`, agent xử lý các lỗi hoặc yêu cầu sửa theo cơ chế retry của nhóm.
-   Agent không hiển thị kết quả như một bài chấm hợp lệ khi kiểm tra chưa qua.
-
-N4 không tự xác định bài có lạc đề hay không. Agent/phần chấm ngữ nghĩa phải cung cấp tín hiệu `off_topic`;
-N4 đối chiếu cờ và kiểm tra giới hạn điểm TA/TR tối đa 5.0 theo yêu cầu dự án.
-
-Đoạn dưới minh họa cách kiểm tra sau khi đã có bài, kết quả AI, các đoạn RAG và kết quả cảm biến:
+## 2. Các hàm TV3/TV5 sử dụng
 
 ```python
-from agent.tools.compute_tool import count_words
-from skills.writing_assessment.checks import validate_writing_assessment
-
-result = validate_writing_assessment(
-    raw_output,
-    essay_text,
-    expected_task_type=task_type,
-    expected_word_count=count_words(essay_text),
-    retrieved_descriptors=chunks,
-    plagiarism_result=plagiarism,
-    security_result=security,
-    off_topic=off_topic_result,
+from agent.tools.compute_tool import count_words, compute_band
+from agent.tools.plagiarism_tool import check_plagiarism, get_default_checker
+from agent.tools.security_tool import SecurityGuard
+from skills.writing_assessment.validators import (
+    quote_validator, refs_validator, consistency_validator,
 )
-if not result.passed:
-    # Chuyển result.errors sang cơ chế sửa lỗi/retry của agent.
-    # Không ghi toàn bộ bài viết hoặc khóa bí mật vào log.
-    ...
 ```
 
-Các biến trong ví dụ phải do agent cung cấp; đây không phải lệnh chạy toàn bộ ứng dụng.
-Các tham số cũ của N3 vẫn dùng được, bao gồm `retrieved_descriptor_ids`.
-Tuy nhiên, chỉ truyền danh sách ID thì không đủ kiểm tra metadata của tiêu chí;
-agent cần truyền `retrieved_descriptors` đầy đủ như ví dụ.
-Nếu bỏ `expected_word_count`, chế độ tương thích cũ không đối chiếu với số từ thực tế của bài.
-Nếu bỏ một kết quả cảm biến hoặc truyền `None`, tín hiệu đó chưa được xác minh, không được coi là âm tính.
+`check_plagiarism(essay)` dùng corpus TV1 và index được cache. `get_default_checker().entries`
+cho phép tra `source_id` về `source_url`. Nếu host cung cấp corpus khác, khởi tạo
+`PlagiarismChecker.from_file(path)` một lần rồi truyền checker cho `build_team_dependencies`.
 
-## 4. Định dạng N4 đang đọc
+`CorpusEntry` cần `source_id`, `text`, `source_url`; `license`, `task_type`,
+`exam_question`, `topic` là metadata tùy chọn. Metadata có cung cấp phải hợp lệ.
+Các bài có ID trùng, thiếu nội dung/nguồn, ID sai định dạng hoặc JSON hỏng đều bị từ chối.
+File corpus không bị loader sửa hay tải lại từ Internet.
 
-Một đoạn tiêu chí RAG cần có đủ bảy trường dưới đây. Đây chỉ là mẫu tự soạn cho kiểm thử, không phải rubric IELTS:
-
-```json
-{
-  "chunk_id": "MOCK_task2_task_response_6",
-  "test_part": "task2",
-  "criterion": "task_response",
-  "band": 6.0,
-  "text": "Synthetic descriptor placeholder, not an IELTS rubric.",
-  "source_url": "urn:se373:synthetic-test",
-  "version": "SYNTHETIC_v1"
-}
-```
-
-Trong kết quả AI, tiêu chí `task_response` có thể dẫn `descriptor_refs: ["MOCK_task2_task_response_6"]`
-nếu đoạn này thực sự nằm trong danh sách RAG đã cung cấp ở lần chạy đó.
-ID phải duy nhất, đúng Task, đúng tiêu chí; ID và version dài 1–100 ký tự, chỉ dùng chữ, số, `_`, `.`, `:`, `-`.
-Danh sách truyền vào validator cần được lọc đúng Task; metadata còn phải có band hợp lệ và nội dung/nguồn không rỗng.
-`source_url` và `version` đã được bổ sung vào hợp đồng trong `skill.yaml` để hai phần dùng cùng định dạng.
-
-Kho bài mẫu mặc định nằm ở `data/knowledge/sample_corpus_links.json`.
-Loader nhận một mảng JSON; mỗi phần tử có `source_id`, `text`, `source_url`, `license`.
-Ví dụ về hình dạng một phần tử, chưa phải nội dung bài mẫu để sử dụng:
-
-```json
-{
-  "source_id": "source_001",
-  "text": "Nội dung đầy đủ của bài mẫu được phép sử dụng phải được đặt ở đây.",
-  "source_url": "Đường dẫn hoặc định danh nguồn",
-  "license": "Giấy phép hoặc căn cứ được phép sử dụng"
-}
-```
-
-Tool cần nội dung bài để so sánh; danh sách URL đơn thuần không đủ.
-`PlagiarismChecker.from_file(path)` đọc mảng JSON hoặc đọc JSONL khi tên file có đuôi `.jsonl`.
-Agent có thể khởi tạo một checker rồi sử dụng lại `checker.check_plagiarism(essay)` cho nhiều yêu cầu.
-Tool không tự tải bài trên Internet. Loader chỉ kiểm tra sự hiện diện/kiểu dữ liệu của metadata;
-nhóm vẫn phải xác minh quyền sử dụng nguồn trước khi đưa dữ liệu vào kho.
-
-Kết quả so sánh có `possible_plagiarism`, `max_similarity`, `matches`.
-Mỗi phần tử `matches` có `source_id` và `evidence` với `quote`, `start_char`, `end_char`.
-Kết quả bảo mật có `injection_detected`.
-Các kết quả này là dataclass, có thể chuyển sang dict bằng `dataclasses.asdict`.
-
-## 5. Khi kiểm tra báo lỗi
-
-Một lỗi N4 có `code`, `criterion`, `reason`, `path`.
-`checks.py` chuyển lỗi này thành chuỗi trong `ValidationResult.errors`, giữ kiểu trả về cũ của N3.
-Ví dụ:
+Kết quả tool:
 
 ```text
-evidence_invalid at criteria[0].evidence[0]: quote not found verbatim in essay
-evidence_invalid at criteria[1].evidence[0]: char offset does not match the quote
+PlagiarismResult(possible_plagiarism, max_similarity, matches)
+matches: [{source_id, evidence: {quote, start_char, end_char}}]
+SecurityResult(injection_detected)
+ValidationIssue(code, criterion, reason, path)
 ```
 
-Lỗi đầu nói câu trích dẫn không tồn tại nguyên văn. Lỗi sau nói vị trí ký tự không khớp câu trích dẫn.
-`path` dùng chỉ số bắt đầu từ 0 để chỉ đúng phần tử sai; thông báo không chép bài viết vào lỗi.
-`refs_invalid` nói dữ liệu RAG hoặc tham chiếu không hợp lệ.
-`consistency_error` kèm lý do cụ thể khi số từ, điểm hoặc cờ không khớp kết quả tin cậy.
-`schema_invalid` nói cấu trúc/kiểu dữ liệu không phù hợp để kiểm tra.
+Offset là chỉ số Unicode code point, cuối không bao gồm ký tự:
+`essay[start_char:end_char] == quote`. Không trim/normalize bài sau khi tính offset.
 
-Nếu chưa có kho bài mẫu, tool ném `Member4DependencyError` có mã `PLAGIARISM_CORPUS_MISSING`.
-File rỗng, dữ liệu sai, thiếu nội dung/nguồn/giấy phép có thể báo `PLAGIARISM_CORPUS_INVALID`.
-Đây là lỗi dữ liệu đầu vào cần xử lý; agent không được thay bằng `possible_plagiarism=False` để tiếp tục như đã kiểm tra.
+## 3. Quy ước tính điểm
 
-## 6. Giới hạn còn giữ từ bản cũ
+`compute_band([6,6,6,7]) == 6.5`; `[6,7,7,7] == 7.0`.
+Lấy trung bình bốn điểm rồi làm tròn nấc 0.5, hòa thì lên theo quy ước repository
+trong AGENTS.md/phân công. Đây không phải tuyên bố quy tắc chấm Task chính thức của IELTS.
+Công cụ nhận bốn số hữu hạn 0–9, từ chối bool/NaN/inf. Mock graph và adapter dùng cùng hàm.
+DTO canonical cho phép điểm tiêu chí hữu hạn 0–9; wrapper cũ nhận cùng phạm vi,
+chuẩn hóa tên tiêu chí khi nhận model canonical và kiểm tra tổng bằng cùng hàm TV4.
 
-- Regex đếm từ hiện là `\b[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*\b`.
-  `don't` và `state-of-the-art` mỗi từ tính một; dấu nháy cong, chữ có dấu và số thập phân chưa được xử lý đầy đủ.
-  Frontend cần dùng cùng quy ước hoặc hiển thị số đếm từ backend. Chưa thể khẳng định hai phía đã đồng bộ vì frontend còn rỗng.
-- So bài chép dùng cụm năm từ liên tiếp, mặc định phủ ít nhất 80% số token của bài và có ít nhất 20 từ khớp với một nguồn.
-  Đây là ngưỡng thử nghiệm chưa hiệu chỉnh bằng benchmark. Sửa từ rải rác có thể phá vỡ các cụm năm từ và làm tool bỏ sót.
-  Cờ chỉ gợi ý cần xem lại; không chứng minh đạo văn và không tìm kiếm toàn Internet.
-- Guard dùng mẫu chuỗi để phát hiện một số dạng prompt injection; nó chưa bảo đảm chặn mọi cách tấn công.
-  Agent vẫn phải cách ly nội dung bài làm và không thực thi chỉ dẫn bên trong dữ liệu không tin cậy.
-- Unit test sử dụng bài và điểm giả lập tự soạn. Các điểm này không phải nhãn chuẩn và không dùng để báo độ chính xác UC-08.
+## 4. Corpus và thuật toán
 
-## 7. Còn cần nhận gì để chạy toàn bộ?
+Thuật toán giữ cụm 5 từ liên tiếp. Với từng nguồn, tính số token bài nộp được cụm trùng
+bao phủ chia cho tổng token bài nộp. `max_similarity` là giá trị lớn nhất với MỘT nguồn.
+Mặc định cờ nghi ngờ cần độ phủ >=0.8 và >=20 từ trùng với nguồn đó.
+Đề bài/chủ đề không được ghép vào `text` để tính trùng.
 
-- Kho bài mẫu có nội dung và nguồn/giấy phép hợp lệ; file mặc định hiện vẫn rỗng.
-- Các đoạn rubric và công cụ RAG thật, theo metadata ở trên.
-- Agent loop/backend để gọi tools, gọi AI, truyền kết quả kiểm tra và thực hiện retry; các file này hiện còn rỗng.
-- Kiểm thử với mô hình thật và bộ bài có điểm chuẩn hợp lệ khi nhóm đã ghép ứng dụng.
+Ngưỡng còn cần hiệu chỉnh bằng tập đạo văn có nhãn riêng. Không diễn giải similarity
+là xác suất đạo văn, không tuyên bố phát hiện >=90% / gắn nhầm <=10% chỉ dựa trên unit test.
+Bài diễn đạt lại và chép ghép nhiều nguồn vẫn là giới hạn của thuật toán.
 
-N4 đã ghép và kiểm thử với schema, checks và committee hiện có của N3 bằng dữ liệu giả lập.
-Điều này chưa đồng nghĩa toàn bộ ứng dụng hoặc chất lượng chấm điểm đã được xác nhận.
+## 5. Nối graph với công cụ thật
 
-## 8. Cách tự kiểm tra lại
+Dùng `src.agent.team_adapters.build_team_dependencies(task_bank=bank, examiner=examiner)`.
+Mặc định tools đọc corpus TV1. Có thể truyền `plagiarism_checker=checker` và
+`retriever=retriever` đã khởi tạo để host quản lý vòng đời.
+`TeamRetriever` xác thực DTO TV3; `TeamValidators` ánh xạ tên criterion cũ/mới.
+Lỗi dữ liệu/công cụ làm graph trả `DEPENDENCY_UNAVAILABLE` hoặc `RETRIEVAL_INVALID`,
+không biến thành kết quả không đạo văn. Lỗi chấm sai refs/schema/evidence chỉ được sửa tối đa 2 lần.
 
-Sau khi đã kích hoạt `.venv` và cài `requirements.txt`, chạy ở gốc repo:
+## 6. API và Task 1
+
+`POST /api/assess-writing` giữ `task_type`, `prompt`, `essay`, `mock` và thêm:
+
+- `task_material_text`: số liệu/đơn vị/chú giải đầy đủ cho Task 1 ở chế độ live.
+- `source_url`: URL HTTPS tùy chọn cho đề public. Không tự nhận đề public là self-written/CC0.
+
+Graph text-only không tự hiểu ảnh chỉ từ đường dẫn `material` trong JSON TV1.
+TV5 cần cung cấp bản chép biểu đồ chính xác qua `task_material_text`, hoặc bổ sung adapter
+thị giác trước khi đánh giá Task 1 bằng ảnh. Thiếu dữ liệu này trả 422 thay vì chấm đoán.
+Frontend đã có ô nhập số liệu Task 1. Đề Task 2 live cũng không được để trống.
+
+Lỗi live có `detail.code`, `retry_count`, `errors`, `diagnostics` đã lọc:
+422 đầu vào; 503 thiếu cấu hình/corpus/retrieval; 429 rate limit; 504 timeout;
+502 lỗi provider hoặc hết lượt sửa. Không trả điểm khi thất bại.
+Mock backend vẫn gọi corpus/security thật; lỗi corpus không bị bỏ qua.
+
+## 7. Điều kiện chạy thật
+
+Cài dependency đã khai báo trong requirements.txt. Từ Git Bash ở gốc repo:
 
 ```bash
-ruff check .
-python -B -m pytest -p no:cacheprovider
-python -B scripts/check_repository.py
-python -B scripts/check_repository.py --history
-git diff --check
+.venv/Scripts/python.exe -B scripts/check_member1_data.py
+.venv/Scripts/python.exe -B scripts/rebuild_vectorstore.py --validate-only
+.venv/Scripts/python.exe -B scripts/rebuild_vectorstore.py
+.venv/Scripts/python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-Hook kiểm tra nội dung chuẩn bị commit và lịch sử trước push đã được bật trên máy hiện tại:
-`git config core.hooksPath .githooks`. Máy khác cần tự chạy lệnh cấu hình này.
-CI cũng kiểm tra file/khóa, Ruff và Pytest trên Python 3.11/3.12; chưa có lần chạy CI mới vì chưa push.
-Môi trường local sử dụng Python 3.14.7. Kết quả local sau khi chuyển code: **228 kiểm thử qua**, `ruff check .` qua,
-`git diff --check` qua; bộ quét worktree và lịch sử Git không phát hiện trường hợp bị chặn.
-Sáu kiểm thử gốc của N3 và code `committee.py` không bị chỉnh sửa.
-Lần chạy trong môi trường Codex sử dụng thư mục tạm riêng cho Pytest để tránh giới hạn quyền ghi thư mục tạm hệ thống.
-Bộ quét chỉ phát hiện các mẫu phổ biến, không thay thế việc xem lại file trước commit.
+ChromaDB phải được tạo trước khi chấm live; script rebuild có thể cần mạng để tải model embedding.
+Xem `.env.example`: `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_RESPONSE_FORMAT`.
+Không cần API key cho kiểm tra corpus hoặc các test offline. Không bật tracing dữ liệu thật mặc định.
 
-## 9. Minh bạch sử dụng AI
+## 8. Kiểm thử và runner TV5
 
-Codex hỗ trợ chuyển code, chỉnh import/hợp đồng, nối các kiểm tra vào code N3,
-viết kiểm thử và tài liệu trong lần chuyển này. Người phụ trách cần đọc và hiểu trước khi nộp.
-Dữ liệu kiểm thử tự soạn được sử dụng để kiểm tra hành vi kỹ thuật; AI không gán nhãn điểm chuẩn IELTS.
+```bash
+.venv/Scripts/python.exe -B -m pytest
+node --test tests/test_frontend_evidence.cjs
+.venv/Scripts/python.exe -B evals/run.py --mock --benchmark evals/benchmark_dev/benchmark.json
+.venv/Scripts/python.exe -B evals/run.py --mock --benchmark evals/benchmark_test/benchmark.json
+```
+
+Runner mặc định đọc 69 bài dev, giữ 15 test riêng. Tham số đường dẫn vẫn nhận bộ demo cũ.
+Khi live thiếu dữ liệu/cấu hình, runner ghi lỗi từng bài, không tạo điểm giả hoặc dừng cả batch.
+Basic cases `scores=null` không tính MAE. Điều kiện flags/trần điểm/correction nằm trong
+`functional_passed` và `functional_errors`. Mock kiểm tra luồng, không chứng minh độ chính xác mô hình.
+
+`tests/test_team_corpus_integration.py` chạy corpus thật, N2 validation thật và graph/validators thật;
+backend lưu trữ retrieval và examiner được kiểm soát, không phải inference Chroma/LLM thật.
+`tests/test_frontend_evidence.cjs` kiểm tra Unicode, đoạn chồng nhau và tọa độ sai trên renderer thật.
+
+## 9. Kiểm chứng ở máy này (26/10/2026)
+
+- 317 test Python pass; 1 test Chroma được skip, 1 test trích PDF được deselect,
+  và module tests/test_rebuild_vectorstore.py chưa chạy vì môi trường thiếu chromadb/PyMuPDF.
+- 3 test renderer Node pass. Ruff, schema sync canonical, kiểm tra repository và lịch sử Git pass.
+- Runner MOCK xử lý đủ 69 dev và 15 test; tất cả bài benchmark qua kiểm tra cấu trúc/evidence.
+- Basic cases: 5/6 điều kiện hành vi đạt trong MOCK. Case lạc đề nâng cao chưa đạt;
+  bộ giả lập dùng heuristic từ khóa, không thay khả năng hiểu đề của LLM.
+- Chưa chạy inference Chroma/LLM thật; chưa báo cáo độ chính xác chấm band hoặc tỷ lệ phát hiện đạo văn thực tế.

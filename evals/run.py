@@ -1,7 +1,7 @@
 """Automated Evaluation Runner for SE373 IELTS Learning Agent (Phase 1, UC-02).
 
 Executes comprehensive evaluation against:
-1. 30-case IELTS Writing benchmark (evals/writing_benchmark_30.json)
+1. Member 1 Writing benchmark (dev/test JSON); legacy demo input is still accepted.
 2. Member 4 Security Test Suite (evals/member4_security_cases.json)
 3. 5 Basic Functional Cases (evals/data/5_basic_cases.json)
 4. Deterministic Harness verification checks (skills/writing_assessment/checks.py)
@@ -33,7 +33,7 @@ if str(ROOT_DIR) not in sys.path:
 from agent.tools.compute_tool import count_words  # noqa: E402
 from agent.tools.security_tool import SecurityGuard  # noqa: E402
 from backend.config import get_mock_mode  # noqa: E402
-from backend.live_service import run_live_assessment  # noqa: E402
+from backend.live_service import LiveAssessmentError, run_live_assessment  # noqa: E402
 from backend.mock_service import mock_assess_writing  # noqa: E402
 from skills.writing_assessment.checks import validate_writing_assessment  # noqa: E402
 
@@ -59,9 +59,22 @@ def evaluate_single_case(
     use_mock: bool = True,
 ) -> dict[str, Any]:
     task_type = case.get("task_type", "task2")
-    topic = case.get("topic", "")
+    topic = case.get("exam_question", case.get("topic", ""))
     essay = case.get("essay", case.get("text", ""))
-    ground_truth = case.get("ground_truth_band")
+    scores = case.get("scores")
+    ground_truth = scores.get("overall_band") if isinstance(scores, dict) else case.get("ground_truth_band")
+    case_id = case.get("id", case.get("case_id", "UNKNOWN_CASE"))
+    material = case.get("material")
+    material_path = material.get("path") if isinstance(material, dict) else material
+    score_keys = {
+        "task": ("task_achievement" if task_type == "task1" else "task_response",),
+        "coherence": ("coherence_cohesion", "coherence_and_cohesion"),
+        "lexical": ("lexical_resource",),
+        "grammar": ("grammatical_range_accuracy", "grammatical_range_and_accuracy"),
+    }
+    gt_criteria = ({group: next((scores[k] for k in names if k in scores), None)
+                    for group, names in score_keys.items()}
+                   if isinstance(scores, dict) else case.get("ground_truth_criteria", {}))
 
     start_t = time.perf_counter()
     w_count = count_words(essay)
@@ -69,7 +82,24 @@ def evaluate_single_case(
     if use_mock:
         assessment = mock_assess_writing(task_type=task_type, prompt=topic, essay=essay)
     else:
-        assessment = run_live_assessment(task_type=task_type, prompt=topic, essay=essay)
+        try:
+            assessment = run_live_assessment(
+                task_type=task_type, prompt=topic, essay=essay,
+                task_material_text=case.get("task_material_text"), source_url=case.get("source"),
+            )
+        except LiveAssessmentError as exc:
+            return {
+                "id": case_id, "task_type": task_type, "word_count": w_count,
+                "predicted_band": None, "ground_truth_band": ground_truth, "band_diff": None,
+                "within_half_band": None, "within_one_band": None, "flags": [],
+                "harness_passed": False, "harness_errors": [exc.code.value],
+                "total_quotes": 0, "quote_matches": 0, "offset_matches": 0,
+                "total_refs": 0, "ref_leaks": 0, "criteria_bands": {},
+                "functional_passed": False, "functional_errors": [exc.code.value],
+                "crit_diffs": {}, "material_path": material_path,
+                "expected_passed": False, "expected_errors": [exc.code.value],
+                "duration_ms": round((time.perf_counter() - start_t) * 1000, 2),
+            }
 
     duration_ms = (time.perf_counter() - start_t) * 1000.0
 
@@ -107,8 +137,31 @@ def evaluate_single_case(
     if ground_truth is not None:
         band_diff = abs(assessment.overall_band - ground_truth)
 
+    criteria_bands = {c.criterion: c.band for c in assessment.criteria}
+    crit_diffs = {}
+    for group, names in score_keys.items():
+        predicted = next((criteria_bands[name] for name in names if name in criteria_bands), None)
+        target = gt_criteria.get(group) if isinstance(gt_criteria, dict) else None
+        if predicted is not None and target is not None:
+            crit_diffs[group] = abs(predicted - target)
+    expected = case.get("expected", {})
+    functional_errors = []
+    for flag in expected.get("required_flags", []):
+        if flag not in assessment.flags:
+            functional_errors.append(f"missing flag: {flag}")
+    for flag in expected.get("forbidden_flags", []):
+        if flag in assessment.flags:
+            functional_errors.append(f"unexpected flag: {flag}")
+    for criterion, cap in expected.get("criterion_band_max", {}).items():
+        if criterion not in criteria_bands or criteria_bands[criterion] > cap:
+            functional_errors.append(f"criterion cap exceeded: {criterion}")
+    categories = {item.category for item in assessment.corrections}
+    for category in expected.get("correction_categories_contains", []):
+        if category not in categories:
+            functional_errors.append(f"missing correction category: {category}")
+
     return {
-        "id": case.get("id"),
+        "id": case_id,
         "task_type": task_type,
         "word_count": w_count,
         "predicted_band": assessment.overall_band,
@@ -119,6 +172,13 @@ def evaluate_single_case(
         "flags": assessment.flags,
         "harness_passed": validation.passed,
         "harness_errors": validation.errors,
+        "criteria_bands": criteria_bands,
+        "functional_passed": validation.passed and not functional_errors,
+        "functional_errors": functional_errors,
+        "expected_passed": validation.passed and not functional_errors,
+        "expected_errors": functional_errors,
+        "crit_diffs": crit_diffs,
+        "material_path": material_path,
         "total_quotes": total_quotes,
         "quote_matches": quote_matches,
         "offset_matches": offset_matches,
@@ -159,10 +219,13 @@ def run_full_evaluation(
     security_cases_path: Path,
     functional_cases_path: Path | None = None,
     use_mock: bool = True,
+    benchmark_test_path: Path | None = None,
 ) -> dict[str, Any]:
     logger.info("Starting Automated Evaluation (Mode: %s)...", "MOCK" if use_mock else "LIVE")
 
-    benchmark_cases = load_json_file(benchmark_path)
+    dev_cases = load_json_file(benchmark_path)
+    test_cases = load_json_file(benchmark_test_path) if benchmark_test_path else []
+    benchmark_cases = dev_cases + test_cases
     security_cases = load_json_file(security_cases_path)
     functional_cases = load_json_file(functional_cases_path) if functional_cases_path else []
 
@@ -172,6 +235,9 @@ def run_full_evaluation(
     )
 
     bench_results = [evaluate_single_case(c, use_mock=use_mock) for c in benchmark_cases]
+    primary_split = "test" if benchmark_path.parent.name == "benchmark_test" else "dev"
+    for index, result in enumerate(bench_results):
+        result["split"] = primary_split if index < len(dev_cases) else "test"
     func_results = [evaluate_single_case(c, use_mock=use_mock) for c in functional_cases]
     security_results = evaluate_security_guard_cases(security_cases)
 
@@ -182,7 +248,7 @@ def run_full_evaluation(
     pct_one = None
 
     if total_bench > 0:
-        valid_diffs = [r["band_diff"] for r in bench_results if r["band_diff"] is not None]
+        valid_diffs = [r["band_diff"] for r in bench_results if r["band_diff"] is not None and r["harness_passed"]]
         if valid_diffs:
             mae = sum(valid_diffs) / len(valid_diffs)
             pct_half = sum(1 for d in valid_diffs if d <= 0.5) / len(valid_diffs) * 100.0
@@ -196,9 +262,9 @@ def run_full_evaluation(
     total_leaks = sum(r["ref_leaks"] for r in all_writing_cases)
     total_duration = sum(r["duration_ms"] for r in all_writing_cases)
 
-    quote_match_rate = (total_quote_matches / total_quotes * 100.0) if total_quotes > 0 else 100.0
-    offset_match_rate = (total_offset_matches / total_quotes * 100.0) if total_quotes > 0 else 100.0
-    ref_valid_rate = ((total_refs - total_leaks) / total_refs * 100.0) if total_refs > 0 else 100.0
+    quote_match_rate = (total_quote_matches / total_quotes * 100.0) if total_quotes > 0 else 0.0
+    offset_match_rate = (total_offset_matches / total_quotes * 100.0) if total_quotes > 0 else 0.0
+    ref_valid_rate = ((total_refs - total_leaks) / total_refs * 100.0) if total_refs > 0 else 0.0
 
     # Security Guard Metrics
     total_security = len(security_results)
@@ -211,9 +277,31 @@ def run_full_evaluation(
     under_length_rate = (under_length_caught / len(under_length_cases) * 100.0) if under_length_cases else 100.0
 
     off_topic_cases = [r for r in func_results if "off_topic" in r["id"]]
-    off_topic_penalized = sum(1 for r in off_topic_cases if "off_topic" in r["flags"] and r["predicted_band"] <= 5.5)
+    off_topic_penalized = sum(1 for r in off_topic_cases if "off_topic" in r["flags"] and
+                              r["criteria_bands"].get("task_achievement" if r["task_type"] == "task1"
+                                                       else "task_response", 10) <= 5)
     off_topic_rate = (off_topic_penalized / len(off_topic_cases) * 100.0) if off_topic_cases else 100.0
 
+    benchmark_complete = bool(bench_results) and all(
+        r["harness_passed"] and r["predicted_band"] is not None for r in bench_results
+    )
+    criteria_mae = {}
+    for group in ("task", "coherence", "lexical", "grammar"):
+        diffs = [r["crit_diffs"][group] for r in bench_results
+                 if r["harness_passed"] and group in r["crit_diffs"]]
+        if diffs:
+            criteria_mae[group] = round(sum(diffs) / len(diffs), 3)
+    split_metrics = {}
+    for split in ("dev", "test"):
+        results = [r for r in bench_results if r["split"] == split]
+        diffs = [r["band_diff"] for r in results if r["harness_passed"] and r["band_diff"] is not None]
+        if results:
+            split_metrics[split] = {
+                "count": len(results),
+                "mae": round(sum(diffs) / len(diffs), 3) if diffs else None,
+                "within_half_band": round(sum(d <= 0.5 for d in diffs) / len(diffs) * 100, 1) if diffs else None,
+                "within_one_band": round(sum(d <= 1 for d in diffs) / len(diffs) * 100, 1) if diffs else None,
+            }
     summary = {
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "execution_mode": "mock" if use_mock else "live",
@@ -221,7 +309,15 @@ def run_full_evaluation(
         "benchmark_cases_count": total_bench,
         "functional_cases_count": len(func_results),
         "security_cases_count": total_security,
+        "writing_success_count": sum(r["predicted_band"] is not None for r in all_writing_cases),
+        "writing_failure_count": sum(r["predicted_band"] is None for r in all_writing_cases),
+        "accuracy_is_model_evaluation": not use_mock,
         "metrics": {
+            "criteria_mae": criteria_mae,
+            "split_metrics": split_metrics,
+            "basic_functional_expected_rate": round(
+                sum(r["functional_passed"] for r in func_results) / len(func_results) * 100, 1
+            ) if func_results else None,
             "verbatim_quote_match_rate": round(quote_match_rate, 2),
             "offset_match_rate": round(offset_match_rate, 2),
             "descriptor_ref_valid_rate": round(ref_valid_rate, 2),
@@ -237,8 +333,8 @@ def run_full_evaluation(
             "verbatim_quote_100pct": quote_match_rate == 100.0,
             "offset_match_100pct": offset_match_rate == 100.0,
             "ref_valid_100pct": ref_valid_rate == 100.0,
-            "half_band_ge_60pct": (pct_half is not None and pct_half >= 60.0),
-            "one_band_ge_90pct": (pct_one is not None and pct_one >= 90.0),
+            "half_band_ge_60pct": (not use_mock and benchmark_complete and pct_half is not None and pct_half >= 60.0),
+            "one_band_ge_90pct": (not use_mock and benchmark_complete and pct_one is not None and pct_one >= 90.0),
             "security_guard_100pct": security_pass_rate == 100.0,
         },
         "benchmark_results": bench_results,
@@ -261,6 +357,8 @@ def generate_markdown_report(summary: dict[str, Any], output_path: Path) -> None
 * **Chế độ thực thi:** `{mode}`
 * **Thời gian chạy:** `{summary['timestamp']}`
 * **Tổng số bài kiểm thử:** `{summary['total_cases_evaluated']}` (Benchmark: {summary['benchmark_cases_count']}, Security: {summary['security_cases_count']}, Functional: {summary['functional_cases_count']})
+* **Bài viết xử lý thành công / thất bại:** `{summary['writing_success_count']} / {summary['writing_failure_count']}`.
+* Chế độ MOCK chỉ kiểm tra luồng. Các tỷ lệ sai lệch chỉ tính trên bài chấm thành công qua harness; không kết luận đạt độ chính xác nếu benchmark còn lỗi.
 
 ---
 
@@ -270,18 +368,18 @@ def generate_markdown_report(summary: dict[str, Any], output_path: Path) -> None
 | :--- | :---: | :---: | :---: |
 | **Tỷ lệ Quote đúng nguyên văn 100%** | **{m['verbatim_quote_match_rate']}%** | 100.0% | {'✅ ĐẠT' if t['verbatim_quote_100pct'] else '❌ CHƯA ĐẠT'} |
 | **Tỷ lệ Khớp tọa độ [start:end]** | **{m['offset_match_rate']}%** | 100.0% | {'✅ ĐẠT' if t['offset_match_100pct'] else '❌ CHƯA ĐẠT'} |
-| **Tỷ lệ Descriptor Refs hợp lệ** | **{m['descriptor_ref_valid_rate']}%** | 100.0% (Không rò rỉ Task khác) | {'✅ ĐẠT' if t['ref_valid_100pct'] else '❌ CHƯA ĐẠT'} |
+| **Tỷ lệ Refs không lẫn Task theo tên** | **{m['descriptor_ref_valid_rate']}%** | 100.0% (graph live còn kiểm tra membership) | {'✅ ĐẠT' if t['ref_valid_100pct'] else '❌ CHƯA ĐẠT'} |
 | **Độ lệch Band <= 0.5** | **{m['within_half_band_rate']}%** | >= 60.0% | {'✅ ĐẠT' if t['half_band_ge_60pct'] else '❌ CHƯA ĐẠT'} |
 | **Độ lệch Band <= 1.0** | **{m['within_one_band_rate']}%** | >= 90.0% | {'✅ ĐẠT' if t['one_band_ge_90pct'] else '❌ CHƯA ĐẠT'} |
-| **Mean Absolute Error (MAE)** | **{m['mae']}** | Càng nhỏ càng tốt | ✅ ĐẠT |
+| **Mean Absolute Error (MAE)** | **{m['mae']}** | Càng nhỏ càng tốt | Tham khảo; MOCK không đo chất lượng mô hình |
 | **Tỷ lệ bảo mật SecurityGuard** | **{m['security_guard_pass_rate']}%** | 100.0% (Bắt đúng injection, không phạt safe) | {'✅ ĐẠT' if t['security_guard_100pct'] else '❌ CHƯA ĐẠT'} |
-| **Cảnh báo độ dài (under_length)** | **{m['under_length_detection_rate']}%** | 100.0% (< 150 cho Task 1, < 250 cho Task 2) | ✅ ĐẠT |
-| **Phạt bài lạc đề (off_topic)** | **{m['off_topic_penalty_enforced_rate']}%** | 100.0% (TR/TA cap <= 5.0) | ✅ ĐẠT |
-| **Độ trễ xử lý trung bình** | **{m['average_latency_ms']} ms** | Yêu cầu thời gian thực | ✅ ĐẠT |
+| **Cảnh báo độ dài (under_length)** | **{m['under_length_detection_rate']}%** | 100.0% (< 150 cho Task 1, < 250 cho Task 2) | {'✅ ĐẠT' if m['under_length_detection_rate'] == 100 else '❌ CHƯA ĐẠT'} |
+| **Phạt bài lạc đề (off_topic)** | **{m['off_topic_penalty_enforced_rate']}%** | 100.0% (TR/TA cap <= 5.0) | {'✅ ĐẠT' if m['off_topic_penalty_enforced_rate'] == 100 else '❌ CHƯA ĐẠT'} |
+| **Độ trễ xử lý trung bình** | **{m['average_latency_ms']} ms** | Đo riêng theo chế độ | Tham khảo |
 
 ---
 
-## 2. Kết Quả Chi Tiết Từng Bài Trên Tập Benchmark (30 Bài)
+## 2. Kết Quả Chi Tiết Từng Bài Trên Tập Benchmark
 
 | ID | Task | Số từ | Điểm Chuẩn | AI Dự Đoán | Độ Lệch | Harness Passed |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -294,7 +392,21 @@ def generate_markdown_report(summary: dict[str, Any], output_path: Path) -> None
     report += """
 ---
 
-## 3. Kết Quả Kiểm Thử Bộ Bảo Mật Member 4 (SecurityGuard Cases)
+## 3. Kết Quả Basic Cases Theo Điều Kiện TV1
+
+| ID | Qua harness | Đạt điều kiện hành vi | Lỗi hành vi |
+| :--- | :---: | :---: | :--- |
+"""
+    for r in summary["functional_results"]:
+        harness = "✅" if r["harness_passed"] else "❌"
+        behavior = "✅" if r["functional_passed"] else "❌"
+        errors = "; ".join(r["functional_errors"]) or "--"
+        report += f"| `{r['id']}` | {harness} | {behavior} | {errors} |\n"
+
+    report += """
+---
+
+## 4. Kết Quả Kiểm Thử Bộ Bảo Mật Member 4 (SecurityGuard Cases)
 
 | ID | Vị trí kiểm tra | Kết quả phát hiện | Kết quả mong đợi | Đánh giá |
 | :--- | :---: | :---: | :---: | :---: |
@@ -308,11 +420,11 @@ def generate_markdown_report(summary: dict[str, Any], output_path: Path) -> None
     report += """
 ---
 
-## 4. Kết Luận & Hướng Tiếp Tục
+## 5. Kết Luận & Hướng Tiếp Tục
 
-* Bộ công cụ tất định của Người 4 (`compute_tool`, `security_tool`, `plagiarism_tool`) đã được tích hợp hoàn toàn vào quy trình đánh giá tự động.
-* Toàn bộ 12 ca kiểm thử bảo mật của Người 4 đều được SecurityGuard nhận diện chính xác 100%.
-* Hệ thống Harness verification của Phase 1 đạt 100% tiêu chí chấp nhận cho việc kiểm soát trích dẫn dẫn chứng nguyên văn và tọa độ ký tự.
+* Đối chiếu các kết quả thực tế ở trên; không suy ra mọi tiêu chí đã đạt chỉ từ việc runner chạy xong.
+* Chế độ MOCK kiểm tra luồng, không chứng minh độ chính xác chấm điểm của mô hình.
+* Kiểm tra refs ở báo cáo này chỉ phát hiện lẫn Task theo tên; graph live kiểm tra đầy đủ membership và metadata bằng validators N4.
 """
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -324,7 +436,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Automated Evaluation Runner for IELTS Learning Agent.")
     parser.add_argument("--mock", action="store_true", default=None, help="Force mock agent mode.")
     parser.add_argument("--live", action="store_true", default=None, help="Force live agent mode.")
-    parser.add_argument("--benchmark", type=Path, default=ROOT_DIR / "evals" / "writing_benchmark_30.json")
+    parser.add_argument("--benchmark", type=Path, default=ROOT_DIR / "evals" / "benchmark_dev" / "benchmark.json")
+    parser.add_argument("--benchmark-test", type=Path, default=None,
+                        help="Optional hold-out JSON; results are reported separately from dev.")
     parser.add_argument("--security", type=Path, default=ROOT_DIR / "evals" / "member4_security_cases.json")
     parser.add_argument("--functional", type=Path, default=ROOT_DIR / "evals" / "data" / "5_basic_cases.json")
     parser.add_argument("--output-json", type=Path, default=ROOT_DIR / "eval_results.json")
@@ -344,6 +458,7 @@ def main() -> None:
         security_cases_path=args.security,
         functional_cases_path=args.functional,
         use_mock=use_mock,
+        benchmark_test_path=args.benchmark_test,
     )
 
     # Save JSON summary

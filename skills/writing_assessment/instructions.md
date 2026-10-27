@@ -27,7 +27,7 @@ Do NOT guess numerical metrics or band descriptors. Follow this sequence:
    - Only cite `chunk_id` values in `descriptor_refs` that were actually retrieved for this run and match `task_type`.
    - Never cite a `task2` descriptor when grading `task1`, or vice versa.
 4. **Overall Band Calculation (`compute_band`):**
-   - Determine the 4 individual criterion bands first, then use `compute_band` to calculate `overall_band` (mean of 4 criteria rounded to the nearest 0.5 per IELTS rules).
+   - Determine the 4 individual criterion bands first, then use `compute_band` to calculate `overall_band` (mean of 4 criteria rounded to the nearest 0.5, ties upward, under the repository policy).
 
 ---
 

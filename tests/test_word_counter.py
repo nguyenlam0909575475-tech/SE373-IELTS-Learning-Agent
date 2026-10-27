@@ -1,4 +1,4 @@
-"""Check the shared tokenization convention and the essay-length boundaries."""
+"""Unit tests for shared tokenization convention and essay-length boundaries."""
 
 import pytest
 

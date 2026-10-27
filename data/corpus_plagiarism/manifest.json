@@ -1,0 +1,129 @@
+{
+  "purpose": "Public IELTS Academic Writing essays for plagiarism comparison; no gold band labels",
+  "corpus_file": "corpus.jsonl",
+  "corpus_sha256": "6e562831f6399ffc248a7b5081cb8bdf5b2ea2c09d9580e7b800e6c6dda67a26",
+  "total_documents": 1800,
+  "task_counts": {
+    "task1": 600,
+    "task2": 1200
+  },
+  "policy": {
+    "public_source_required": true,
+    "license_required": false,
+    "band_labels_included": false,
+    "original_text_preserved": true,
+    "min_words": 50,
+    "deduplication": "SHA256 of NFKC + casefold + collapsed whitespace; exact normalized text only",
+    "sampling": "Round robin topics, then questions; deterministic SHA256 source_id rank within question",
+    "general_training_filter": "Letter prompts/salutations; Task 1 topic allowlist; Task 2 visual prompt exclusion"
+  },
+  "evaluation_exclusions": {
+    "records_read": 90,
+    "unique_essay_hashes": 90,
+    "files": [
+      {
+        "path": "evals/data/5_basic_cases.json",
+        "sha256": "83b6847b758c3033cc3ed875a9f62f686d660b75c4990eb7b2ae09a5b1ea9cfe"
+      },
+      {
+        "path": "evals/benchmark_dev/benchmark.json",
+        "sha256": "9312bdc11a2013990536477267824c128d1f86e7e73adf26abc35da21421ce20"
+      },
+      {
+        "path": "evals/benchmark_test/benchmark.json",
+        "sha256": "d57c984d27d680c57222bb288023c436e2a57f5fa0d0e18e96d7a65957b7bb9b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "dataset": "hai2131/IELTS-essays-task-1",
+      "source_url": "https://huggingface.co/datasets/hai2131/IELTS-essays-task-1",
+      "publisher": "hai2131",
+      "revision": "acf8025d107dbe8bb823bb82c551c69696417da4",
+      "download_url": "https://huggingface.co/datasets/hai2131/IELTS-essays-task-1/resolve/acf8025d107dbe8bb823bb82c551c69696417da4/data/train-00000-of-00001.parquet",
+      "raw_file": "data/corpus_plagiarism/raw/hai2131__IELTS-essays-task-1/train-00000-of-00001.parquet",
+      "raw_sha256": "05cdca522cad0ae239b8eaef2c29dea136f02356f7aa0b9a21eee842c5e95ed9",
+      "rows_read": 13925,
+      "filtered": {
+        "duplicate": 5075
+      },
+      "raw_topics": 7,
+      "raw_questions": 329,
+      "eligible": 8850,
+      "selected": 600,
+      "eligible_not_selected": 8250,
+      "selected_topics": {
+        "Bar Chart": 86,
+        "Line Graph": 86,
+        "Map": 86,
+        "Multiple Graphs": 86,
+        "Pie Chart": 86,
+        "Process Diagram": 85,
+        "Table": 85
+      },
+      "selected_questions": 329,
+      "word_count_range": [
+        103,
+        379
+      ]
+    },
+    {
+      "dataset": "chillies/ielts-writing-task2-essays",
+      "source_url": "https://huggingface.co/datasets/chillies/ielts-writing-task2-essays",
+      "publisher": "chillies",
+      "revision": "fa42fa7a2b02941e002cfbf5146c3176ba21f413",
+      "download_url": "https://huggingface.co/datasets/chillies/ielts-writing-task2-essays/resolve/fa42fa7a2b02941e002cfbf5146c3176ba21f413/data/train-00000-of-00001.parquet",
+      "raw_file": "data/corpus_plagiarism/raw/chillies__ielts-writing-task2-essays/train-00000-of-00001.parquet",
+      "raw_sha256": "634370b1a7c306bf6154f7294fe0d74f4cc9099243175023da806e2e11614128",
+      "rows_read": 8049,
+      "filtered": {
+        "general_training_letter": 4,
+        "under_minimum_words": 1
+      },
+      "raw_topics": 25,
+      "raw_questions": 1970,
+      "eligible": 8044,
+      "selected": 1200,
+      "eligible_not_selected": 6844,
+      "selected_topics": {
+        "Art": 48,
+        "Business and Companies": 48,
+        "Cities": 48,
+        "Climate Change": 48,
+        "Crime": 48,
+        "Education": 48,
+        "Entertainment": 48,
+        "Environment and Nature": 48,
+        "Family and Children": 48,
+        "Globalization and Consumerism": 48,
+        "Government": 48,
+        "Health": 48,
+        "History": 48,
+        "Housing": 48,
+        "Internet": 48,
+        "Language": 48,
+        "Media and Advertising": 48,
+        "Psychology": 48,
+        "Science": 48,
+        "Society": 48,
+        "Sports and Exercise": 48,
+        "Technology": 48,
+        "Transportation": 48,
+        "Travel and Tourism": 48,
+        "Work": 48
+      },
+      "selected_questions": 850,
+      "word_count_range": [
+        53,
+        593
+      ]
+    }
+  ],
+  "limitations": [
+    "Automated scope filters; not independently reviewed for every essay.",
+    "Near duplicates and paraphrases are not removed by exact-text deduplication.",
+    "Public source authorship and human/AI origin are not independently authenticated.",
+    "Corpus coverage alone does not establish plagiarism detection or false-positive rates."
+  ]
+}

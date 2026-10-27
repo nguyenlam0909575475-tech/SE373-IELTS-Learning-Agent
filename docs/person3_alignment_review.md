@@ -1,3 +1,5 @@
+> Cập nhật tích hợp 26/10/2026: chính sách hiện hành và cách nối thật ở [member4_handoff.md](member4_handoff.md) và [team_integration.md](team_integration.md). Các nhận định raw mean/adapter cũ dưới đây là lịch sử; code hiện gọi compute_band TV4 theo quy ước repository.
+
 # Đối chiếu phân công mới — Lịch sử và quyết định đã chốt
 
 Ngày18/10/2026. Phạm vi: nội dung tài liệu và code Người 3 đang có; không xác minh code của các thành viên khác.

@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import asdict, is_dataclass
-from math import isclose
 from typing import Any
 
 from pydantic import TypeAdapter
@@ -37,12 +36,10 @@ def _plain(value: Any) -> Any:
     return value
 
 
-def _legacy_assessment(assessment: Any, *, overall_band: float | None = None) -> dict[str, Any]:
+def _legacy_assessment(assessment: Any) -> dict[str, Any]:
     payload = assessment.model_dump(mode="python")
     for item in payload["criteria"]:
         item["criterion"] = _LEGACY.get(item["criterion"], item["criterion"])
-    if overall_band is not None:
-        payload["overall_band"] = overall_band
     return payload
 
 
@@ -75,7 +72,7 @@ class TeamRetriever:
 
 
 class TeamTools:
-    """Expose N4 word/plagiarism tools and retain the approved raw task mean."""
+    """Expose the shared N4 tools without replacing their scoring policy."""
     def __init__(self, compute_module: Any, plagiarism_module: Any):
         self._compute = compute_module
         self._plagiarism = plagiarism_module
@@ -87,10 +84,8 @@ class TeamTools:
             raise DependencyFailure() from None
 
     def compute_band(self, bands: list[float]) -> float:
-        if len(bands) != 4:
-            raise DependencyFailure()
         try:
-            return sum(bands) / 4
+            return self._compute.compute_band(bands)
         except Exception:
             raise DependencyFailure() from None
 
@@ -100,11 +95,8 @@ class TeamTools:
                 _plain(self._plagiarism.check_plagiarism(essay))
             )
         except Exception:
-            # Missing licensed corpus is not a negative plagiarism result.
+            # Missing or invalid corpus is not a negative plagiarism result.
             raise DependencyFailure() from None
-
-    def legacy_rounded_band(self, bands: list[float]) -> float:
-        return self._compute.compute_band(bands)
 
 
 class TeamSecurity:
@@ -124,7 +116,7 @@ class TeamSecurity:
 
 
 class TeamValidators:
-    """Translate legacy criterion spellings and isolate N4's former band policy."""
+    """Translate legacy criterion spellings at the transport boundary."""
     def __init__(self, validators: Any, tools: TeamTools):
         self._validators = validators
         self._tools = tools
@@ -180,20 +172,10 @@ class TeamValidators:
         plagiarism: PlagiarismResult, security: SecurityResult, off_topic: bool,
     ) -> list[ValidationIssue]:
         try:
-            raw_mean = sum(item.band for item in assessment.criteria) / 4
-            if not isclose(assessment.overall_band, overall_band, rel_tol=0, abs_tol=1e-9):
-                return [ValidationIssue(code=IssueCode.CONSISTENCY_ERROR)]
-            if not isclose(overall_band, raw_mean, rel_tol=0, abs_tol=1e-9):
-                return [ValidationIssue(code=IssueCode.CONSISTENCY_ERROR)]
-            # N4's validator rechecks its half-band score policy. Supply a
-            # private compatibility view while preserving the public raw mean.
-            n4_band = self._tools.legacy_rounded_band(
-                [item.band for item in assessment.criteria]
-            )
             rows = self._validators.consistency_validator(
-                _legacy_assessment(assessment, overall_band=n4_band),
+                _legacy_assessment(assessment),
                 word_count=word_count,
-                overall_band=n4_band,
+                overall_band=overall_band,
                 plagiarism=plagiarism,
                 security=security,
                 off_topic=off_topic,
@@ -208,20 +190,21 @@ class TeamValidators:
 def build_team_dependencies(
     *, task_bank: Any, examiner: Any, db_path: str | None = None,
     plagiarism_checker: Any | None = None, security_guard: Any | None = None,
-    validators: Any | None = None, model_version: str = "team_model",
+    validators: Any | None = None, retriever: Any | None = None, model_version: str = "team_model",
     prompt_version: str = "writing_assessment_1_0_0",
 ) -> Dependencies:
-    """Compose teammate modules; the host app must provide a task bank and licensed corpus."""
+    """Compose real N2/N4 dependencies using the shipped public corpus by default."""
     try:
         from agent.tools import compute_tool, plagiarism_tool, security_tool  # type: ignore[import-not-found, import-untyped]
         from skills.writing_assessment import validators as n4_validators  # type: ignore[import-not-found]
         from src.tools.rag_descriptors import DescriptorRetriever  # type: ignore[import-not-found]
 
-        retriever = DescriptorRetriever(
-            db_path=db_path,
-            chunk_factory=lambda **row: DescriptorChunk.model_validate(row),
-        )
-        tools = TeamTools(compute_tool, plagiarism_checker or plagiarism_tool)
+        if retriever is None:
+            retriever = DescriptorRetriever(
+                db_path=db_path,
+                chunk_factory=lambda **row: DescriptorChunk.model_validate(row),
+            )
+        tools = TeamTools(compute_tool, plagiarism_checker if plagiarism_checker is not None else plagiarism_tool)
         return Dependencies(
             task_bank=task_bank,
             retriever=TeamRetriever(retriever),

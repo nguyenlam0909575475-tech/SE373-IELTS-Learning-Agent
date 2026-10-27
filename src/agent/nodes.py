@@ -260,6 +260,12 @@ class Nodes:
                 corrections=draft.corrections,
                 flags=flags,
                 disclaimer=DISCLAIMER,
+                top_priorities=getattr(draft, "top_priorities", []),
+                error_patterns=getattr(draft, "error_patterns", []),
+                sentence_rewrites=getattr(draft, "sentence_rewrites", []),
+                paragraph_analyses=getattr(draft, "paragraph_analyses", []),
+                grammar_rules=getattr(draft, "grammar_rules", []),
+                model_sentences=getattr(draft, "model_sentences", []),
             )
         except ValidationError:
             return {"validation_errors": [ValidationIssue(code=IssueCode.SCHEMA_INVALID)]}

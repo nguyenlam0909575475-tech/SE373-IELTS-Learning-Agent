@@ -98,15 +98,15 @@ class FakeRetriever:
 
 
 class FakeTools:
-    """MOCK contracts only. Word regex from group; mean policy remains unconfirmed."""
+    """MOCK plagiarism only; word count and band policy match the shared tools."""
 
     def count_words(self, essay: str) -> int:
         return len(MOCK_WORD_PATTERN.findall(essay))
 
     def compute_band(self, bands: list[float]) -> float:
-        if len(bands) != 4:
-            raise ValueError("MOCK expects four bands")
-        return sum(bands) / 4  # MOCK raw mean; deliberately no unverified rounding rule.
+        from agent.tools.compute_tool import compute_band
+
+        return compute_band(bands)
 
     def check_plagiarism(self, essay: str) -> PlagiarismResult:
         return PlagiarismResult(possible_plagiarism=False, max_similarity=0.0, matches=[])

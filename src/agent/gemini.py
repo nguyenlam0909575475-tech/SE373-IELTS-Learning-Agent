@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import Annotated, Any, NoReturn, Self
+from typing import Annotated, Any, Literal, NoReturn, Self
 
 from pydantic import Field, SecretStr, ValidationError, model_validator
 
@@ -23,6 +23,7 @@ class GeminiSettings(PublicModel):
     model: Identifier
     timeout_ms: int = Field(default=45000, ge=1000, le=120000)
     max_output_tokens: int = Field(default=4096, ge=512, le=16384)
+    thinking_level: Literal["minimal", "low", "medium", "high"] | None = None
 
     @model_validator(mode="after")
     def configured_values(self) -> Self:
@@ -43,9 +44,10 @@ def load_gemini_settings(dotenv_path: Path | None = None) -> GeminiSettings:
 
         return GeminiSettings(
             api_key=setting("GEMINI_API_KEY"),
-            model=setting("GEMINI_MODEL"),
+            model=setting("GEMINI_MODEL", "gemini-flash-lite-latest"),
             timeout_ms=setting("GEMINI_TIMEOUT_MS", 45000),
             max_output_tokens=setting("GEMINI_MAX_OUTPUT_TOKENS", 4096),
+            thinking_level=setting("GEMINI_THINKING_LEVEL") or None,
         )
     except (ImportError, OSError, ValidationError):
         raise DependencyFailure(ErrorCode.LLM_CONFIGURATION_ERROR) from None
@@ -95,6 +97,10 @@ class GeminiExaminer:
                     response_json_schema=LLMGradingDraft.model_json_schema(),
                     temperature=0,
                     max_output_tokens=self.settings.max_output_tokens,
+                    thinking_config=(
+                        types.ThinkingConfig(thinking_level=self.settings.thinking_level)
+                        if self.settings.thinking_level is not None else None
+                    ),
                 ),
             )
         except Exception as exc:
@@ -140,7 +146,9 @@ class GeminiExaminer:
                     401: ErrorCode.LLM_AUTH_ERROR,
                     403: ErrorCode.LLM_AUTH_ERROR,
                     404: ErrorCode.LLM_MODEL_UNAVAILABLE,
+                    408: ErrorCode.LLM_TIMEOUT,
                     429: ErrorCode.LLM_RATE_LIMITED,
+                    504: ErrorCode.LLM_TIMEOUT,
                 }.get(status, ErrorCode.LLM_REQUEST_FAILED)
                 if isinstance(status, int)
                 else ErrorCode.LLM_REQUEST_FAILED

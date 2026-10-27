@@ -1,0 +1,242 @@
+[
+  {
+    "case_id": "uc02_063fb5734c0491b3_1",
+    "task_type": "task1",
+    "exam_question": "The graph below gives information from a 2008 report about consumption of energy in the USA since 1980 with projections until 2030.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The graph illustrates the consumption of six categories of fuel in the USA in the year 1980 to 2008 and their prediction until 2030.\n\nTo begin with, it is noticeable that all kinds of energy had an upward trend except hydropower, which was a roughly steady pattern with an amount of 3 quadrillions unite (qu) between the year 1980 and 2030. With respect to the given graph, the highest usage was petrol and oil which was beginning from 35 quadrillions unite in the year 1980 with a dramatic increasing trend while the projections demonstrate it will be raised more than 45 (qu) in 2030. The secondly ranked was related to coal which was 16 (qu) in 1980. It is worth mentioning that it had a similar sharp climbing movement likes fossil fuel such as petrol and oil while in the end it will be reached 30 (qu) in 2030.\n\nOn the other hand, natural gas, nuclear, and solar/wind energy had a gradual rise. It is noteworthy that both nuclear and solar/wind sources had the same rate of consumption in 1980 that was almost 4 (qu), whereas the predictions show that people prefer to utilize nuclear more than solar/wind energy in the future.  However, natural gas had a similar movement but its utilization was equal to 20 (qu) in the year 1980 which will be arisen to 24 (qu) according to projections.\n\nTo sum up, it can be clearly seen that the fossil fuel practically petrol and oil was the most popular resource of energy in the USA and it will be the most common source till 2030.",
+    "material": "evals/materials/uc02_063fb5734c0491b3_1.png",
+    "scores": {
+      "task_achievement": 6.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 5.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 5.5
+    },
+    "feedback": "Thank you indeed for writing this report. Task Achievement (TA)\nThe report addresses the task requirements by summarizing the main features and making comparisons. However, the overview could be clearer, highlighting overall trends more distinctly. The report should also rectify the misrepresentation of data, such as the claim that \"all kinds of energy had an upward trend except hydropower,\" which does not align with the graph where hydropower shows an increase. Accuracy in data presentation is crucial.\nCoherence and Cohesion (CC)\nThe organization of the report shows logical sequencing. Yet, it would benefit from a broader range of cohesive devices to better link ideas and sections. Clear topic sentences should be introduced for each paragraph to guide the reader through the response more effectively.\nLexical Resource (LR)\nA range of vocabulary is employed to describe the data, such as \"dramatic increasing trend\" and \"the projections demonstrate.\" Nonetheless, there are errors like \"quadrillions unite\" instead of \"quadrillion units\" and some unnatural phrasing. Using correct terminology and varying vocabulary to articulate trends and comparisons would enhance the lexical resource score.\nGrammatical Range and Accuracy (GRA)\nThe report utilizes a mixture of simple and complex sentence structures, but there are grammatical inaccuracies present. Phrases like \"The secondly ranked was related to coal\" should be revised for clarity and correctness to something like \"Coal was the second most consumed fuel.\" Attention should be given to subject-verb agreement, prepositional use, and the elimination of superfluous words.\nOverall:\nThe report provides a competent description of the graph but has room for improvement, particularly in the accurate portrayal of information, grammatical precision, and the use of a wider range of linguistic structures.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-2829-band-5-5/"
+  },
+  {
+    "case_id": "uc02_1e82eae284e2726c_1",
+    "task_type": "task1",
+    "exam_question": "The diagram below shows how a biofuel called ethanol is produced.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The diagram drawn below clearly illustrates the cycle of ethanol which is considered a biofuel. There are seven steps until ethanol reaches a level where it is used as fuel.\n\nThe entire process commences when trees and plants require energy to grow. This energy has two main components: carbon dioxide (CO2) and sunlight absorbed by plants and trees. Later, these plants and trees are harvested and fed into a preprocessing unit. The outcome is cellulose which begins the processing phase to form sugar molecules. In the end, special microbes are added so that ethanol can be produced.\n\nThe produced ethanol is fuel for airplanes, trucks, and cars. Once consumed, carbon dioxide is emitted into the atmosphere. The CO2 later cycles back to be absorbed by more trees and plants. Overall, ethanol’s journey to becoming a biofuel is lengthy; its application ranges from passenger cars to ground logistics and even aviation.",
+    "material": "evals/materials/uc02_1e82eae284e2726c_1.png",
+    "scores": {
+      "task_achievement": 8.0,
+      "coherence_cohesion": 8.0,
+      "lexical_resource": 9.0,
+      "grammatical_range_accuracy": 8.0,
+      "overall_band": 8.0
+    },
+    "feedback": "Thank you for writing this report. The response effectively outlines the ethanol production process, demonstrating strong coherence and a varied lexical range. The logical sequence of events is clear, and the use of linking words enhances readability. However, slight awkward phrasing and minor imprecisions, such as \"seven steps until ethanol reaches a level where it is used as fuel,\" could be refined for better fluency.\nSome awkward phrasing affects fluency:\n1- \"The diagram drawn below clearly illustrates the cycle of ethanol which is considered a biofuel.\"\nImproved Version:\n\"The diagram clearly illustrates the ethanol production cycle, showcasing its role as a biofuel.\"\n2- \"Later, these plants and trees are harvested and fed into a preprocessing unit.\"\nMore precise:\n\"Once matured, these plants are harvested and processed to extract cellulose.\"",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3433-band-8-0/"
+  },
+  {
+    "case_id": "uc02_2379a300f77b0c13_1",
+    "task_type": "task1",
+    "exam_question": "The figures give information about economic growth and household expenditure across a range of categories.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The line graph and pie charts given provide data on economic growth, as well as household spending patterns in housing, food, clothing, entertainment, travel, and other from 1995 to 2010.\n\nIn 1995, economic growth was approximately 1 per cent. The pie chart for that year illustrates that the spending on essentials such as housing and food accounted for two-thirds of overall household expenses; whereas, the spending on less crucial categories like clothing, entertainment, and travel was way lower at roughly 20 per cent.\n\nBy 2000, the growth has nearly doubled and expenditure on housing has shrunk to roughly one-quarter of total spending. On the other hand, expenses on food and non-essential items had risen. The trend of expansion of the latter category was even more evident in 2005, when the growth of economy had reached approximately 4.5 per cent.\n\nNevertheless, the trend had reversed when in 2010 growth returned to 1 per cent caused by economic decline. The breakdown of expenditure was similar to the pattern marked in 1995. Moreover, the decrease in non-essential spending was even more evident.\n\nOverall, the figures show that household expenditures were affected by economic growth.",
+    "material": "evals/materials/uc02_2379a300f77b0c13_1.png",
+    "scores": {
+      "task_achievement": 8.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 7.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 7.0
+    },
+    "feedback": "Thank you indeed for writing this report. The report is almost perfectly successful in Task Achievement, whereas its grammar could use a bit more accuracy, especially in making sure the correct verb tense is used for each section.\nIELTS Juice\nIELTS Juice is brought to you by Juice Academy, registered in ‌British Columbia, Canada. On this channel, experienced English teachers and IELTS experts provide lessons, tips, and guidance to help you improve your English and achieve the best results in the IELTS exam.\nSubscribe",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3317-band-7-0/"
+  },
+  {
+    "case_id": "uc02_46ad2e8773a6a1e5_1",
+    "task_type": "task1",
+    "exam_question": "The maps below show an industrial area in the town of Norbiton, and planned future development of the site.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The maps illustrate the present industrial area of Norbiton town and the proposed development in the future.\n\nOverall, the industrial area will observe drastic changes in its layout, ; namely, factories will be completely taken over by housing and amenities such as a school.\n\nThe current industrial area has a big roundabout in the centre that can be accessed from the road to its south. To this roundabout, there are three factories encircling it from south-west to the north. The site eastern’s side The site’s eastern side houses five factories, which can be reached via a lane. Across the northern part, farmland is present adjacent to a river.\n\nThe anticipated makeover will witness the addition of a small roundabout, by modifying the southern outlet, and joining the big roundabout. The big roundabout will also be transformed to accommodate two additional lanes. Factories on either side of the roundabout will be replaced by residential housing and other facilities like shops, a medical centre, and a playground. In the north, a T-shape road and a bridge will be constructed to access the housing on the farmland.",
+    "material": "evals/materials/uc02_46ad2e8773a6a1e5_1.png",
+    "scores": {
+      "task_achievement": 6.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 6.0,
+      "grammatical_range_accuracy": 7.0,
+      "overall_band": 6.5
+    },
+    "feedback": "Thank you for writing this report. The candidate has produced a good response that covers the main aspects of the maps. However, to achieve a higher score, more precise detail, improved coherence, and enhanced grammatical range are needed. The overall structure is solid, but there is room for refinement in vocabulary usage and grammatical accuracy.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3413-band-6-5/"
+  },
+  {
+    "case_id": "uc02_636fdb29eb315501_1",
+    "task_type": "task1",
+    "exam_question": "The diagrams below show the changes that have taken place at West Park Secondary School since its construction in 1950.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The given diagrams illustrates some alters in construction of secondary school at west park between 1950 and 2010. Overall, science block cannot be seen in 1950,however, in 1980 and 30 years later, 2010, the block is easily noticeable.\n\nAccording to the graph, houses have been omitted in 1980 and it is devoted to car park which was not available in 1950. It is noteworthy that in 2010 the car park is more spacious due in part to limitation of sports field and play ground.\n\nIn 1950, there is a farmland which is about 25 percent of the map, and it changed to sports field after 30 years and in 2010 the size changed to half.\n\nSize and location of main building remained fairly stable(on the right side of the map) and does not meet any changes during the mentioned years.",
+    "material": "evals/materials/uc02_636fdb29eb315501_1.png",
+    "scores": {
+      "task_achievement": 5.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 6.0,
+      "grammatical_range_accuracy": 5.0,
+      "overall_band": 5.0
+    },
+    "feedback": "Thank you indeed for writing this report.\nTask Achievement (TA): The response provides a minimal overview and some development of the main features. The text explains the basic changes over the years but does not cover all key comparisons or developments comprehensively. For instance, it mentions the construction of the science block, but lacks detail about the evolution of other elements like the school playground and sports field, which are also significant.\nCoherence and Cohesion (CC): The report is organized with basic logical sequencing. However, the transitions between ideas are minimal, making the overall flow somewhat disjointed. The use of cohesive devices is limited and does not effectively structure the information.\nLexical Resource (LR): The vocabulary is adequate for basic descriptions and comparisons (e.g., \"spacious,\" \"noteworthy\"). However, the range of vocabulary is limited, and there are some inaccuracies in word choice (\"alters\" should be \"alterations\" or \"changes,\" \"it is devoted to\" should be \"converted into\").\nGrammatical Range and Accuracy (GRA): The grammar shows a mix of simple and a few complex structures. There are several grammatical errors (\"cannot be seen\" could be better expressed as \"is not present,\" \"does not meet any changes\" should be \"does not undergo any changes\"). These errors impact the clarity and accuracy of the report.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3081-band-5-0/"
+  },
+  {
+    "case_id": "uc02_963ff6b5def57655_1",
+    "task_type": "task1",
+    "exam_question": "The pie chart below shows the main reasons why agricultural land becomes less productive. The table shows how these causes affected three regions of the world during the 1990s.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The pie chart and table could noticed that what reasons are pivotal and essential for demolishing lands.\n\nOverall, as can be seen from the the most effective causes of land degradation is over-grazing by worldwide and it is clear from the table that Europe is a region which have the most impression on the land degradation.\n\nGetting back to details, the first and more importantly reason for demolishing is over-grazing by some domestic animals which its percentage is 35% after that the second reason is deforestation which its percentage is similar to over-grazing approximately (30%),the third reason is over-cultivation that  is roughly a quarter  and the last one is some other reasons that is included a tiny fraction.\n\nAs is illustrated by the table, the most percentage of over-grazing which was the main reason on the pie chart  above is allocated to Oceania which is included some islands such as  Australia and New Zealand; moreover, the enormous percentage of deforestation that was the second reason on the pie chart is relevant to Europe region.",
+    "material": "evals/materials/uc02_963ff6b5def57655_1.png",
+    "scores": {
+      "task_achievement": 4.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 5.0,
+      "grammatical_range_accuracy": 5.0,
+      "overall_band": 4.5
+    },
+    "feedback": "Thank you indeed for writing this report. The response does not sufficiently address the requirements of the task. The comparison and contrast of data between the pie chart and the table are not clear. Vocabulary is limited and often inaccurately used, and there are multiple grammatical errors. The overall band score reflects a performance that struggles to communicate the main features of the graph and table due to these issues.\nTo improve, the report should focus on accurately presenting data with appropriate units, making clear comparisons, using a wider range of vocabulary correctly, and constructing grammatically correct sentences.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3156-band-4-5/"
+  },
+  {
+    "case_id": "uc02_aa6b207e1c7d592d_1",
+    "task_type": "task1",
+    "exam_question": "The diagram below shows the process for recycling plastic bottles.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The illustration depicts the method how recycling plastic bottles is done.\n\nOverall, it is a cyclical, man-made process and consists of nine phases.  Bottles are broken-down into raw ingredients in order to produce items like containers and T-shirts.\n\nFirst of all, a person throws out a plastic bottle in a designated recycling pin which a reprocessing truck picks up and empties into its container. In the recycling centre, an employee selects which bottles are suitable for repurposing and discard the damaged bottles that are unsuitable for reusing; after that, they are compressed into blocks. From this, the cubes pass through two crushing wheels which dismantle them into smaller pieces, next they are placed in a water-filled holder and washed.\n\nFollowing that, the now-clean pieces are dumped in a pellet-producing machine and subsequently heated, and then raw materials are formed. The raw materials are molded to produce several products, such as containers, water bottles, T-shirts, pencils, and reusable bags.",
+    "material": "evals/materials/uc02_aa6b207e1c7d592d_1.png",
+    "scores": {
+      "task_achievement": 9.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 8.0,
+      "grammatical_range_accuracy": 7.0,
+      "overall_band": 7.5
+    },
+    "feedback": "The provided description of the recycling process for plastic bottles captures the sequence of events accurately and provides a clear overview. However, to align with the IELTS writing task 1 band descriptors, there are areas that could be improved:\nTask Achievement (TA): The response covers all stages of the process but could benefit from more precise language when describing the steps. For instance, \"reprocessing truck\" could be more clearly described as a \"collection vehicle,\" and \"designated recycling pin\" could be refined to \"designated recycling bin.\"\nCoherence and Cohesion (CC): The text is logically organized and follows the process sequentially. However, the use of cohesive devices such as \"after that\" and \"following that\" can be overused. Varying these with synonyms or other linking phrases could improve the flow of information.\nLexical Resource (LR): The vocabulary is generally appropriate, with terms like \"repurposing,\" \"compressed,\" and \"raw materials\" used effectively. Yet, there's room for a wider range of vocabulary. For example, \"an employee selects which bottles are suitable\" could be more succinctly expressed as \"workers sort the bottles.\"\nGrammatical Range and Accuracy (GRA): The grammar used is mostly accurate, with appropriate use of past participles and passive constructions. However, the phrase \"a person throws out a plastic bottle in a designated recycling pin\" should be corrected to \"a person throws a plastic bottle into a designated recycling bin.\" Additionally, \"the cubes pass through two crushing wheels\" could be more accurately described as \"the blocks are then crushed into smaller pieces.\"",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3357-band-7-5/"
+  },
+  {
+    "case_id": "uc02_c2a5a14300bea658_1",
+    "task_type": "task1",
+    "exam_question": "The charts below show the average percentages in typical meals of three types of nutrients, all of which may be unhealthy if eaten too much.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The pie charts given illustrate how much of three nutrients, which may be harmful for health if consumed exceeding the norms, are contained in standard meals in the USA. The nutrients in question are: Sodium, saturated fat, and added sugar. Apparently, dinner accounts for the highest level of Sodium and saturated fat, whereas snacks contain the biggest share of sugar that was added. Breakfast, on the other hand, accounts for the lowest percentage of all three nutrients combined.\n\nSodium and saturated fat consumption have similar patterns; namely, dinner includes them at 43% and 37%, respectively. It is followed by lunch, with 29% of salt and 26% of fat. Proportions of Sodium is the same in breakfast and snacks (14%), while the latter accounts for significantly higher share of saturated fat (21% versus 16%).\n\nThe highest level carrier of added sugar are snacks with 42 per cent. Followed by dinner that accounts for 23%, lunch (19%), and finally breakfast (16%).",
+    "material": "evals/materials/uc02_c2a5a14300bea658_1.png",
+    "scores": {
+      "task_achievement": 9.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 8.0,
+      "grammatical_range_accuracy": 7.0,
+      "overall_band": 7.5
+    },
+    "feedback": "Thank you indeed for writing this report. The report could use more accuracy in grammar, specifically noun-verb agreement. Also, there is an underuse of discourse markers, that is why many paragraphs do not start giving the reader a clear description of the information coming next.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3322-band-7-5/"
+  },
+  {
+    "case_id": "uc02_da3e4986de6b7901_1",
+    "task_type": "task1",
+    "exam_question": "The maps below show an industrial area in the town of Norbiton, and planned future development of the site.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The maps illustrate the current state and the future development plans for an industrial area in the town of Norbiton. Currently, the area consists mainly of factories arranged around a central roundabout, with farmland located to the north beyond a river.\n\nIn the future development plan, significant changes are proposed. The central roundabout will remain, but it will be surrounded by housing instead of factories. The existing factories will be replaced by various facilities including a playground, a medical center, shops, and a school to the east. Additionally, the river will remain as a natural boundary, but new housing developments will extend across it.\n\nMoreover, the area around the main roundabout will see the addition of more housing units, and the introduction of a playground suggests an emphasis on creating a more family-friendly environment. The establishment of a medical center and shops further indicates a shift from an industrial zone to a mixed-use development catering to residential needs.\n\nOverall, the planned future development of Norbiton’s industrial area is focused on transforming the site into a residential neighborhood with various amenities to support the community.",
+    "material": "evals/materials/uc02_da3e4986de6b7901_1.png",
+    "scores": {
+      "task_achievement": 7.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 7.0,
+      "grammatical_range_accuracy": 7.0,
+      "overall_band": 7.0
+    },
+    "feedback": "Thank you for writing this report. This is a strong response that meets the task requirements effectively. To achieve a higher score, the response could include more detailed descriptions, varied cohesive devices, and a wider range of vocabulary and grammatical structures.",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3386-band-7-0/"
+  },
+  {
+    "case_id": "uc02_e7a93d7ef21cc146_1",
+    "task_type": "task1",
+    "exam_question": "The chart below shows information about wages for health care professionals in four different countries.\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    "essay": "The given table represents average salaries per month for two occupations in the health care sector: Doctors and nurses. The sample data distributed across four countries.\n\nObviously, source countries offer low payment amounts for both careers. Country A seems to be the poorest because nurses and doctors only earn $32, $64 per month, respectively. Whereas Country B, at the same time, they can get approximately ten times more. Nevertheless, these wages are still far away from destination nations.\n\nIn Countries C and D, which have been defined as a destination for health care immigrant workers, wages jump up significantly. Nurses in country C can get paid 2900$ monthly but 500$ more in Country D. Besides that, Doctors have the highest salaries levels can be as two times more than nurses in C, but its three times in Country D, which is considered the lucrative chances for them.\n\nGenerally, Countries that trained skilled human resources for medical services providers are poor payers, unlike destination countries that receive professionals and reward them generously.",
+    "material": "evals/materials/uc02_e7a93d7ef21cc146_1.png",
+    "scores": {
+      "task_achievement": 6.0,
+      "coherence_cohesion": 6.0,
+      "lexical_resource": 7.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 6.0
+    },
+    "feedback": "Thank you indeed for writing this report. Task Achievement (TA)\nThe report addresses the requirements of the task, which involves summarizing the main features of the chart and making relevant comparisons. The writer has attempted to summarize the data and make comparisons between the source and destination countries. However, the report could have more explicitly described the differences in salaries between nurses and doctors within the same country. Moreover, the introduction does not clearly paraphrase the question, and there is no overview paragraph that summarizes the main trends or features.\nCoherence and Cohesion (CC)\nThe text is organized and information is sequenced logically. The writer uses linking words (\"Whereas,\" \"Besides that,\" \"Nevertheless\") to connect ideas. However, the overall cohesion could be improved with better paragraphing, especially by including an overview paragraph at the beginning or end. The text is organized but could be improved in terms of paragraphing and overall flow.\nLexical Resource (LR)\nThe writer demonstrates a good range of vocabulary (\"lucrative chances,\" \"skilled human resources,\" \"medical services providers\"). However, some word choices are less appropriate (\"poorest\" could be replaced with \"lowest paying\"). There are also some inaccuracies (\"nurses and doctors only earn $32, $64 per month, respectively\" should be $35 for nurses based on the chart).\nGrammatical Range and Accuracy (GRA)\nThere are several grammatical errors (\"are poor payers,\" \"salaries levels,\" \"its three times\"), and some sentence structures could be more complex to fully meet the criteria for a higher band; the errors present can hinder the reader's understanding. Here’s a good read:\nSee Post",
+    "source": "https://ieltsjuice.com/ielts-writing-task-1-report-sample-3147-band-6-0/"
+  },
+  {
+    "case_id": "uc02_22d537ebf11c2d6e_1",
+    "task_type": "task2",
+    "exam_question": "In the last decade, there has been a great increase in the number and variety of online courses available to adults. This has been welcomed as a great opportunity by many students, however, other students see these courses as less effective than classroom teaching.\nWhat are the advantages and disadvantages of studying an online course?",
+    "essay": "In recent years, distance teaching and learning has become increasingly popular among the students and this is perceived differently by learners. Many students perceive this as a beneficial aid in learning while others think that they are not as much effective as classroom teaching. This essay will discuss about the merits and demerits of distant learning.\nStudying an online course provides a flexible timing and less budgeted learning for students. They are able to learn their desire course and subjects on their suitable time. This gives a great opportunity for learners to gain new skills and strengthen their knowledge level staying in their own place. For instance, a Nepali student who wants an Australian degree in business management course does not have to stay in Australia, he can study online and complete course staying at his home. Hence, distant learning is economic and time saving.\nHowever, online courses give more emphasis on the theoretical part of learning and there is less teacher and student interaction. It lacks the practical aspects of learning and encourage the passive learning. This is very obvious that students find it as a less effective learning than in the classroom. A recent study suggests that a greater number of students found classroom teaching far more effective than the distance learning.\nIn conclusion, the ever growing availability of online learning has gained its popularity among the young adults for many years, which is perceived as beneficial by many people while others find it to be less effective. The emphasis can be given to its effectiveness to establish it as the most cost effective learning than the classroom teaching.",
+    "material": null,
+    "scores": {
+      "task_response": 7.0,
+      "coherence_cohesion": 7.0,
+      "lexical_resource": 7.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 7.0
+    },
+    "feedback": "Overall: 7.0\nTask Response: 7\n✓ addresses all parts of the task (the author writes more than 250 words)\n✓ presents a clear position throughout the response (the conclusion is kinda unclear, but overall the author has done well)\n✓ presents, extends and supports main ideas, but there may be a tendency to overgeneralise and/or supporting ideas may lack focus (the author has provided evidences and/or examples for his arguments)\nCoherence and Cohesion: 7\n✓ logically organises information and ideas; there is clear progression throughout\n✓ uses a range of cohesive devices appropriately although there may be some under-/over-use (the author needs to use more connectives and less “this is”)\n✓ presents a clear central topic within each paragraph (the author has done well on this part)\nLexical Resource: 7\n✓ uses a sufficient range of vocabulary to allow some flexibility and precision\n✓ uses less common lexical items with some awareness of style and collocation (various mistakes in terms of collocation makes it impossible to rate this criterion more than 7)\n✓ may produce occasional errors in word choice, spelling and/or word formation\nGrammatical Range and Accuracy: 6\n✓ uses a mix of simple and complex sentence forms\n✓ makes some errors in grammar and punctuation but they rarely reduce communication (there are only 2 error-free sentences in the whole essay, so it’s impossible to give a 7+ score on this criterion)\n----------------------------------------------------------\nThis essay is corrected by Anh Tran -  Let's Write Something Group.",
+    "source": "https://ieltsonlinetests.com/writing-correction/advantages-and-disadvantages-studying-online-course-corrected-essay"
+  },
+  {
+    "case_id": "uc02_2f6fda1c83715bcb_1",
+    "task_type": "task2",
+    "exam_question": "The goal of every country should be to produce more materials and goods. Many people assume that the goal of every country should be to produce more materials and goods. To what extent do you agree or disagree that constantly increasing production is an appropriate goal?\nThe goal of every country should be to produce more materials and goods. Many people assume that the goal of every country should be to produce more materials and goods. To what extent do you agree or disagree that constantly increasing production is an appropriate goal?",
+    "essay": "It is thought by a majority of people that, to enhance the manufacturing of various things should be the major goal of countries. Since it results in both blessings and curse to human kind; this essay aims to find the controversial issues related to augmentation of production.\nIt can be stated undoubtedly that, a country can never soar its development without boosting its material production. Moreover, to meet the demands of ever growing population it needs to produce goods related to basic needs as food, clothing etc. Third world countries especially the least developed countries always feel such pressure. Besides this, in order to alleviate poverty from country there is a constant stress of enhancing GDP which in turn demands for continuous production. Every nation wants to keep them abreast with the flow of globalization, hence tend to manufacture more and more materials. If excess local product can be exported for example, foreign currency will be obtained and thus countries can catch the global market.\nHowever, tendency to increase production may cause negative consequences. When a country is in the mode of boosting market, it may often unaware of environmental soundness. More factories means more wastes and if such wastes cannot be managed carefully and properly, great havoc may occur such as air pollution, water pollution etc. Additionally it is irony that high production does not always suppose to eliminate scarcity of people until the yields are properly distributed. Lastly, the principle of long term development lies on the effective and efficient utilization of resources, not in unwise surge of production.\nIt can be concluded that, to cope with the modern era, countries have to emphasize on producing more products. But they should also think prudentially that such production must be sustainable and eco friendly.",
+    "material": null,
+    "scores": {
+      "task_response": 6.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 6.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 6.0
+    },
+    "feedback": "Overall: 6.0\nTask Response: 6\n✓ addresses all parts of the task although some parts may be more fully covered than others (the author has written 295 words and addressed the topic question)\n✓ presents a relevant position although the conclusions may become unclear or repetitive\n✓ presents relevant main ideas but some may be inadequately (the topic sentence in paragraph 2 is inappropriate)\nCoherence and cohesion : 5\n✓ Presents information with some organization but there may be a lack of overall progression\n✓ Makes inadequate, inaccurate or over-use of cohesive devices (however, besides this, but)\n✓ May be repetitive because of lack of referencing and substitution (such written twice, there is)\n✓ May not write in paragraphs, or paragraphing may be inadequate (Paragraph 2 is too vague. The last point in paragraph 3 is a sidetrack)\nLexical Resource: 6\n✓ uses an adequate range of vocabulary for the task (alleviate poverty, basic needs)\n✓ attempts to use less common vocabulary but with some inaccuracy\n✓ makes some errors in spelling and/or word formation, but they do not impede communication\nGrammatical Range and Accuracy: 6\n✓ uses a mix of simple and complex sentence forms\n✓ makes some errors in grammar and punctuation but they rarely reduce communication.\n----------------------------------------------------------\nThis essay is corrected by Eddy Suaib - IELTS Teacher at English Studio Kampung Inggris",
+    "source": "https://ieltsonlinetests.com/writing-correction/goal-every-country-should-be-produce-more-materials-and-goods"
+  },
+  {
+    "case_id": "uc02_4dbed5f97b671f1e_1",
+    "task_type": "task2",
+    "exam_question": "Traffic and accommodation problems are increasing and government should encourage some businesses to move from cities to rural areas. Does the advantages outweigh the disadvantages?\nTraffic and accommodation problems are increasing and government should encourage some businesses to move from cities to rural areas. Does the advantages outweigh the disadvantages?",
+    "essay": "An increasing number of vehicles and buildings is overwhelming so some businesses are being encouraged to relocating their offices to somewhere less crowded. Although I tend towards the viewpoint that relocation will solve this contrerversial problem but this solution will cause some inconvenienences and disadvantages for both customers and companies.\nOn the one hand, relocation can help the urbanisation problem. The shortage of jobs along with young people's need to pursue a career, are the two main reasons of rural depopulaton. Moving businesses from crowded places to rural ones will balance workforces between cities and countrysides, which helps urban areas not being overpopulated from migration. Another benefit of relocation some businesses is traffic congestion. People will tend to use public transportation instead of their private cars for longer destination to save the traveling cost. This also prevents car accidents after a frustrated working day when people are very tired and don not suit for driving.\nOn the other hand, moving between urban areas and non-urban areas will cause some inconvenienences for people who already live in cities. Changing their workplaces also means young people probably have to change their lifestyles for young people, such as their daily routines. But people with families will have to move to rural areas to live as a family with lower living conditions, which is not easily to give up. Moreover, some businesses like service companies will have some troubles while moving from cities because most of their potential are in big cities. People in urban areas need more service compared to rural ones such as healh care, restaurants, technologies, furnitures.\nIn conclusion, it seems to me that the disadavantges of moving businesses between cities and rural areas will outweight the advatages it brings due to previous reasons.",
+    "material": null,
+    "scores": {
+      "task_response": 5.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 6.0,
+      "grammatical_range_accuracy": 6.0,
+      "overall_band": 5.5
+    },
+    "feedback": "Overall: 5.5\nTask Response: 5\n✓ addresses the task only partially; the format may be inappropriate in places (due to the unclear thesis statement)\n✓ expresses a position but the development is not always clear and there may be no conclusions drawn\n✓ presents some main ideas but these are limited and not sufficiently developed; there may be irrelevant detail (the second body paragraph lost in cohesion)\nCoherence and Cohesion: 5\n✓ presents information with some organization but there may be a lack of overall progression (due to the underdeveloped second body paragraph)\n✓ makes inadequate, inaccurate or over use of cohesive devices (the author used “but”,  in the first sentence)\n✓ may be repetitive because of lack of referencing and substitution\n✓ may not write in paragraphs, or paragraphing may be inadequate\nLexical Resource: 6\n✓ uses an adequate range of vocabulary for the task\n✓ attempts to use less common vocabulary but with some inaccuracy\n✓ makes some errors in spelling and/or word formation, but they do not impede communication\nGrammatical Range and Accuracy: 6\n✓ uses a mix of simple and complex sentence forms\n✓ makes some errors in grammar and punctuation but they rarely reduce communication\n----------------------------------------------------------\nThis essay is corrected by Eddy Suaib - IELTS Teacher at English Studio Kampung Inggris",
+    "source": "https://ieltsonlinetests.com/writing-correction/traffic-and-accommodation-problems"
+  },
+  {
+    "case_id": "uc02_5beae22d98151bbb_1",
+    "task_type": "task2",
+    "exam_question": "Due to the development and rapid expansion of supermarket in some countries, many small, local business are unable to compete. Some people think that the closure of local business will bring about the death of local communities.\nTo what extent do you agree or disagree?",
+    "essay": "Nowadays a lot of large business such as supermarkets have been improved fastly and have become widespread in the world, therefore a lot of small business have affected and lost the ability to rival. Large number of people believe that closing like these small business will impact negatively and might destroy the local communities.\nFirstly, small business play an important function in keeping the economy of local communities safe. In fact,local communities are vital because a lot of factories rely on to sell their products thus without these small business,large number of factories will be threaten to close as a result a lot workers might lose their jobs and lead to increase the idleness. For example,in some Mediterranean countries they are completely depend on a small business.In addition,there is a study says that roughly 80% percent of a people tend to buy their requirement such as foods and vegetables from small supermarkets because they found them cheaper than large supermarkets therefore without these local business the standard of the life would be very expensive and a people can not afford it.\nSecondly, absence of local businesses will make the life very complicated for the people who life in a countryside areas.Moreover, in many Mediterranean countries,most people live in cities consequently large supermarkets not exist in a countryside as a result the people who live there buy their need from the the small supermarkets consequently we can not imagine our life without these small supermarket.\nIn conclusion,despite large supermarkets are important in our life since there are comprehensive and supply us with our need, however small supermarkets are also important and we have support them.",
+    "material": null,
+    "scores": {
+      "task_response": 5.0,
+      "coherence_cohesion": 5.0,
+      "lexical_resource": 5.0,
+      "grammatical_range_accuracy": 5.0,
+      "overall_band": 5.0
+    },
+    "feedback": "Overall: 5.0\nTask Response: 5\n✓ addresses the task only partially; the format may be inappropriate in places (due to the unclear introduction)\n✓ expresses a position but the development is not always clear and there may be no conclusions drawn\n✓ presents some main ideas but these are limited and not sufficiently developed; there may be irrelevant detail (the second body paragraph is just a paraphrase from the first one)\nCoherence and Cohesion: 5\n✓ presents information with some organisation but there may be a lack of overall progression (due to the underdeveloped second body paragraph)\n✓ makes inadequate, inaccurate or over use of cohesive devices (the author used “as a result”, “thus”, “consequently” too many times)\n✓ may be repetitive because of lack of referencing and substitution\n✓ may not write in paragraphs, or paragraphing may be inadequate\nLexical Resource: 5\n✓ uses a limited range of vocabulary, but this is minimally adequate for the task (the author failed to use appropriate words such as “necessity goods”, or “living standard”)\n✓ may make noticeable errors in spelling and/or word formation that may cause some difficulty for the reader (close closing off)\nGrammatical Range and Accuracy: 5\n✓ uses only a limited range of structures (inability to effectively use phrasal nouns)\n✓ attempts complex sentences but these tend to be less accurate than simple sentences\n✓ may make frequent grammatical errors and punctuation may be faulty; errors can cause some difficulty for the reader (the lack of commas makes it hard to read the essay)\n----------------------------------------------------------\nThis essay is corrected by Anh Tran -  Let's Write Something Group.",
+    "source": "https://ieltsonlinetests.com/writing-correction/closure-local-business-will-bring-about-death-local-communities"
+  },
+  {
+    "case_id": "uc02_919e00c990eb4019_1",
+    "task_type": "task2",
+    "exam_question": "Are famous people treated unfairly by the media? Should they be given more privacy, or is the price of their fame an invasion into their private life? Discuss both these views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+    "essay": "Different people hold different point of view regarding the way media treat famous personalities, specifically in terms of coverage of their private lives. I strongly believe that the media should refrain itself from breaching the privacy of notable personalities & I will provide suitable reasoning to support my stand. To further strengthen my position, light on the other view point will also be shed along with discussing its faults.\nFirstly, it should be noted that privacy is equally needed by everyone. For me privacy is our right & cannot be compromised in any way. In my opinion, media nowadays fail to draw line between private & social life. It greatly confuses the two and the result is obnoxious, unethical, spiced up news. Taking the example of the latest news hype about a Pakistani actress wearing western clothes & smoking with an Indian star; the act itself is very personal but media of both countries didn’t fail to fully cover it and make a fuss out of it. It can be easily estimated that 40% of news influx is related to private matters of celebrities and this needs to change. They use it to increase their channel rankings & get maximum viewership.\nOn the other hand, there is a school of thought that believes that fame comes for a certain price & that is to sacrifice your privacy. They are comfortable with media breaching privacy of celebrities as they are of the opinion that a celebrity becomes a national asset & is the bearer of national culture. I again, condemn this thought & believes that it is unethical to poke around into private matters of anyone.\nConcluding, I want to say that line must be drawn between a celebrity’s private & social life & media should avoid invading their lives, as privacy is our psychological need. It is not an acceptable trend to use such news for increased channel ratings.",
+    "material": null,
+    "scores": {
+      "task_response": 6.0,
+      "coherence_cohesion": 6.0,
+      "lexical_resource": 7.0,
+      "grammatical_range_accuracy": 7.0,
+      "overall_band": 6.5
+    },
+    "feedback": "Overall: 6.5\n●     Task Response: 6\n✓ addresses all parts of the task although some parts may be more fully covered than others\n✓ presents a relevant position although the conclusions may become unclear or repetitive\n✓ presents relevant main ideas but some may be inadequately developed/ unclear\n●     Coherence and Cohesion: 6\n×  arranges information and ideas coherently and there is a clear overall progression\n✓ uses cohesive devices effectively, but cohesion within and/or between sentences may be faulty or mechanical\n✓ may not always use referencing clearly or appropriately\n✓ uses paragraphing, but not always logically (lack of good supporting evidence for the argument)\n●     Lexical Resource: 7\n✓ uses a sufficient range of vocabulary to allow some flexibility and precision\n✓ uses less common lexical items with some awareness of style and collocation\n✓ may produce occasional errors in word choice, spelling and/or word formation\n●     Grammatical Range and Accuracy: 7\n✓ uses a variety of complex structures (avoid + Ving: avoid invading)\n✓ has produces frequent error-free sentences\n✓ has good control of grammar and punctuation but may make a few errors\n----------------------------------------------------------\nThis essay is corrected by Eddy Suaib - IELTS Teacher at English Studio Kampung Inggris",
+    "source": "https://ieltsonlinetests.com/writing-correction/are-famous-people-treated-unfairly-media"
+  }
+]

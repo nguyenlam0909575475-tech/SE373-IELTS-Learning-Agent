@@ -1,4 +1,4 @@
-"""Flag explicit instruction attacks in untrusted text; never execute them.
+"""Flag explicit instruction attacks in untrusted text (Prompt Injection Guard).
 
 This pattern guard is an additional signal. It is not a complete injection
 defence and does not determine semantic relevance or adjust essay scores.

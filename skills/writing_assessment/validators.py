@@ -74,6 +74,27 @@ def quote_validator(assessment: object, essay: str) -> list[ValidationIssue]:
                 reason = "quote or char offset fields are missing"
             if reason:
                 issues.append(ValidationIssue("evidence_invalid", name, reason, f"{base}[{ei}]"))
+    # New PR22 feedback also claims to quote the submission. Validate those
+    # claims before displaying advice, just like criterion evidence.
+    for collection, field in (("top_priorities", "example_quote"), ("sentence_rewrites", "original_sentence")):
+        try:
+            rows = read_field(assessment, collection)
+        except ShapeError:
+            continue  # Legacy assessments do not contain these optional fields.
+        if not isinstance(rows, list):
+            issues.append(ValidationIssue("evidence_invalid", path=collection))
+            continue
+        for index, row in enumerate(rows):
+            try:
+                quote = read_field(row, field)
+                valid = isinstance(quote, str) and bool(quote.strip()) and quote in essay
+            except ShapeError:
+                valid = False
+            if not valid:
+                issues.append(ValidationIssue(
+                    "evidence_invalid", reason="feedback quote not found verbatim in essay",
+                    path=f"{collection}[{index}].{field}",
+                ))
     return issues
 
 _ID = re.compile(r"[A-Za-z0-9_.:-]{1,100}\Z")

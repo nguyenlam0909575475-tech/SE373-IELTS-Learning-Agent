@@ -49,3 +49,30 @@ test("invalid or fabricated spans do not highlight unrelated characters", () => 
       { quote: "Original", start_char: -1, end_char: 8 }] }]);
   assert.equal(html, "Original text");
 });
+
+test("PR22 feedback renders supplied fields, escapes text and hides absent sections", () => {
+  const names = [
+    ["topPrioritiesSection", "topPrioritiesList"], ["errorPatternsSection", "errorPatternsList"],
+    ["sentenceRewritesSection", "sentenceRewritesList"], ["paragraphAnalysisSection", "paragraphAnalysesList"],
+    ["grammarRulesSection", "grammarRulesList"], ["modelSentencesSection", "modelSentencesList"],
+  ];
+  const context = { document: { createElement: () => ({ className: "", innerHTML: "" }) } };
+  for (const pair of names) for (const name of pair) {
+    const hidden = new Set(["hidden"]);
+    context[name] = { innerHTML: "", children: [],
+      appendChild(child) { this.children.push(child); },
+      classList: { add: value => hidden.add(value), remove: value => hidden.delete(value),
+        contains: value => hidden.has(value) } };
+  }
+  const start = source.indexOf("  function renderPedagogicalFeedback(");
+  const end = source.indexOf("  async function fetchServerConfig(", start);
+  vm.runInNewContext(`${escapeFunction}\n${source.slice(start, end)}`, context);
+  context.renderPedagogicalFeedback({ top_priorities: [{ rank: 1, title: "Improve <clarity>",
+    example_quote: "😀 <student>", why_it_matters: "Explain precisely.",
+    fix_principle: "Use clear wording.", related_criterion: "coherence_cohesion" }] });
+  assert.equal(context.topPrioritiesSection.classList.contains("hidden"), false);
+  assert.match(context.topPrioritiesList.children[0].innerHTML, /😀 &lt;student&gt;/);
+  assert.equal(context.grammarRulesSection.classList.contains("hidden"), true);
+  context.renderPedagogicalFeedback({});
+  for (const [section] of names) assert.equal(context[section].classList.contains("hidden"), true);
+});

@@ -42,11 +42,13 @@ class DescriptorCollection:
 class Examiner:
     """Controlled draft replaces LLM inference only, so failures and retries are deterministic."""
 
-    def __init__(self, *, invalid_refs=False, provider_error=False):
+    def __init__(self, *, invalid_refs=False, provider_error=False, rich_feedback=False, bad_feedback=False):
         self.calls = 0
         self.invalid_refs = invalid_refs
         self.provider_error = provider_error
         self.closed = False
+        self.rich_feedback = rich_feedback
+        self.bad_feedback = bad_feedback
 
     def close(self):
         self.closed = True
@@ -57,7 +59,7 @@ class Examiner:
             raise DependencyFailure(ErrorCode.LLM_TIMEOUT)
         quote = data.submission.essay[:20]
         names = list(dict.fromkeys(chunk.criterion for chunk in data.chunks))
-        return {"criteria": [
+        draft = {"criteria": [
             {"criterion": name, "band": 7.0 if i == 3 else 6.0,
              "evidence": [{"quote": quote, "start_char": 0, "end_char": len(quote)}],
              "descriptor_refs": ["INVENTED" if self.invalid_refs else
@@ -65,6 +67,23 @@ class Examiner:
              "comment": "Controlled test draft, not an accuracy evaluation."}
             for i, name in enumerate(names)
         ], "corrections": [], "off_topic": False}
+        if self.rich_feedback:
+            draft.update({
+                "top_priorities": [{"rank": 1, "title": "Improve clarity",
+                                    "example_quote": "A fabricated quote absent from this essay." if self.bad_feedback else quote,
+                                    "why_it_matters": "Controlled explanation.", "fix_principle": "Use clear wording.",
+                                    "related_criterion": names[0]}],
+                "error_patterns": [{"pattern_name": "Controlled pattern", "category": "grammar", "frequency": 1,
+                                    "priority": "high", "rule": "Controlled rule.", "instances": []}],
+                "sentence_rewrites": [{"original_sentence": quote, "rewritten_sentence": "A controlled rewrite.",
+                                       "changes_made": ["Controlled explanation."]}],
+                "paragraph_analyses": [{"paragraph_number": 1, "paragraph_role": "Introduction",
+                                        "what_works": "Clear wording.", "what_to_improve": "Add support."}],
+                "grammar_rules": [{"rule_name": "Agreement", "explanation": "Controlled rule.",
+                                   "incorrect_example": "They is", "correct_example": "They are"}],
+                "model_sentences": [{"sentence": "A controlled model sentence.", "useful_phrases": ["controlled phrase"]}],
+            })
+        return draft
 
 
 def dependencies(task_type, examiner, *, checker=None, material="Complete synthetic table data."):
@@ -161,7 +180,7 @@ def test_live_api_uses_real_team_tools(monkeypatch, tmp_path, public_checker, ta
     from backend import live_service
     from backend.main import app
 
-    examiner = Examiner()
+    examiner = Examiner(rich_feedback=True)
     monkeypatch.setattr(live_service, "_get_examiner", lambda: (examiner, "controlled_test"))
     monkeypatch.setattr("backend.main.LATEST_RESULT_PATH", tmp_path / "latest.json")
     monkeypatch.setattr(live_service, "get_live_retriever", lambda: DescriptorRetriever(
@@ -179,9 +198,20 @@ def test_live_api_uses_real_team_tools(monkeypatch, tmp_path, public_checker, ta
     assert "possible_plagiarism" in body["assessment"]["flags"]
     assert body["assessment"]["overall_band"] == 6.5
     assert examiner.closed and examiner.calls == 1
+    for field in ("top_priorities", "error_patterns", "sentence_rewrites", "paragraph_analyses", "grammar_rules", "model_sentences"):
+        assert len(body["assessment"][field]) == 1
+    assert body["assessment"]["top_priorities"][0]["example_quote"] == essay[:20]
     for criterion in body["assessment"]["criteria"]:
         for evidence in criterion["evidence"]:
             assert essay[evidence["start_char"]:evidence["end_char"]] == evidence["quote"]
+
+
+def test_fabricated_pedagogical_quote_is_rejected_by_real_harness(public_checker):
+    examiner = Examiner(rich_feedback=True, bad_feedback=True)
+    result = invoke(dependencies("task2", examiner, checker=public_checker),
+                    public_checker.entries[-1].text)["result"]
+    assert result.status == "error" and result.code == ErrorCode.ASSESSMENT_VALIDATION_FAILED
+    assert examiner.calls == 3 and result.retry_count == 2
 
 
 def test_live_api_missing_material_and_provider_failure_have_no_grade(monkeypatch):

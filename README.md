@@ -209,3 +209,14 @@ Mọi đóng góp vào repository phải tuân thủ nghiêm ngặt 4 quy tắc 
 - Bản ghép PR #19 với TV4: 315 test Python khả dụng và 3 test renderer Node pass.
   Test PDF/Chroma chưa chạy đầy đủ do thiếu dependency; chưa xác nhận chất lượng inference live.
 - Chi tiết giao tiếp corpus, schema và lỗi: [bàn giao TV4](docs/member4_handoff.md).
+
+
+### Bản ghép PR #22 với TV4/TV5 (27/10/2026)
+
+- Giữ giao diện thi của PR #19; thêm nhận xét theo ưu tiên, nhóm lỗi, viết lại câu,
+  phân tích đoạn, quy tắc và câu tham khảo của PR #22.
+- Giữ các trường mới qua graph và schema API có kiểu rõ ràng; đồng bộ skill schema từ model TV3.
+- Các câu trích dẫn trong gợi ý ưu tiên/viết lại câu cũng phải tồn tại nguyên văn trong bài nộp.
+- Dẫn chứng nhiều đoạn vẫn dùng offset Unicode và xử lý đoạn chồng nhau của TV4.
+- Chế độ live báo lỗi khi thiếu cấu hình provider, không tự sinh điểm thay thế.
+- 317 test Python khả dụng và 4 test giao diện Node pass. Test PDF/Chroma vẫn cần dependency bổ sung.

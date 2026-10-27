@@ -83,6 +83,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const emptyResultState = document.getElementById("emptyResultState");
   const assessmentResults = document.getElementById("assessmentResults");
 
+  // Pedagogical Elements
+  const topPrioritiesSection = document.getElementById("topPrioritiesSection");
+  const topPrioritiesList = document.getElementById("topPrioritiesList");
+  const errorPatternsSection = document.getElementById("errorPatternsSection");
+  const errorPatternsList = document.getElementById("errorPatternsList");
+  const sentenceRewritesSection = document.getElementById("sentenceRewritesSection");
+  const sentenceRewritesList = document.getElementById("sentenceRewritesList");
+  const paragraphAnalysisSection = document.getElementById("paragraphAnalysisSection");
+  const paragraphAnalysesList = document.getElementById("paragraphAnalysesList");
+  const grammarRulesSection = document.getElementById("grammarRulesSection");
+  const grammarRulesList = document.getElementById("grammarRulesList");
+  const modelSentencesSection = document.getElementById("modelSentencesSection");
+  const modelSentencesList = document.getElementById("modelSentencesList");
+
   // Modal Elements
   const sampleTestsModal = document.getElementById("sampleTestsModal");
   const closeSampleTestsBtn = document.getElementById("closeSampleTestsBtn");
@@ -1060,10 +1074,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderInteractiveEssay(rawEssay, a.criteria);
 
     // Render 4 Criteria Cards
-    renderCriteriaCards(a.criteria);
+    renderCriteriaCards(a.criteria, essayText);
 
     // Render Actionable Corrections
     renderCorrections(a.corrections);
+    renderPedagogicalFeedback(a);
 
     // Render Raw Agent JSON Viewer
     const jsonViewerContent = document.getElementById("jsonViewerContent");
@@ -1115,7 +1130,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (active.length) {
         const ids = active.map((span) => span.id).join(" ");
         const title = active.map((span) => `${span.criterion}: ${span.comment}`).join(" | ");
-        html += `<mark class="quote-highlight" data-quote-ids="${ids}" title="${escapeHtml(title)}">${text}</mark>`;
+        const criterionClass = active.map((span) => `crit-${span.criterion}`).join(" ");
+        html += `<mark class="quote-highlight ${escapeHtml(criterionClass)}" data-quote-ids="${ids}" title="${escapeHtml(title)}">${text}</mark>`;
       } else {
         html += text;
       }
@@ -1126,7 +1142,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Attach click events on marks
     document.querySelectorAll(".quote-highlight").forEach((el) => {
       el.addEventListener("click", () => {
-        highlightQuote(el.dataset.quoteIds.split(" ")[0]);
+        const quoteId = el.dataset.quoteIds.split(" ")[0];
+        highlightQuote(quoteId);
+        const criterionIndex = Number(quoteId.split("-")[1]);
+        document.querySelectorAll(".criterion-card").forEach((card, index) => {
+          card.classList.toggle("selected-card", index === criterionIndex);
+        });
+        document.querySelectorAll(".crit-evidence-item").forEach((item) => item.classList.remove("active-evidence-glow"));
+        const item = document.querySelector(`.crit-evidence-item[data-quote-id="${quoteId}"]`);
+        if (item) {
+          item.classList.add("active-evidence-glow");
+          item.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
       });
     });
   }
@@ -1142,16 +1169,56 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function renderCriteriaCards(criteria) {
+  function getParagraphLabelForOffset(essayText, startChar) {
+    if (!essayText || typeof startChar !== "number") return "";
+    startChar = Array.from(essayText).slice(0, startChar).join("").length;
+    const rawParagraphs = essayText.split(/\n+/);
+    let curOffset = 0;
+    const paraRanges = [];
+    rawParagraphs.forEach((pText, pIdx) => {
+      const trimmed = pText.trim();
+      if (!trimmed) return;
+      const pStart = essayText.indexOf(pText, curOffset);
+      if (pStart !== -1) {
+        const pEnd = pStart + pText.length;
+        paraRanges.push({ index: pIdx + 1, start: pStart, end: pEnd });
+        curOffset = pEnd;
+      }
+    });
+
+    const total = paraRanges.length;
+    for (let i = 0; i < total; i++) {
+      const pr = paraRanges[i];
+      if (startChar >= pr.start && startChar <= pr.end) {
+        if (total >= 3) {
+          if (i === 0) return "Đoạn 1 (Mở bài / Tổng quan)";
+          if (i === total - 1) return `Đoạn ${total} (Kết luận)`;
+          return `Đoạn ${i + 1} (Thân bài ${i})`;
+        }
+        return `Đoạn ${i + 1}`;
+      }
+    }
+    return "";
+  }
+
+  function renderCriteriaCards(criteria, essayText) {
     criteriaGrid.innerHTML = "";
     const criterionDisplayNames = {
-      task_achievement: "Task Achievement (Task 1)",
-      task_response: "Task Response (Task 2)",
-      coherence_and_cohesion: "Coherence & Cohesion",
+      task_achievement: "Task Achievement (Mức độ hoàn thành đề bài)",
+      task_response: "Task Response (Khả năng phát triển luận điểm)",
       coherence_cohesion: "Coherence & Cohesion",
-      lexical_resource: "Lexical Resource",
-      grammatical_range_and_accuracy: "Grammatical Range & Accuracy",
+      coherence_and_cohesion: "Coherence & Cohesion (Tính mạch lạc & Liên kết)",
+      lexical_resource: "Lexical Resource (Vốn từ vựng học thuật)",
       grammatical_range_accuracy: "Grammatical Range & Accuracy",
+      grammatical_range_and_accuracy: "Grammatical Range & Accuracy (Ngữ pháp đa dạng & Chính xác)",
+    };
+
+    const criterionEvidenceMeta = {
+      task_achievement: { icon: "🎯", label: "Luận điểm chính / Câu tổng quan" },
+      task_response: { icon: "🎯", label: "Luận điểm chính & Lập trường" },
+      coherence_and_cohesion: { icon: "🔗", label: "Phương tiện liên kết & Chuyển ý" },
+      lexical_resource: { icon: "📚", label: "Vốn từ vựng học thuật & Collocation" },
+      grammatical_range_and_accuracy: { icon: "⚙️", label: "Cấu trúc câu phức & Ngữ pháp" },
     };
 
     criteria.forEach((crit, idx) => {
@@ -1161,16 +1228,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const title = criterionDisplayNames[crit.criterion] || crit.criterion;
       const refsHtml = (crit.descriptor_refs || [])
-        .map((r) => {
-          const match = r.match(/_b([0-9]+)_/);
-          const bandLabel = match ? `Barem Band ${match[1]}.0` : r;
-          return `<span class="ref-pill" title="Căn cứ barem IELTS: ${escapeHtml(r)}">📌 ${escapeHtml(bandLabel)}</span>`;
-        })
+        .map((r) => `<span class="ref-pill">#${escapeHtml(r)}</span>`)
         .join(" ");
 
-      let quoteSnippet = "";
-      if (crit.evidence && Array.isArray(crit.evidence) && crit.evidence.length > 0 && crit.evidence[0].quote) {
-        quoteSnippet = `<div class="crit-evidence-box" style="margin-top: 8px; font-size: 0.85rem; color: #475569; border-left: 2px solid #38bdf8; padding-left: 8px; background: rgba(56, 189, 248, 0.05); padding-top: 4px; padding-bottom: 4px; border-radius: 0 4px 4px 0;"><strong>Dẫn chứng trích xuất từ bài:</strong> <em>"${escapeHtml(crit.evidence[0].quote)}"</em></div>`;
+      let evidenceContainerHtml = "";
+      if (crit.evidence && crit.evidence.length > 0) {
+        const meta = criterionEvidenceMeta[crit.criterion] || {
+          icon: "📝",
+          label: "Dẫn chứng phân tích",
+        };
+
+        const evidenceItemsHtml = crit.evidence
+          .map((ev, evIdx) => {
+            const paraLabel = getParagraphLabelForOffset(essayText, ev.start_char);
+            const locationTag = paraLabel
+              ? `<span class="evidence-para-tag">📍 ${escapeHtml(paraLabel)}</span>`
+              : "";
+            return `
+            <div class="crit-evidence-item" data-quote-id="quote-${idx}-${evIdx}">
+              <div class="evidence-item-header">
+                <div class="evidence-item-title-group">
+                  <span class="evidence-type-badge">${meta.icon} Dẫn chứng #${evIdx + 1}</span>
+                  ${locationTag}
+                </div>
+                <span class="evidence-offset-tag">Ký tự [${ev.start_char}:${ev.end_char}]</span>
+              </div>
+              <div class="evidence-quote-content">"${escapeHtml(ev.quote)}"</div>
+              <div class="evidence-footer-actions">
+                <button class="btn-view-evidence" data-quote-id="quote-${idx}-${evIdx}">
+                  📍 Nhảy tới dẫn chứng này trên bài viết
+                </button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+
+        evidenceContainerHtml = `
+          <div class="crit-evidence-container">
+            <div class="evidence-container-header">
+              <span class="evidence-container-title">📑 Dẫn chứng phân tích xuyên suốt toàn bài (${crit.evidence.length} dẫn chứng):</span>
+            </div>
+            <div class="evidence-items-list">
+              ${evidenceItemsHtml}
+            </div>
+          </div>
+        `;
       }
 
       card.innerHTML = `
@@ -1179,9 +1282,23 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="crit-band">Band ${crit.band.toFixed(1)}</span>
         </div>
         <p class="crit-comment">${escapeHtml(crit.comment)}</p>
-        ${quoteSnippet}
         <div class="crit-refs">${refsHtml}</div>
+        ${evidenceContainerHtml}
       `;
+
+      card.querySelectorAll(".btn-view-evidence").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const qId = btn.getAttribute("data-quote-id");
+          highlightQuote(qId);
+          document.querySelectorAll(".criterion-card").forEach((c) => c.classList.remove("selected-card"));
+          card.classList.add("selected-card");
+
+          document.querySelectorAll(".crit-evidence-item").forEach((it) => it.classList.remove("active-evidence-glow"));
+          const parentItem = btn.closest(".crit-evidence-item");
+          if (parentItem) parentItem.classList.add("active-evidence-glow");
+        });
+      });
 
       card.addEventListener("click", () => {
         highlightQuote(`quote-${idx}-0`);
@@ -1226,6 +1343,181 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       correctionsList.appendChild(row);
     });
+  }
+
+  // --- Modals & Sample Tests (Người 1) ---
+
+  function renderPedagogicalFeedback(a) {
+    const categoryDisplayMap = {
+      grammar: "Ngữ pháp",
+      lexis: "Từ vựng",
+      cohesion: "Mạch lạc & Liên kết",
+      task: "Yêu cầu đề bài",
+    };
+    const priorityDisplayMap = {
+      high: "Ưu tiên cao",
+      medium: "Ưu tiên vừa",
+      low: "Ưu tiên thấp",
+    };
+    const critTagMap = {
+      task_achievement: "🎯 Task Achievement",
+      task_response: "🎯 Task Response",
+      coherence_cohesion: "Coherence & Cohesion",
+      coherence_and_cohesion: "🔗 Coherence & Cohesion",
+      lexical_resource: "📚 Lexical Resource",
+      grammatical_range_accuracy: "Grammatical Range & Accuracy",
+      grammatical_range_and_accuracy: "⚙️ Grammatical Range",
+    };
+
+    // 1. Top Priorities
+    if (topPrioritiesSection && topPrioritiesList) {
+      if (a.top_priorities && a.top_priorities.length > 0) {
+        topPrioritiesSection.classList.remove("hidden");
+        topPrioritiesList.innerHTML = "";
+        a.top_priorities.forEach((p) => {
+          const card = document.createElement("div");
+          card.className = "priority-card";
+          const critLabel = critTagMap[p.related_criterion] || p.related_criterion;
+          card.innerHTML = `
+            <div class="priority-header">
+              <span class="priority-rank-badge">Ưu tiên #${p.rank}</span>
+              <span class="priority-title">${escapeHtml(p.title)}</span>
+              <span class="ref-pill" style="margin-left:auto;">${escapeHtml(critLabel)}</span>
+            </div>
+            <div class="priority-quote-box">
+              <span style="font-size:0.75rem; color:#64748b; display:block; margin-bottom:2px;">📝 Câu trích xuất minh họa từ bài viết:</span>
+              "${escapeHtml(p.example_quote)}"
+            </div>
+            <div class="priority-meta">
+              <div><strong>⚠️ Vì sao bị trừ điểm:</strong> ${escapeHtml(p.why_it_matters)}</div>
+              <div style="margin-top:4px;"><strong>💡 Nguyên tắc khắc phục:</strong> ${escapeHtml(p.fix_principle)}</div>
+            </div>
+          `;
+          topPrioritiesList.appendChild(card);
+        });
+      } else {
+        topPrioritiesSection.classList.add("hidden");
+      }
+    }
+
+    // 2. Error Patterns
+    if (errorPatternsSection && errorPatternsList) {
+      if (a.error_patterns && a.error_patterns.length > 0) {
+        errorPatternsSection.classList.remove("hidden");
+        errorPatternsList.innerHTML = "";
+        a.error_patterns.forEach((ep) => {
+          const card = document.createElement("div");
+          card.className = "pattern-card";
+          const priorityBadgeClass = ep.priority === "high" ? "badge-priority-high" : (ep.priority === "medium" ? "badge-priority-medium" : "badge-priority-low");
+          const prioLabel = priorityDisplayMap[ep.priority] || ep.priority;
+          const catLabel = categoryDisplayMap[ep.category] || ep.category;
+          let instHtml = "";
+          if (ep.instances && ep.instances.length > 0) {
+            instHtml = ep.instances.map(i => `<span style="display:inline-block; margin-right:8px; font-size:0.8rem;">❌ <del>${escapeHtml(i.original)}</del> ➔ ✅ <strong>${escapeHtml(i.suggestion)}</strong></span>`).join("");
+          }
+          card.innerHTML = `
+            <div class="pattern-header">
+              <span class="pattern-name">${escapeHtml(ep.pattern_name)}</span>
+              <div class="pattern-badges">
+                <span class="ref-pill">${escapeHtml(catLabel)} (xuất hiện ${ep.frequency} lần)</span>
+                <span class="${priorityBadgeClass}">${escapeHtml(prioLabel)}</span>
+              </div>
+            </div>
+            <div class="pattern-rule">📌 <strong>Quy tắc giải thích:</strong> ${escapeHtml(ep.rule)}</div>
+            ${instHtml ? `<div style="margin-top:6px; background:#f8fafc; padding:6px 10px; border-radius:4px;">${instHtml}</div>` : ""}
+          `;
+          errorPatternsList.appendChild(card);
+        });
+      } else {
+        errorPatternsSection.classList.add("hidden");
+      }
+    }
+
+    // 3. Sentence Rewrites
+    if (sentenceRewritesSection && sentenceRewritesList) {
+      if (a.sentence_rewrites && a.sentence_rewrites.length > 0) {
+        sentenceRewritesSection.classList.remove("hidden");
+        sentenceRewritesList.innerHTML = "";
+        a.sentence_rewrites.forEach((sr) => {
+          const card = document.createElement("div");
+          card.className = "rewrite-card";
+          const changesHtml = (sr.changes_made || []).map(c => `<span class="change-pill">✔ ${escapeHtml(c)}</span>`).join(" ");
+          card.innerHTML = `
+            <div class="rewrite-orig">❌ <strong>Câu gốc của thí sinh:</strong> "${escapeHtml(sr.original_sentence)}"</div>
+            <div class="rewrite-new">✨ <strong>Gợi ý viết lại nâng cấp (Band 8.0+):</strong> "${escapeHtml(sr.rewritten_sentence)}"</div>
+            ${changesHtml ? `<div class="rewrite-changes"><div style="font-size:0.75rem; color:#475569; margin-bottom:4px; font-weight:600;">🛠 Các điểm cải tiến chi tiết:</div>${changesHtml}</div>` : ""}
+          `;
+          sentenceRewritesList.appendChild(card);
+        });
+      } else {
+        sentenceRewritesSection.classList.add("hidden");
+      }
+    }
+
+    // 4. Paragraph Analysis
+    if (paragraphAnalysisSection && paragraphAnalysesList) {
+      if (a.paragraph_analyses && a.paragraph_analyses.length > 0) {
+        paragraphAnalysisSection.classList.remove("hidden");
+        paragraphAnalysesList.innerHTML = "";
+        a.paragraph_analyses.forEach((pa) => {
+          const card = document.createElement("div");
+          card.className = "para-card";
+          card.innerHTML = `
+            <div class="para-header">
+              <span class="para-role">Đoạn ${pa.paragraph_number}: ${escapeHtml(pa.paragraph_role)}</span>
+            </div>
+            <div class="para-works">✅ <strong>Điểm làm tốt:</strong> ${escapeHtml(pa.what_works)}</div>
+            <div class="para-improve">⚠️ <strong>Cần cải thiện:</strong> ${escapeHtml(pa.what_to_improve)}</div>
+          `;
+          paragraphAnalysesList.appendChild(card);
+        });
+      } else {
+        paragraphAnalysisSection.classList.add("hidden");
+      }
+    }
+
+    // 5. Grammar Rules
+    if (grammarRulesSection && grammarRulesList) {
+      if (a.grammar_rules && a.grammar_rules.length > 0) {
+        grammarRulesSection.classList.remove("hidden");
+        grammarRulesList.innerHTML = "";
+        a.grammar_rules.forEach((gr) => {
+          const card = document.createElement("div");
+          card.className = "grammar-rule-card";
+          card.innerHTML = `
+            <div class="rule-name">📘 <strong>Quy tắc:</strong> ${escapeHtml(gr.rule_name)}</div>
+            <p style="margin-bottom:6px; color:#334155; line-height:1.5;">💡 <strong>Giải thích chi tiết:</strong> ${escapeHtml(gr.explanation)}</p>
+            <div style="font-size:0.8rem; display:flex; flex-direction:column; gap:4px; background:#f8fafc; padding:8px 10px; border-radius:4px;">
+              <div style="color:#b91c1c;">❌ <em>Ví dụ lỗi sai:</em> "${escapeHtml(gr.incorrect_example)}"</div>
+              <div style="color:#15803d;">✅ <em>Cách sửa đúng:</em> "${escapeHtml(gr.correct_example)}"</div>
+            </div>
+          `;
+          grammarRulesList.appendChild(card);
+        });
+      } else {
+        grammarRulesSection.classList.add("hidden");
+      }
+    }
+
+    // 6. Model Sentences
+    if (modelSentencesSection && modelSentencesList) {
+      if (a.model_sentences && a.model_sentences.length > 0) {
+        modelSentencesSection.classList.remove("hidden");
+        modelSentencesList.innerHTML = "";
+        a.model_sentences.forEach((ms) => {
+          const card = document.createElement("div");
+          card.className = "model-sentence-card";
+          const phrasesHtml = (ms.useful_phrases || []).map(p => `<span class="model-phrase-pill">💎 ${escapeHtml(p)}</span>`).join(" ");
+          card.innerHTML = `
+            <div style="font-weight:600; color:#1e293b; margin-bottom:6px; font-style:italic;">"${escapeHtml(ms.sentence)}"</div>
+            ${phrasesHtml ? `<div style="margin-top:6px;"><div style="font-size:0.75rem; color:#475569; margin-bottom:4px; font-weight:600;">Cụm từ đắt giá và ngữ nghĩa:</div>${phrasesHtml}</div>` : ""}
+          `;
+          modelSentencesList.appendChild(card);
+        });
+      } else {
+        modelSentencesSection.classList.add("hidden");
+      }
+    }
   }
 
   // --- Modals & Sample Tests (Người 1) ---

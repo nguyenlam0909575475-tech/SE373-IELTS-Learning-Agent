@@ -94,6 +94,67 @@ class Correction(PublicModel):
     category: CorrectionCategory
 
 
+class PriorityLevel(StrEnum):
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+
+class ImprovementPriority(PublicModel):
+    """Ranked improvement action: tells the student what to fix first and why."""
+
+    rank: Annotated[int, Field(strict=True, ge=1, le=5)]
+    title: Text
+    example_quote: Text
+    why_it_matters: Text
+    fix_principle: Text
+    related_criterion: Criterion
+
+
+class ErrorPattern(PublicModel):
+    """Recurring error pattern with frequency count and grouped instances."""
+
+    pattern_name: Text
+    category: CorrectionCategory
+    frequency: Annotated[int, Field(strict=True, ge=1)]
+    priority: PriorityLevel
+    rule: Text
+    instances: list[Correction]
+
+
+class SentenceRewrite(PublicModel):
+    """Minimal sentence-level edit that preserves the student's original ideas."""
+
+    original_sentence: Text
+    rewritten_sentence: Text
+    changes_made: list[Text]
+
+
+class ParagraphAnalysis(PublicModel):
+    """Per-paragraph feedback on structure and content."""
+
+    paragraph_number: Annotated[int, Field(strict=True, ge=1)]
+    paragraph_role: Text
+    what_works: Text
+    what_to_improve: Text
+
+
+class GrammarRule(PublicModel):
+    """High-impact grammar or vocabulary rule derived from the student's recurring errors."""
+
+    rule_name: Text
+    explanation: Text
+    incorrect_example: Text
+    correct_example: Text
+
+
+class ModelSentence(PublicModel):
+    """Reusable model sentence with highlighted useful phrases."""
+
+    sentence: Text
+    useful_phrases: list[Text]
+
+
 class WritingAssessment(PublicModel):
     task_type: TaskType
     word_count: Annotated[StrictInt, Field(ge=0)]
@@ -102,6 +163,13 @@ class WritingAssessment(PublicModel):
     corrections: list[Correction]
     flags: list[Flag]
     disclaimer: Text
+    # --- Pedagogical feedback (optional, populated by live LLM examiner) ---
+    top_priorities: list[ImprovementPriority] = []
+    error_patterns: list[ErrorPattern] = []
+    sentence_rewrites: list[SentenceRewrite] = []
+    paragraph_analyses: list[ParagraphAnalysis] = []
+    grammar_rules: list[GrammarRule] = []
+    model_sentences: list[ModelSentence] = []
 
     @model_validator(mode="after")
     def task_criteria_and_disclaimer(self) -> Self:

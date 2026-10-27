@@ -19,6 +19,14 @@ from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from agent.tools.compute_tool import compute_band
 from agent.tools.contracts import is_band
+from src.agent.schemas import (
+    ErrorPattern,
+    GrammarRule,
+    ImprovementPriority,
+    ModelSentence,
+    ParagraphAnalysis,
+    SentenceRewrite,
+)
 
 from .validators import consistency_validator, format_issue, quote_validator, refs_validator
 
@@ -84,6 +92,12 @@ class WritingAssessment(BaseModel):
     corrections: list[CorrectionItem] = Field(default_factory=list)
     flags: list[FlagType] = Field(default_factory=list)
     disclaimer: str = Field(default=DEFAULT_DISCLAIMER, min_length=10)
+    top_priorities: list[ImprovementPriority] = Field(default_factory=list)
+    error_patterns: list[ErrorPattern] = Field(default_factory=list)
+    sentence_rewrites: list[SentenceRewrite] = Field(default_factory=list)
+    paragraph_analyses: list[ParagraphAnalysis] = Field(default_factory=list)
+    grammar_rules: list[GrammarRule] = Field(default_factory=list)
+    model_sentences: list[ModelSentence] = Field(default_factory=list)
 
 
 class ValidationResult(BaseModel):

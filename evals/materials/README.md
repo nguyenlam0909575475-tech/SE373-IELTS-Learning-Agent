@@ -216,4 +216,6 @@
 
 ![Phương tiện đến trường](basic_cases_school_trips.jpg)
 
-[Nguồn biểu đồ](https://www.ieltsluminary.com/post/the-number-of-trips-made-by-children)
+Ảnh có đầy đủ tiêu đề, trục, đơn vị và chú giải 1990/2010. Đề bài nằm ở `exam_question` của hai case; khi chạy Task 1 phải nạp cả đề và ảnh.
+
+[Nguồn đề và biểu đồ](https://engnovate.com/ugc-ielts-writing-task-1-topics/the-chart-below-shows-the-number-of-trips-made-by-children-in-one-country-in-1990-and-2010-to-travel-65db35dd6f71d/)

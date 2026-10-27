@@ -33,6 +33,8 @@ Benchmark có 8 trường: `case_id`, `task_type`, `exam_question`, `essay`, `ma
 
 Benchmark dùng chuỗi `material="evals/materials/ten_anh.png"`; basic cases dùng object `material={"path": "evals/materials/...jpg", "url": "https://..."}`. Task 2 có `material=null`.
 
+Với basic cases Task 1, nạp cả đề từ `exam_question` và ảnh từ `material.path` hoặc `material.url`. Ảnh có đầy đủ tiêu đề, trục, đơn vị và chú giải 1990/2010.
+
 ```python
 from pathlib import Path
 
@@ -67,7 +69,7 @@ Không gửi `scores`, `feedback`, `expected` hoặc trang nguồn có đáp án
 
 Với mỗi kết quả thành công, kiểm tra đủ bốn tiêu chí, evidence/offset khớp bài gốc, descriptor refs đúng chunks của lượt retrieval, số từ theo tool N4, overall theo hàm tính điểm đã thống nhất. Không tự trừ cố định band vì thiếu từ. Cờ đạo văn phụ thuộc corpus; không mặc định bài public là bài tự viết không đạo văn.
 
-Nguồn basic cases: bài Case 1/2/3a/3b từ [IELTS.org — candidate responses](https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf); Case 5 từ trang 18 của [IELTS.org — sample tasks](https://ielts.org/cdn/Sample-tests/ielts-academic-writing-sample-tasks-2023.pdf). Case 4 là đề du lịch và bài về hoàn cảnh gia đình được cung cấp để thử lạc đề; URL trong fixture chỉ dẫn PDF có đề du lịch gốc. [Biểu đồ phương tiện đến trường](https://www.ieltsluminary.com/post/the-number-of-trips-made-by-children) đi kèm Case 1/3a; phần mô tả đề đã ghi chú hai năm vì ảnh thiếu chú giải.
+Nguồn basic cases: bài Case 1/2/3a/3b từ [IELTS.org — candidate responses](https://ielts.org/cdn/computer-delivered-sample-tests-academic-writing/ielts-academic-writing-example-responses-to-parts-1-and-2-with-band-scores-and-examiner-comments.pdf); Case 5 từ trang 18 của [IELTS.org — sample tasks](https://ielts.org/cdn/Sample-tests/ielts-academic-writing-sample-tasks-2023.pdf). Case 4 là đề du lịch và bài về hoàn cảnh gia đình được cung cấp để thử lạc đề; URL trong fixture chỉ dẫn PDF có đề du lịch gốc. [Đề và biểu đồ phương tiện đến trường trên Engnovate](https://engnovate.com/ugc-ielts-writing-task-1-topics/the-chart-below-shows-the-number-of-trips-made-by-children-in-one-country-in-1990-and-2010-to-travel-65db35dd6f71d/) đi kèm Case 1/3a; chỉ lấy đề và ảnh, bài làm vẫn giữ bản từ IELTS.org.
 
 ## Kiểm tra trước khi chạy Agent
 

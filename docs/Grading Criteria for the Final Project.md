@@ -42,8 +42,14 @@ Xây dựng một IELTS learning agent cho người học tự luyện thi (Acad
    - *Vi phạm thì mọi UC dùng mục đề đó bị 0 điểm.*
 2. **Điểm do agent chấm là ước lượng:** Mọi màn hình, báo cáo, file xuất có hiển thị band phải kèm nhãn rõ ràng, ví dụ: *"Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức"*. Không dùng logo, tên thương hiệu IELTS theo cách khiến người dùng hiểu đây là sản phẩm chính thức.
    - *Vi phạm thì U1 của UC liên quan tối đa mức Trung bình.*
-3. **Bộ bài có điểm chuẩn phải có nguồn hợp lệ:** Điểm chuẩn chỉ được lấy từ: bài mẫu công khai có band kèm nhận xét của giám khảo (ghi link nguồn), hoặc bài do giáo viên/người có chứng chỉ IELTS chấm (ghi tên người chấm, ngày chấm). Không được dùng LLM để gán điểm chuẩn.
-   - *Vi phạm thì UC-08 bị 0 điểm, và mọi chỉ số độ chính xác chấm điểm của các UC khác không được công nhận.*
+3. **Bộ bài có điểm chuẩn và chính sách nguồn dữ liệu (Cập nhật theo hướng dẫn giảng viên):**
+   - **Hạ tiêu chuẩn nguồn dataset:** Do khó khăn trong việc tìm bộ chuẩn public có danh tính thật, các nhóm được phép sử dụng các nguồn dữ liệu công khai trên **Hugging Face, Kaggle** và các kho dữ liệu mở public khác.
+   - **Tính ẩn danh & Nguồn:** Dữ liệu có thể được ẩn danh, **không bắt buộc** phải xác định danh tính thật của người viết hoặc giám khảo, nhưng bắt buộc phải ghi rõ link nguồn dữ liệu và phương pháp xây dựng nhãn.
+   - **Quy trình gán nhãn & Rà soát thủ công (Human Review):** Nếu không tìm được dữ liệu có nhãn phù hợp, nhóm có thể tự gán nhãn hoặc sử dụng LLM hỗ trợ gán nhãn sơ bộ, **NHƯNG BẮT BUỘC** phải có quy trình đánh giá và rà soát thủ công (Human-in-the-loop review) để kiểm tra, điều chỉnh và xác nhận nhãn.
+     - Việc đánh giá thủ công có thể do chính các thành viên trong nhóm thực hiện, không bắt buộc phải thuê chuyên gia IELTS bên ngoài.
+     - Nhóm cần mô tả rõ quy trình này, tiêu chí đánh giá và những hạn chế của bộ dữ liệu trong tài liệu nộp.
+   - **Phân biệt nhãn:** Bắt buộc phân biệt rõ nhãn do LLM đề xuất (`llm_suggested`) với nhãn đã được nhóm kiểm tra, xác nhận (`human_verified`). Tuyệt đối không mặc nhiên xem nhãn do LLM tạo là đáp án chuẩn nếu chưa qua bước rà soát đánh giá thủ công.
+   - *Vi phạm (dùng LLM sinh nhãn hoàn toàn tự động mà không qua quy trình rà soát thủ công hoặc thiếu minh bạch nguồn) thì UC-08 bị 0 điểm, và mọi chỉ số độ chính xác chấm điểm của các UC khác không được công nhận.*
 4. **Bảo vệ dữ liệu người học:**
    - Chỉ dùng người học giả lập, hoặc tình nguyện viên có phiếu đồng ý bằng văn bản (lưu bản scan ngoài repo, chỉ ghi mã đồng ý trong repo).
    - Không commit bài làm, audio, transcript, thông tin cá nhân của người thật vào repo.
@@ -84,7 +90,7 @@ Mỗi mục có metadata tối thiểu: `item_id`, `skill`, `question_type`, `to
 
 ### 2.3. Bộ dữ liệu chấm có đáp án
 Toàn bộ nằm trong `evals/`, kèm script chấm:
-- **Benchmark Writing:** ít nhất 30 bài (cả Task 1 và Task 2), band trải từ 4.0 đến 8.0, mỗi bài có điểm chuẩn theo 4 tiêu chí và điểm tổng, nguồn hợp lệ theo quy định 1.5.3.
+- **Benchmark Writing:** ít nhất 30 bài (cả Task 1 và Task 2), band trải từ 4.0 đến 8.0, mỗi bài có điểm chuẩn theo 4 tiêu chí và điểm tổng, nguồn hợp lệ theo quy định 1.5.3 đã cập nhật (nguồn Kaggle/Hugging Face hoặc LLM hỗ trợ có quy trình rà soát thủ công).
 - **Benchmark Speaking:** ít nhất 10 transcript do giáo viên chấm, hoặc transcript nhóm tự đóng vai theo các mức band rồi nhờ giáo viên chấm.
 - **Hồ sơ người học giả lập:** ít nhất 10 hồ sơ ở các mức band khác nhau, mỗi hồ sơ có bộ câu trả lời mẫu cho bài kiểm tra đầu vào và band tham chiếu cho từng kỹ năng (dùng cho UC-01).
 - **Bộ câu hỏi Reading/Listening có đáp án do người kiểm:** ít nhất 40 câu, trong đó có câu cố ý sai đáp án để kiểm tra validator (UC-04).

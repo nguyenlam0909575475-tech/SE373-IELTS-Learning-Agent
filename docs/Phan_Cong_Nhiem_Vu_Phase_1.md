@@ -5,6 +5,11 @@
 * **Use Case trọng tâm:** UC-02 - Chấm Writing Task 1/Task 2 theo Band Descriptors, có dẫn chứng (Nguồn: `de_tai_06_ielts_learning_agent.docx`, Mục 3, trang 6)
 * **Thời gian thực hiện:** kế hoạch nhóm Tuần 5 – Tuần 7, hạn chót đang ghi nhận là 27/10. Ảnh `Quydinh2.png` được bản cũ viện dẫn hiện chưa có trong workspace để kiểm chứng mốc này; không xem đây là mốc đã xác nhận từ Word.
 * **Quy mô nhóm:** 5 thành viên
+- Thành viên 1: nguyenlam0909575475-tech
+- Thành viên 2: HuynhNguyenHoaiLoc
+- Thành viên 3: KhaanhZ
+- Thành viên 4: nhatlinh0409
+- Thành viên 5: kouun-rokku
 
 **Đồng bộ với Word ngày 18/10/2026:** giữ tên tool `compute_band` (Mục 4.1) và trường `overall_band` (UC-02); benchmark Writing tối thiểu 30 bài (Mục 2.3). Các tên cũ `compute_task_band` và `task_band` là quy ước nội bộ của bản phân công trước, không phải tên trong đề tài gốc. Các bổ sung nội bộ về thư mục, regex, mã lỗi và metadata được ghi rõ bên dưới.
 

@@ -106,3 +106,8 @@ Mọi luồng xử lý văn bản bài làm của học viên đều đi qua quy
   > *"Điểm ước lượng do AI chấm, chỉ dùng để luyện tập, không thay thế điểm thi chính thức."*
 * **Tự sửa sai (Self-Correction):** Khi Verification Node phát hiện lỗi (sai schema, quote không khớp nguyên văn, mã ref sai task), Agent được tự sửa lỗi tối đa 2 lần (tổng tối đa 3 lần gọi LLM). Nếu vượt quá số lần, hệ thống trả về mã lỗi JSON có cấu trúc, tuyệt đối không hiển thị kết quả sai lên giao diện.
 * **Quyền riêng tư:** Tuyệt đối không commit bài làm thật hay thông tin định danh (PII) của người học vào repo; mọi trace log chỉ sử dụng dữ liệu giả lập.
+
+## CÁC PHẦN ĐÃ HOÀN THIỆN (FREEZE — TUYỆT ĐỐI KHÔNG CHỈNH SỬA NẾU KHÔNG ĐƯỢC YÊU CẦU)
+1. **Giao diện Trang chủ (Home View):** Cấu trúc thẻ `#homeView`, module card Writing Test trong `frontend/index.html`.
+3. **Thanh Header & Footer chuẩn thi máy tính:** Cấu trúc `.cd-header` (đồng hồ đếm ngược, nút nộp bài, switch Mock/Live) và `.app-footer`.
+4. **Giao diện Xem lại bài nộp (Review Screen View):** Cấu trúc thẻ `#reviewScreenView`, hiển thị song song 2 Part và hộp xác nhận nộp bài có kiểm tra hết giờ.

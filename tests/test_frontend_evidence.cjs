@@ -8,8 +8,8 @@ const vm = require("node:vm");
 const source = fs.readFileSync(path.join(__dirname, "../frontend/app.js"), "utf8");
 const renderer = source.slice(source.indexOf("  function renderInteractiveEssay("),
   source.indexOf("  function highlightQuote("));
-const escapeFunction = source.slice(source.indexOf("  function escapeHtml("),
-  source.indexOf("  // --- Event Listeners Setup ---"));
+const escapeStart = source.indexOf("  function escapeHtml(");
+const escapeFunction = source.slice(escapeStart, source.indexOf("\n  function ", escapeStart + 1));
 
 function render(essay, criteria) {
   const context = { essay, criteria, highlightedEssayContent: { innerHTML: "" },

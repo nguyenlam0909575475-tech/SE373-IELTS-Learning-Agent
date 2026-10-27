@@ -1,6 +1,20 @@
 """Self-authored fixtures; scores are test values, not benchmark labels."""
 
+from pathlib import Path
+
 import pytest
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+@pytest.fixture(scope="session")
+def ensure_chroma_db() -> None:
+    """Ensure ChromaDB exists before integration tests run."""
+    db_file = ROOT / "data" / "chroma_db" / "chroma.sqlite3"
+    if not db_file.is_file():
+        from scripts.rebuild_vectorstore import rebuild
+        source = ROOT / "data" / "processed" / "writing_descriptors.json"
+        rebuild(source, db_file.parent)
 
 ESSAY = (
     "Free community libraries help residents learn because they offer shared books, "

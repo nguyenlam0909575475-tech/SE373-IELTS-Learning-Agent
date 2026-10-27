@@ -58,10 +58,16 @@ def load_openai_settings(dotenv_path: Path | None = None) -> OpenAICompatibleSet
         def setting(name: str, default: Any = None) -> Any:
             return os.environ.get(name, values.get(name, default))
 
+        api_key = setting("OPENAI_API_KEY") or setting("GROQ_API_KEY")
+        is_openai_key = bool(api_key and api_key.startswith("sk-"))
+        default_base_url = "https://api.openai.com/v1" if is_openai_key else "https://api.groq.com/openai/v1"
+        default_model = "gpt-4o-mini" if is_openai_key else "openai/gpt-oss-20b"
+        model = setting("OPENAI_MODEL") or setting("SE373_MODEL", default_model)
+
         return OpenAICompatibleSettings(
-            api_key=setting("OPENAI_API_KEY") or setting("GROQ_API_KEY"),
-            model=setting("OPENAI_MODEL", "openai/gpt-oss-20b"),
-            base_url=setting("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
+            api_key=str(api_key or ""),
+            model=model,
+            base_url=setting("OPENAI_BASE_URL", default_base_url),
             response_format=setting("OPENAI_RESPONSE_FORMAT", "json_object"),
             timeout_ms=setting("OPENAI_TIMEOUT_MS", 45000),
             max_output_tokens=setting("OPENAI_MAX_OUTPUT_TOKENS", 4096),

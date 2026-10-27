@@ -157,16 +157,13 @@ def test_n4_refs_accept_canonical_member1_chunks(assessment):
 
 
 @pytest.mark.parametrize("task_type", ["task1", "task2"])
-def test_live_api_uses_real_team_tools(monkeypatch, public_checker, task_type):
-    from types import SimpleNamespace
-
+def test_live_api_uses_real_team_tools(monkeypatch, tmp_path, public_checker, task_type):
     from backend import live_service
     from backend.main import app
 
     examiner = Examiner()
-    monkeypatch.setattr(live_service, "load_openai_settings",
-                        lambda *_: SimpleNamespace(trace_model_version="controlled_test"))
-    monkeypatch.setattr(live_service, "OpenAICompatibleExaminer", lambda _: examiner)
+    monkeypatch.setattr(live_service, "_get_examiner", lambda: (examiner, "controlled_test"))
+    monkeypatch.setattr("backend.main.LATEST_RESULT_PATH", tmp_path / "latest.json")
     monkeypatch.setattr(live_service, "get_live_retriever", lambda: DescriptorRetriever(
         collection=DescriptorCollection(), chunk_factory=lambda **row: DescriptorChunk.model_validate(row)))
     entry = next(row for row in public_checker.entries if row.task_type == task_type)
@@ -178,7 +175,7 @@ def test_live_api_uses_real_team_tools(monkeypatch, public_checker, task_type):
     })
     assert response.status_code == 200, response.text
     body = response.json()
-    assert body["execution_mode"] == "live"
+    assert body["execution_mode"] == "agent"
     assert "possible_plagiarism" in body["assessment"]["flags"]
     assert body["assessment"]["overall_band"] == 6.5
     assert examiner.closed and examiner.calls == 1
@@ -200,7 +197,7 @@ def test_live_api_missing_material_and_provider_failure_have_no_grade(monkeypatc
     def unavailable(**kwargs):
         raise live_service.LiveAssessmentError(ErrorCode.LLM_TIMEOUT)
 
-    monkeypatch.setattr("backend.main.run_live_assessment", unavailable)
+    monkeypatch.setattr("backend.main.run_agent_assessment", unavailable)
     response = client.post("/api/assess-writing", json={
         "task_type": "task2", "prompt": "Discuss libraries.", "essay": "A private submission.", "mock": False,
     })

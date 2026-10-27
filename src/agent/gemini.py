@@ -43,7 +43,7 @@ def load_gemini_settings(dotenv_path: Path | None = None) -> GeminiSettings:
 
         return GeminiSettings(
             api_key=setting("GEMINI_API_KEY"),
-            model=setting("GEMINI_MODEL"),
+            model=setting("GEMINI_MODEL", "gemini-flash-lite-latest"),
             timeout_ms=setting("GEMINI_TIMEOUT_MS", 45000),
             max_output_tokens=setting("GEMINI_MAX_OUTPUT_TOKENS", 4096),
         )

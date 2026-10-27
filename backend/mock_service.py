@@ -32,7 +32,7 @@ def _detect_off_topic(topic: str, text: str) -> bool:
     # If topic has specific keywords and text completely misses them
     topic_words = set(re.findall(r"\b[A-Za-z]{4,}\b", topic.lower()))
     text_words = set(re.findall(r"\b[A-Za-z]{4,}\b", text.lower()))
-    
+
     # Check explicit marker in test cases
     if "nuclear energy" in topic.lower() and "chocolate cake" in text.lower():
         return True

@@ -64,6 +64,17 @@ def evaluate_single_case(
     scores = case.get("scores")
     ground_truth = scores.get("overall_band") if isinstance(scores, dict) else case.get("ground_truth_band")
     case_id = case.get("id", case.get("case_id", "UNKNOWN_CASE"))
+    material = case.get("material")
+    material_path = material.get("path") if isinstance(material, dict) else material
+    score_keys = {
+        "task": ("task_achievement" if task_type == "task1" else "task_response",),
+        "coherence": ("coherence_cohesion", "coherence_and_cohesion"),
+        "lexical": ("lexical_resource",),
+        "grammar": ("grammatical_range_accuracy", "grammatical_range_and_accuracy"),
+    }
+    gt_criteria = ({group: next((scores[k] for k in names if k in scores), None)
+                    for group, names in score_keys.items()}
+                   if isinstance(scores, dict) else case.get("ground_truth_criteria", {}))
 
     start_t = time.perf_counter()
     w_count = count_words(essay)
@@ -85,6 +96,8 @@ def evaluate_single_case(
                 "total_quotes": 0, "quote_matches": 0, "offset_matches": 0,
                 "total_refs": 0, "ref_leaks": 0, "criteria_bands": {},
                 "functional_passed": False, "functional_errors": [exc.code.value],
+                "crit_diffs": {}, "material_path": material_path,
+                "expected_passed": False, "expected_errors": [exc.code.value],
                 "duration_ms": round((time.perf_counter() - start_t) * 1000, 2),
             }
 
@@ -125,6 +138,12 @@ def evaluate_single_case(
         band_diff = abs(assessment.overall_band - ground_truth)
 
     criteria_bands = {c.criterion: c.band for c in assessment.criteria}
+    crit_diffs = {}
+    for group, names in score_keys.items():
+        predicted = next((criteria_bands[name] for name in names if name in criteria_bands), None)
+        target = gt_criteria.get(group) if isinstance(gt_criteria, dict) else None
+        if predicted is not None and target is not None:
+            crit_diffs[group] = abs(predicted - target)
     expected = case.get("expected", {})
     functional_errors = []
     for flag in expected.get("required_flags", []):
@@ -156,6 +175,10 @@ def evaluate_single_case(
         "criteria_bands": criteria_bands,
         "functional_passed": validation.passed and not functional_errors,
         "functional_errors": functional_errors,
+        "expected_passed": validation.passed and not functional_errors,
+        "expected_errors": functional_errors,
+        "crit_diffs": crit_diffs,
+        "material_path": material_path,
         "total_quotes": total_quotes,
         "quote_matches": quote_matches,
         "offset_matches": offset_matches,
@@ -196,10 +219,13 @@ def run_full_evaluation(
     security_cases_path: Path,
     functional_cases_path: Path | None = None,
     use_mock: bool = True,
+    benchmark_test_path: Path | None = None,
 ) -> dict[str, Any]:
     logger.info("Starting Automated Evaluation (Mode: %s)...", "MOCK" if use_mock else "LIVE")
 
-    benchmark_cases = load_json_file(benchmark_path)
+    dev_cases = load_json_file(benchmark_path)
+    test_cases = load_json_file(benchmark_test_path) if benchmark_test_path else []
+    benchmark_cases = dev_cases + test_cases
     security_cases = load_json_file(security_cases_path)
     functional_cases = load_json_file(functional_cases_path) if functional_cases_path else []
 
@@ -209,6 +235,9 @@ def run_full_evaluation(
     )
 
     bench_results = [evaluate_single_case(c, use_mock=use_mock) for c in benchmark_cases]
+    primary_split = "test" if benchmark_path.parent.name == "benchmark_test" else "dev"
+    for index, result in enumerate(bench_results):
+        result["split"] = primary_split if index < len(dev_cases) else "test"
     func_results = [evaluate_single_case(c, use_mock=use_mock) for c in functional_cases]
     security_results = evaluate_security_guard_cases(security_cases)
 
@@ -256,6 +285,23 @@ def run_full_evaluation(
     benchmark_complete = bool(bench_results) and all(
         r["harness_passed"] and r["predicted_band"] is not None for r in bench_results
     )
+    criteria_mae = {}
+    for group in ("task", "coherence", "lexical", "grammar"):
+        diffs = [r["crit_diffs"][group] for r in bench_results
+                 if r["harness_passed"] and group in r["crit_diffs"]]
+        if diffs:
+            criteria_mae[group] = round(sum(diffs) / len(diffs), 3)
+    split_metrics = {}
+    for split in ("dev", "test"):
+        results = [r for r in bench_results if r["split"] == split]
+        diffs = [r["band_diff"] for r in results if r["harness_passed"] and r["band_diff"] is not None]
+        if results:
+            split_metrics[split] = {
+                "count": len(results),
+                "mae": round(sum(diffs) / len(diffs), 3) if diffs else None,
+                "within_half_band": round(sum(d <= 0.5 for d in diffs) / len(diffs) * 100, 1) if diffs else None,
+                "within_one_band": round(sum(d <= 1 for d in diffs) / len(diffs) * 100, 1) if diffs else None,
+            }
     summary = {
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "execution_mode": "mock" if use_mock else "live",
@@ -267,6 +313,11 @@ def run_full_evaluation(
         "writing_failure_count": sum(r["predicted_band"] is None for r in all_writing_cases),
         "accuracy_is_model_evaluation": not use_mock,
         "metrics": {
+            "criteria_mae": criteria_mae,
+            "split_metrics": split_metrics,
+            "basic_functional_expected_rate": round(
+                sum(r["functional_passed"] for r in func_results) / len(func_results) * 100, 1
+            ) if func_results else None,
             "verbatim_quote_match_rate": round(quote_match_rate, 2),
             "offset_match_rate": round(offset_match_rate, 2),
             "descriptor_ref_valid_rate": round(ref_valid_rate, 2),
@@ -386,6 +437,8 @@ def main() -> None:
     parser.add_argument("--mock", action="store_true", default=None, help="Force mock agent mode.")
     parser.add_argument("--live", action="store_true", default=None, help="Force live agent mode.")
     parser.add_argument("--benchmark", type=Path, default=ROOT_DIR / "evals" / "benchmark_dev" / "benchmark.json")
+    parser.add_argument("--benchmark-test", type=Path, default=None,
+                        help="Optional hold-out JSON; results are reported separately from dev.")
     parser.add_argument("--security", type=Path, default=ROOT_DIR / "evals" / "member4_security_cases.json")
     parser.add_argument("--functional", type=Path, default=ROOT_DIR / "evals" / "data" / "5_basic_cases.json")
     parser.add_argument("--output-json", type=Path, default=ROOT_DIR / "eval_results.json")
@@ -405,6 +458,7 @@ def main() -> None:
         security_cases_path=args.security,
         functional_cases_path=args.functional,
         use_mock=use_mock,
+        benchmark_test_path=args.benchmark_test,
     )
 
     # Save JSON summary

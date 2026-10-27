@@ -48,7 +48,7 @@ def test_evaluate_security_cases_suite() -> None:
 
 
 def test_full_evaluation_execution(tmp_path: Path) -> None:
-    benchmark_file = ROOT_DIR / "evals" / "writing_benchmark_30.json"
+    benchmark_file = ROOT_DIR / "evals" / "benchmark_dev" / "benchmark.json"
     security_file = ROOT_DIR / "evals" / "member4_security_cases.json"
     functional_file = ROOT_DIR / "evals" / "data" / "5_basic_cases.json"
 
@@ -63,7 +63,7 @@ def test_full_evaluation_execution(tmp_path: Path) -> None:
         use_mock=True,
     )
     # 30 benchmark + 12 security + 6 functional (cases 1, 2, 3a, 3b, 4, 5) = 48 cases
-    assert summary["total_cases_evaluated"] == 48
+    assert summary["total_cases_evaluated"] == 87
     assert summary["metrics"]["verbatim_quote_match_rate"] == 100.0
     assert summary["metrics"]["offset_match_rate"] == 100.0
     assert summary["metrics"]["descriptor_ref_valid_rate"] == 100.0
@@ -82,6 +82,7 @@ def test_member1_benchmark_maps_question_id_and_published_score():
     assert assess.call_args.kwargs["prompt"] == row["exam_question"]
     assert result["id"] == row["case_id"]
     assert result["ground_truth_band"] == row["scores"]["overall_band"]
+    assert set(result["crit_diffs"]) == {"task", "coherence", "lexical", "grammar"}
 
 
 def test_failed_live_case_is_reported_without_fabricated_score():
